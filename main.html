@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>구장별 날씨 예보</title>
+</head>
+<body>
+    <button onclick="color('잠실')">잠실</button>
+    <button onclick="color('문학')">문학</button>
+    <button onclick="color('수원')">수원</button>
+    <button onclick="color('대전')">대전</button>
+    <button onclick="color('대구')">대구</button>
+    <button onclick="color('광주')">광주</button>
+    <button onclick="color('사직')">사직</button>
+    <button onclick="color('창원')">창원</button>
+
+    <script type="module" src="js/main.js"></script>
+    <script>
+        function getBackgroundColor(risk) {
+            let backgroundColor = "";
+
+            if (risk >= 75) {
+                backgroundColor = "#ff4d4d"; 
+            } 
+            else if (risk >= 50) {
+                backgroundColor = "#ffa500"; 
+            } 
+            else if (risk >= 25) {
+                backgroundColor = "#ffeb3b"; 
+            } 
+            else {
+                backgroundColor = "#4caf50"; 
+            }
+
+            return backgroundColor;
+        }
+
+        async function color(stadiumName) {
+            const risk = await main(stadiumName);
+
+            const bg = getBackgroundColor(risk);
+
+            document.body.style.backgroundColor = bg;
+        }
+    </script>
+</body>
+</html>

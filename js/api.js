@@ -11,7 +11,7 @@ const STADIUMS = {
 
 const API_KEY = "f83e46782ad87604233b2e8c5294753b";
 
-async function getStadiumForecast(stadiumName) {
+export async function getStadiumForecast(stadiumName) {
     const coords = STADIUMS[stadiumName];
 
     if (!coords) {
@@ -29,29 +29,15 @@ async function getStadiumForecast(stadiumName) {
         const forecastList = data.list.map(item => {
             return {
                 시간: item.dt_txt,                  
-                상태: item.weather[0].description,
                 날씨코드: item.weather[0].id,       
-                기온: item.main.temp,
-                습도: item.main.humidity,
                 강수확률: item.pop * 100,            
                 강수량_3h: item.rain?.['3h'] || 0    
             };
         });
 
-        return {
-            구장: stadiumName,
-            예보리스트: forecastList
-        };
+        return  forecastList;
 
     } catch (error) {
         return { error: error.message };
     }
-}
-
-async function test() {
-    const jamsilWeather = await getStadiumForecast("잠실");
-    console.log("잠실 날씨:", jamsilWeather);
-
-    const sajikWeather = await getStadiumForecast("사직");
-    console.log("사직 날씨:", sajikWeather);
 }

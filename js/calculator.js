@@ -1,28 +1,28 @@
-function calculateRainoutRisk(item) {
-    const pop = (item.pop || 0) * 100; // 강수확률 (%)
-    const rain3h = item.rain?.['3h'] || 0; // 3시간 누적 강수량 (mm)
-    const hourlyRain = rain3h / 3; // 시간당 강수량 (mm/h)
-    const weatherId = item.weather[0]?.id || 800; // 날씨 ID
 
-    let weight = 0;
-    if (hourlyRain === 0) weight = 0;
-    else if (hourlyRain < 1) weight = 0.2;
-    else if (hourlyRain < 3) weight = 0.5;
-    else if (hourlyRain < 8) weight = 0.85;
-    else weight = 1.0;
+export function calculateCancelRisk(rain3h, pop, code) {
 
-    let bonus = 0;
-    if (weatherId >= 200 && weatherId < 300) {
-        bonus = 20; // 뇌우
-    } else if ([502, 503, 504, 522].includes(weatherId)) {
-        bonus = 15; // 폭우
+    const hour_Rain = rain3h / 3;
+
+    let rainScore = 0;
+    if (hour_Rain >= 10) {
+        rainScore = 100; 
+    } 
+    else if (hour_Rain >= 5) {
+        rainScore = 70 + ((hour_Rain - 5) / 5) * 29;
+    } 
+    else if (hour_Rain >= 1.5) {
+        rainScore = 30 + ((hour_Rain - 1.5) / 3.5) * 39;
+    } 
+    else if (hour_Rain > 0) {
+        rainScore = (hour_Rain / 1.5) * 29;
     }
 
-    const cancelRisk = Math.min(100, Math.round((pop * weight) + bonus));
+    let bonusScore = 0;
+    if (code >= 200 && code < 300) bonusScore += 20; // 날씨 코드 200~300은 번개맨
+    if (code >= 502 && code <=504) bonusScore += 15; // 날씨 코드 502~504는 폭우
 
-    return {
-        취소위험도: cancelRisk + "%",
-        시간당강수량: hourlyRain.toFixed(1) + "mm/h",
-        판정: cancelRisk >= 70 ? "취소 유력" : cancelRisk >= 40 ? "취소 가능성 있음" : "정상 진행 예상"
-    };
+
+    let totalScore = (rainScore * 0.8) + (pop * 0.2) + bonusScore;
+
+    return Math.min(Math.max(Math.round(totalScore), 0), 100);
 }
