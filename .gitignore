@@ -1,0 +1,32 @@
+# Secrets and local machine files
+.env
+.env.*
+!.env.example
+.DS_Store
+
+# Dependencies and regenerable environments
+node_modules/
+.cache/
+.venv/
+venv/
+env/
+
+# Logs, coverage, temporary files, and build output
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+coverage/
+dist/
+build/
+tmp/
+temp/
+*.tmp
+*.swp
+
+# Editor and tool-local files
+.idea/
+.vscode/*.local.json
+.codex/
+.agents/
