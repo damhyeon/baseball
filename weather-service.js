@@ -20,7 +20,9 @@
           "Live Server에서는 날씨 API를 사용할 수 없습니다. npm start 실행 후 http://localhost:3000 에서 접속하세요.",
         );
       }
-      throw new Error(`날씨 서버에서 예상하지 못한 응답을 받았습니다 (HTTP ${response.status}).`);
+      throw new Error(
+        `날씨 서버에서 예상하지 못한 응답을 받았습니다 (HTTP ${response.status}).`,
+      );
     }
 
     const data = await response.json();
@@ -79,7 +81,9 @@
           icon.textContent = "⚠️";
           description.textContent = getFailureMessage(error);
           button.title =
-            error instanceof Error ? error.message : "날씨 조회에 실패했습니다.";
+            error instanceof Error
+              ? error.message
+              : "날씨 조회에 실패했습니다.";
           temperature.textContent = "--°";
           button.removeAttribute("aria-busy");
         }
