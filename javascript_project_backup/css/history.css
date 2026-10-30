@@ -1,0 +1,1063 @@
+/* ===== history.css ===== */
+@media (min-width: 1101px) {
+  body.history-body {
+    display: grid !important;
+    grid-template-columns: 240px minmax(0, 1fr) !important;
+    height: 100dvh !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+  }
+
+  body.history-body > .app-sidebar {
+    position: fixed !important;
+    inset: 0 auto 0 0 !important;
+    width: 240px !important;
+    height: 100dvh !important;
+  }
+
+  body.history-body > .history-page {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 390px !important;
+    grid-template-rows: auto auto auto minmax(200px, auto) auto auto !important;
+    align-content: start !important;
+    gap: 14px !important;
+    width: auto !important;
+    height: 100dvh !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 28px 12px 28px 28px !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    background: transparent !important;
+  }
+
+  body.history-body .history-header,
+  body.history-body .history-intro,
+  body.history-body .date-select-section,
+  body.history-body .history-weather,
+  body.history-body .game-result,
+  body.history-body .before-weather {
+    grid-column: 1 !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+  }
+
+  body.history-body .history-header {
+    grid-row: 1 !important;
+    align-items: center !important;
+    min-height: 68px !important;
+    padding: 0 !important;
+    border: 0 !important;
+  }
+
+  body.history-body .history-header .back-button {
+    display: none !important;
+  }
+
+  body.history-body .history-header h1 {
+    font-size: 28px !important;
+  }
+
+  body.history-body .history-header p {
+    margin-top: 6px !important;
+    font-size: 13px !important;
+  }
+
+  body.history-body .history-intro {
+    grid-row: 2 !important;
+    padding: 16px 20px !important;
+  }
+
+  body.history-body .history-intro h2 {
+    font-size: 18px !important;
+  }
+
+  body.history-body .history-intro p {
+    display: block !important;
+    margin-top: 7px !important;
+    font-size: 13px !important;
+  }
+
+  body.history-body .date-select-section {
+    grid-row: 3 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 16px !important;
+    padding: 0 !important;
+  }
+
+  body.history-body .date-select-section h3 {
+    display: block !important;
+    flex: 0 0 auto !important;
+    font-size: 15px !important;
+  }
+
+  body.history-body .date-buttons {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  body.history-body .date-button {
+    min-width: 78px !important;
+    min-height: 40px !important;
+    padding: 8px 12px !important;
+    border-radius: 10px !important;
+  }
+
+  body.history-body .history-weather {
+    grid-row: 4 !important;
+    padding: 20px !important;
+  }
+
+  body.history-body .history-weather .section-title,
+  body.history-body .game-result .section-title {
+    margin-bottom: 18px !important;
+  }
+
+  body.history-body .weather-summary {
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    gap: 14px !important;
+    min-height: 130px !important;
+  }
+
+  body.history-body .weather-summary .weather-icon {
+    font-size: 46px !important;
+  }
+
+  body.history-body .weather-summary .temperature strong {
+    font-size: 42px !important;
+  }
+
+  body.history-body .weather-info {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    flex: 1 1 100% !important;
+    gap: 8px !important;
+    margin: 0 !important;
+  }
+
+  body.history-body .weather-info > div {
+    min-width: 0 !important;
+    padding: 10px !important;
+  }
+
+  body.history-body .weather-info span {
+    font-size: 13px !important;
+  }
+
+  body.history-body .weather-info strong {
+    display: block !important;
+    margin-top: 5px !important;
+    font-size: 19px !important;
+  }
+
+  body.history-body .game-result {
+    grid-row: 5 !important;
+    padding: 24px !important;
+  }
+
+  body.history-body .game-result .result-card {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    align-items: center !important;
+    gap: 16px !important;
+    min-height: 140px !important;
+  }
+
+  body.history-body .game-result .teams {
+    grid-column: 1 / -1 !important;
+    grid-row: 1 !important;
+    justify-content: center !important;
+    gap: 14px !important;
+  }
+
+  body.history-body .game-result .game-date,
+  body.history-body .game-result .game-meta {
+    font-size: 12px !important;
+  }
+
+  body.history-body .game-result .result-status {
+    grid-column: 2 !important;
+    grid-row: 2 !important;
+    position: static !important;
+  }
+
+  body.history-body .before-weather {
+    grid-row: 6 !important;
+    padding: 18px 20px !important;
+  }
+
+  body.history-body .history-weather,
+  body.history-body .game-result,
+  body.history-body .before-weather {
+    min-width: 0 !important;
+    border: 1px solid rgba(255, 255, 255, 0.22) !important;
+    border-radius: 16px !important;
+    background: rgba(42, 130, 184, 0.26) !important;
+    box-shadow: 0 8px 22px rgba(20, 80, 120, 0.12) !important;
+  }
+
+  body.history-body > .history-page > .weather-stadium-panel {
+    position: static !important;
+    grid-column: 2 !important;
+    grid-row: 1 / 7 !important;
+    align-self: start !important;
+    display: flex !important;
+    flex-direction: column !important;
+    width: 390px !important;
+    height: calc(100dvh - 112px) !important;
+    max-height: calc(100dvh - 48px) !important;
+    min-width: 0 !important;
+    margin: 28px 0 0 !important;
+    padding: 8px 14px 16px !important;
+    border: 1px solid rgba(224, 240, 251, 0.2) !important;
+    border-radius: 16px !important;
+    background: rgba(76, 118, 149, 0.62) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+    color: #fff !important;
+    font-family: "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif !important;
+    font-size: 17px !important;
+    overflow: hidden !important;
+    backdrop-filter: blur(18px) !important;
+  }
+
+  body.history-body .weather-panel-search {
+    display: flex !important;
+    align-items: center !important;
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 56px !important;
+    margin: 0 !important;
+    padding: 8px 12px !important;
+    gap: 9px !important;
+    border: 1px solid rgba(228, 243, 253, 0.24) !important;
+    border-radius: 14px !important;
+    background: rgba(105, 153, 189, 0.28) !important;
+    color: #f2f8fc !important;
+    font-family: inherit !important;
+    font-size: 17px !important;
+  }
+
+  body.history-body .weather-panel-search > svg {
+    flex: 0 0 20px !important;
+    width: 20px !important;
+    height: 20px !important;
+    fill: none !important;
+    stroke: rgba(226, 241, 250, 0.82) !important;
+    stroke-linecap: round !important;
+    stroke-linejoin: round !important;
+    stroke-width: 1.8 !important;
+  }
+
+  body.history-body .weather-panel-search input {
+    flex: 1 1 auto !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    outline: 0 !important;
+    background: transparent !important;
+    color: #f2f8fc !important;
+    font: inherit !important;
+    font-size: 14px !important;
+  }
+
+  body.history-body .weather-panel-search input::placeholder {
+    color: rgba(226, 241, 250, 0.62) !important;
+  }
+
+  body.history-body .weather-panel-current-city {
+    display: flex !important;
+    flex: 0 0 auto !important;
+    align-items: center !important;
+    gap: 5px !important;
+    padding-left: 8px !important;
+    border-left: 1px solid rgba(228, 243, 253, 0.18) !important;
+    color: #f2f8fc !important;
+    font-size: 14px !important;
+  }
+
+  body.history-body .weather-panel-current-city svg {
+    width: 17px !important;
+    height: 17px !important;
+    fill: none !important;
+    stroke: currentColor !important;
+    stroke-linecap: round !important;
+    stroke-linejoin: round !important;
+    stroke-width: 1.8 !important;
+  }
+
+  body.history-body .weather-panel-current-city strong {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+  }
+
+  body.history-body .weather-stadium-panel h2 {
+    display: block !important;
+    flex: 0 0 auto !important;
+    margin: 14px 8px 10px !important;
+    padding: 0 0 10px !important;
+    border-bottom: 1px solid rgba(228, 243, 253, 0.18) !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    line-height: 1.4 !important;
+  }
+
+  body.history-body .weather-panel-list {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-auto-rows: 82px !important;
+    align-content: start !important;
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    padding: 0 1px 2px !important;
+    gap: 4px !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain !important;
+  }
+
+  body.history-body .weather-panel-list button {
+    display: grid !important;
+    grid-template-columns: 36px minmax(0, 1fr) auto 16px !important;
+    align-items: center !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 82px !important;
+    height: 82px !important;
+    padding: 10px 12px !important;
+    gap: 8px !important;
+    border: 1px solid rgba(227, 242, 252, 0.24) !important;
+    border-radius: 16px !important;
+    background: rgba(114, 157, 190, 0.25) !important;
+    color: #f2f8fc !important;
+    font-family: inherit !important;
+    font-size: 19px !important;
+    text-align: left !important;
+    overflow: hidden !important;
+  }
+
+  body.history-body .weather-panel-list button:hover,
+  body.history-body .weather-panel-list button:focus-visible {
+    border-color: rgba(235, 247, 255, 0.48) !important;
+    background: rgba(145, 184, 212, 0.3) !important;
+  }
+
+  body.history-body .weather-panel-list button span {
+    min-width: 0 !important;
+    font-size: 14px !important;
+    line-height: 1.3 !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  body.history-body .weather-panel-list button .stadium-weather-icon {
+    display: grid !important;
+    place-items: center !important;
+    width: 32px !important;
+    font-size: 30px !important;
+    font-weight: 600 !important;
+    line-height: 1.3 !important;
+  }
+
+  body.history-body .weather-panel-list button .stadium-weather-name {
+    display: block !important;
+    font-weight: 600 !important;
+  }
+
+  body.history-body .weather-panel-list button small {
+    display: block !important;
+    margin-top: 4px !important;
+    color: rgba(230, 241, 248, 0.72) !important;
+    font-size: 12px !important;
+    font-weight: 400 !important;
+  }
+
+  body.history-body .weather-panel-list button b {
+    margin: 0 !important;
+    color: #f2f8fc !important;
+    font-size: 25px !important;
+    font-weight: 400 !important;
+    line-height: 1 !important;
+  }
+
+  body.history-body .weather-panel-list button i {
+    margin: 0 !important;
+    color: rgb(216, 220, 237) !important;
+    font-size: 18px !important;
+    font-style: normal !important;
+  }
+
+  body.history-body .weather-panel-list button[hidden] {
+    display: none !important;
+  }
+
+  body.history-body .weather-panel-empty {
+    margin: 12px 6px !important;
+    color: rgba(230, 241, 248, 0.72) !important;
+    font-size: 12px !important;
+    text-align: center !important;
+  }
+}
+
+@media (min-width: 701px) and (max-width: 1100px) {
+  body.history-body {
+    display: grid !important;
+    grid-template-columns: 240px minmax(0, 1fr) !important;
+    height: auto !important;
+    min-height: 100dvh !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+  }
+
+  body.history-body > .history-page {
+    grid-column: 2 !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: auto !important;
+    gap: 14px !important;
+    width: auto !important;
+    height: auto !important;
+    min-width: 0 !important;
+    min-height: 100dvh !important;
+    margin: 0 !important;
+    padding: 24px !important;
+    overflow: visible !important;
+  }
+
+  body.history-body .history-header,
+  body.history-body .history-intro,
+  body.history-body .date-select-section,
+  body.history-body .history-weather,
+  body.history-body .game-result,
+  body.history-body .before-weather,
+  body.history-body > .history-page > .weather-stadium-panel {
+    grid-column: 1 !important;
+    grid-row: auto !important;
+  }
+
+  body.history-body > .history-page > .weather-stadium-panel {
+    width: 100% !important;
+    height: auto !important;
+    max-height: calc(100dvh - 24px) !important;
+    margin: 0 !important;
+  }
+
+  body.history-body .history-intro,
+  body.history-body .date-select-section,
+  body.history-body .history-weather,
+  body.history-body .game-result,
+  body.history-body .before-weather {
+    padding: 18px !important;
+  }
+}
+
+@media (max-width: 1100px) {
+  body.history-body > .history-page > .weather-stadium-panel {
+    position: static !important;
+    inset: auto !important;
+    transform: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    min-width: 0 !important;
+    padding: 8px 14px 16px !important;
+    border: 1px solid rgba(224, 240, 251, 0.2) !important;
+    border-radius: 16px !important;
+    background: rgba(76, 118, 149, 0.62) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+    color: #fff !important;
+    font-family: "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif !important;
+    font-size: 17px !important;
+    overflow: hidden !important;
+    backdrop-filter: blur(18px) !important;
+  }
+
+  body.history-body .weather-panel-search {
+    display: flex !important;
+    align-items: center !important;
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 48px !important;
+    margin: 0 !important;
+    padding: 8px 12px !important;
+    gap: 9px !important;
+    border: 1px solid rgba(228, 243, 253, 0.24) !important;
+    border-radius: 14px !important;
+    background: rgba(105, 153, 189, 0.28) !important;
+    color: #f2f8fc !important;
+    font-family: inherit !important;
+    font-size: 17px !important;
+  }
+
+  body.history-body .weather-panel-search > svg {
+    flex: 0 0 20px !important;
+    width: 20px !important;
+    height: 20px !important;
+    fill: none !important;
+    stroke: rgba(226, 241, 250, 0.82) !important;
+    stroke-linecap: round !important;
+    stroke-linejoin: round !important;
+    stroke-width: 1.8 !important;
+  }
+
+  body.history-body .weather-panel-search input {
+    flex: 1 1 auto !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    outline: 0 !important;
+    background: transparent !important;
+    color: #f2f8fc !important;
+    font: inherit !important;
+    font-size: 12px !important;
+  }
+
+  body.history-body .weather-panel-search input::placeholder {
+    color: rgba(226, 241, 250, 0.62) !important;
+  }
+
+  body.history-body .weather-panel-current-city {
+    display: flex !important;
+    flex: 0 0 auto !important;
+    align-items: center !important;
+    gap: 5px !important;
+    padding-left: 8px !important;
+    border-left: 1px solid rgba(228, 243, 253, 0.18) !important;
+    color: #f2f8fc !important;
+    font-size: 12px !important;
+  }
+
+  body.history-body .weather-panel-current-city svg {
+    width: 17px !important;
+    height: 17px !important;
+    fill: none !important;
+    stroke: currentColor !important;
+    stroke-linecap: round !important;
+    stroke-linejoin: round !important;
+    stroke-width: 1.8 !important;
+  }
+
+  body.history-body .weather-panel-current-city strong {
+    font-size: 12px !important;
+    font-weight: 600 !important;
+  }
+
+  body.history-body .weather-stadium-panel h2 {
+    display: block !important;
+    flex: 0 0 auto !important;
+    margin: 14px 8px 10px !important;
+    padding: 0 0 10px !important;
+    border-bottom: 1px solid rgba(228, 243, 253, 0.18) !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    line-height: 1.4 !important;
+  }
+
+  body.history-body .weather-panel-list {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-auto-rows: 60px !important;
+    align-content: start !important;
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    max-height: min(440px, calc(100dvh - 210px)) !important;
+    padding: 0 1px 2px !important;
+    gap: 4px !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain !important;
+  }
+
+  body.history-body .weather-panel-list button {
+    display: grid !important;
+    grid-template-columns: 36px minmax(0, 1fr) auto 16px !important;
+    align-items: center !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 60px !important;
+    height: 60px !important;
+    padding: 7px 10px !important;
+    gap: 8px !important;
+    border: 1px solid rgba(227, 242, 252, 0.24) !important;
+    border-radius: 16px !important;
+    background: rgba(114, 157, 190, 0.25) !important;
+    color: #f2f8fc !important;
+    font-family: inherit !important;
+    text-align: left !important;
+    overflow: hidden !important;
+  }
+
+  body.history-body .weather-panel-list button:hover,
+  body.history-body .weather-panel-list button:focus-visible {
+    border-color: rgba(235, 247, 255, 0.48) !important;
+    background: rgba(145, 184, 212, 0.3) !important;
+  }
+
+  body.history-body .weather-panel-list button span {
+    min-width: 0 !important;
+    font-size: 12px !important;
+    line-height: 1.3 !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  body.history-body .weather-panel-list button .stadium-weather-icon {
+    display: grid !important;
+    place-items: center !important;
+    width: 32px !important;
+    font-size: 26px !important;
+    font-weight: 600 !important;
+    line-height: 1 !important;
+  }
+
+  body.history-body .weather-panel-list button .stadium-weather-name {
+    display: block !important;
+    font-weight: 600 !important;
+  }
+
+  body.history-body .weather-panel-list button small {
+    display: block !important;
+    margin-top: 3px !important;
+    color: rgba(230, 241, 248, 0.72) !important;
+    font-size: 11px !important;
+    font-weight: 400 !important;
+  }
+
+  body.history-body .weather-panel-list button b {
+    margin: 0 !important;
+    color: #f2f8fc !important;
+    font-size: 21px !important;
+    font-weight: 400 !important;
+    line-height: 1 !important;
+  }
+
+  body.history-body .weather-panel-list button i {
+    margin: 0 !important;
+    color: rgb(216, 220, 237) !important;
+    font-size: 18px !important;
+    font-style: normal !important;
+  }
+
+  body.history-body .weather-panel-list button[hidden] {
+    display: none !important;
+  }
+
+  body.history-body .weather-panel-empty {
+    margin: 12px 6px !important;
+    color: rgba(230, 241, 248, 0.72) !important;
+    font-size: 12px !important;
+    text-align: center !important;
+  }
+}
+
+@media (max-width: 700px) {
+  body.history-body {
+    display: block !important;
+    height: auto !important;
+    min-height: 100dvh !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+  }
+
+  body.history-body > .app-sidebar {
+    position: relative !important;
+    inset: auto !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    padding: 10px 12px !important;
+  }
+
+  body.history-body > .app-sidebar .brand {
+    display: none !important;
+  }
+
+  body.history-body > .app-sidebar nav {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 6px !important;
+  }
+
+  body.history-body > .app-sidebar nav a {
+    display: flex !important;
+    flex: 1 1 0 !important;
+    justify-content: center !important;
+    width: auto !important;
+    min-width: 0 !important;
+    min-height: 44px !important;
+    padding: 8px 6px !important;
+    gap: 6px !important;
+    font-size: 13px !important;
+  }
+
+  body.history-body > .history-page {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: auto !important;
+    gap: 12px !important;
+    width: 100% !important;
+    height: auto !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 18px 14px 24px !important;
+    overflow: visible !important;
+  }
+
+  body.history-body .history-header,
+  body.history-body .history-intro,
+  body.history-body .date-select-section,
+  body.history-body .history-weather,
+  body.history-body .game-result,
+  body.history-body .before-weather,
+  body.history-body > .history-page > .weather-stadium-panel {
+    grid-column: 1 !important;
+    grid-row: auto !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+  }
+
+  body.history-body .history-header {
+    min-height: 56px !important;
+    margin-bottom: 4px !important;
+  }
+
+  body.history-body .history-header .back-button {
+    display: inline-flex !important;
+  }
+
+  body.history-body .history-intro,
+  body.history-body .date-select-section,
+  body.history-body .history-weather,
+  body.history-body .game-result,
+  body.history-body .before-weather {
+    padding: 16px !important;
+  }
+
+  body.history-body .date-select-section {
+    display: block !important;
+  }
+
+  body.history-body .date-select-section h3 {
+    display: block !important;
+    margin-bottom: 10px !important;
+  }
+
+  body.history-body .date-buttons {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  body.history-body .date-button {
+    min-width: 0 !important;
+    padding: 9px 12px !important;
+  }
+
+  body.history-body .weather-summary {
+    flex-wrap: wrap !important;
+    gap: 12px !important;
+  }
+
+  body.history-body .weather-info {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    width: 100% !important;
+    margin: 8px 0 0 !important;
+    gap: 6px !important;
+  }
+
+  body.history-body .weather-info > div {
+    min-width: 0 !important;
+    padding: 8px !important;
+  }
+
+  body.history-body .weather-info strong {
+    font-size: 16px !important;
+  }
+
+  body.history-body .game-result .result-card {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 12px !important;
+    min-height: 132px !important;
+  }
+
+  body.history-body .game-result .teams {
+    justify-content: center !important;
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+  }
+
+  body.history-body > .history-page > .weather-stadium-panel {
+    width: 100% !important;
+    height: auto !important;
+    max-height: min(420px, calc(100dvh - 24px)) !important;
+    margin: 0 !important;
+    padding: 8px 14px 16px !important;
+  }
+
+  body.history-body .weather-panel-list {
+    max-height: min(330px, calc(100dvh - 210px)) !important;
+  }
+}
+
+@media (min-width: 1101px) {
+  body.history-body .history-weather .section-title {
+    margin-bottom: 8px !important;
+  }
+
+  body.history-body .weather-summary {
+    flex-wrap: nowrap !important;
+    min-height: 100px !important;
+    gap: 14px !important;
+  }
+
+  body.history-body .weather-info {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    margin: 0 0 0 auto !important;
+    padding-left: 16px !important;
+    transform: translateY(-22px) !important;
+  }
+}
+
+body.history-body .history-weather,
+body.history-body .game-result {
+  border: 1px solid rgba(255, 255, 255, 0.48) !important;
+  box-shadow: 0 0 24px rgba(255, 255, 255, 0.24) !important;
+  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.2));
+}
+
+body.history-body .date-text,
+body.history-body #historyDate {
+  font-family: "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 300 !important;
+  color: rgba(218, 235, 247, 0.78) !important;
+  line-height: 1.35 !important;
+}
+
+body.history-body .history-weather .weather-info {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+@media (max-width: 700px) {
+  body.history-body .history-weather .weather-info {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+/* history 상단을 향후 5일 우천취소 위험 요약으로 사용 */
+body.history-body .history-intro {
+  display: none !important;
+}
+
+/* 과거 날씨 기록 기능은 하단 영역에서 계속 표시 */
+body.history-body .five-day-forecast {
+  grid-row: 3 !important;
+}
+
+body.history-body .date-select-section {
+  display: flex !important;
+  grid-column: 1 !important;
+  grid-row: 2 !important;
+}
+
+body.history-body .history-weather {
+  display: block !important;
+  grid-column: 1 !important;
+  grid-row: 4 !important;
+}
+
+@media (max-width: 700px) {
+  body.history-body .date-select-section,
+  body.history-body .history-weather {
+    display: block !important;
+    grid-row: auto !important;
+  }
+}
+
+body.history-body .five-day-forecast {
+  grid-column: 1 !important;
+  display: block !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 22px 24px !important;
+  border: 1px solid rgba(255, 255, 255, 0.28) !important;
+  border-radius: 18px !important;
+  background: rgba(67, 143, 194, 0.3) !important;
+  box-shadow: 0 8px 22px rgba(20, 80, 120, 0.12) !important;
+}
+
+body.history-body .five-day-forecast .section-title {
+  margin-bottom: 16px !important;
+}
+
+body.history-body .five-day-forecast .section-title h3 {
+  font-size: 20px !important;
+  font-weight: 300 !important;
+}
+
+body.history-body .five-day-forecast-list {
+  display: grid !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  min-width: 0 !important;
+}
+
+body.history-body .five-day-forecast-item {
+  display: flex !important;
+  min-width: 0 !important;
+  min-height: 112px !important;
+  padding: 8px 14px !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.2) !important;
+  text-align: center !important;
+}
+
+body.history-body .five-day-forecast-item:last-child {
+  border-right: 0 !important;
+}
+
+body.history-body .five-day-forecast-item .date-text {
+  font-size: 14px !important;
+  white-space: nowrap !important;
+}
+
+body.history-body .five-day-forecast-item strong {
+  font-family: "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif !important;
+  font-size: clamp(28px, 3vw, 42px) !important;
+  font-weight: 300 !important;
+  line-height: 1 !important;
+}
+
+body.history-body .five-day-forecast-item small {
+  color: rgba(218, 235, 247, 0.78) !important;
+  font-size: 12px !important;
+  font-weight: 300 !important;
+}
+
+body.history-body .five-day-forecast-message {
+  margin: 18px 0 !important;
+  color: rgba(218, 235, 247, 0.8) !important;
+  font-size: 14px !important;
+  text-align: center !important;
+}
+
+@media (max-width: 700px) {
+  body.history-body .five-day-forecast {
+    padding: 18px 12px !important;
+  }
+
+  body.history-body .five-day-forecast-list {
+    grid-template-columns: repeat(5, minmax(76px, 1fr)) !important;
+    overflow-x: auto !important;
+  }
+
+  body.history-body .five-day-forecast-item {
+    padding: 8px 10px !important;
+  }
+}
+
+body.history-body,
+body.history-body button,
+body.history-body input,
+body.history-body h1,
+body.history-body h2,
+body.history-body h3,
+body.history-body strong,
+body.history-body span,
+body.history-body p,
+body.history-body a {
+  font-family: "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif !important;
+}
+
+body.history-body .history-header h1,
+body.history-body .history-weather .section-title h3,
+body.history-body .game-result .section-title h3 {
+  font-family: "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif !important;
+  font-weight: 300 !important;
+  letter-spacing: -0.03em !important;
+}
+
+body.history-body .history-header h1 {
+  font-size: clamp(24px, 2.4vw, 30px) !important;
+}
+
+body.history-body .history-weather .section-title h3,
+body.history-body .game-result .section-title h3 {
+  font-size: clamp(18px, 1.8vw, 22px) !important;
+}
+
+body.history-body > .app-sidebar .brand,
+body.history-body > .app-sidebar .brand span,
+body.history-body > .app-sidebar nav a,
+body.history-body > .app-sidebar nav a span,
+body.history-body > .app-sidebar .sidebar-note {
+  font-family: "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif !important;
+  font-weight: 300 !important;
+}
+
+body.history-body .history-weather,
+body.history-body .history-weather span,
+body.history-body .history-weather strong,
+body.history-body .game-result,
+body.history-body .game-result span,
+body.history-body .game-result strong,
+body.history-body .game-result b,
+body.history-body .history-tooltip,
+body.history-body .game-result-tooltip {
+  font-family: "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif !important;
+  font-weight: 300 !important;
+}
+
+body.history-body .weather-info strong,
+body.history-body .teams strong {
+  font-weight: 400 !important;
+}
+
+body.history-body .weather-info span,
+body.history-body .game-date small,
+body.history-body .game-meta,
+body.history-body .result-status,
+body.history-body .history-tooltip,
+body.history-body .game-result-tooltip {
+  font-size: 12px !important;
+}
+
+body.history-body .weather-info strong {
+  font-size: 18px !important;
+}
+
+body.history-body .teams {
+  font-size: 16px !important;
+}
+
+body.history-body .teams strong {
+  font-size: 26px !important;
+}
+
+/* 모든 화면 크기에서 동일한 글꼴과 굵기 유지 */
+body.history-body * {
+  font-family: "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif !important;
+  font-weight: 300 !important;
+}
+
+body.history-body .teams strong,
+body.history-body .weather-info strong {
+  font-weight: 400 !important;
+}

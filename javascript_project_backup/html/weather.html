@@ -1,0 +1,636 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>우천 취소 지킴이 - 날씨</title>
+
+    <link rel="stylesheet" href="style.css?v=20261023-1" />
+    <link rel="stylesheet" href="weather.css?v=20261023-1" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  </head>
+
+  <body class="weather-body">
+    <aside class="app-sidebar">
+      <a class="brand" href="index.html"
+        ><i class="brand-mark"></i><span>우천 취소 지킴이</span></a
+      >
+      <nav>
+        <a class="nav-home" href="index.html"
+          ><i class="nav-icon stadium-icon"></i><span>구장 선택</span></a
+        ><a class="nav-weather" href="weather.html"
+          ><i class="nav-icon weather-icon-small"></i><span>날씨</span></a
+        ><a class="nav-history" href="history.html"
+          ><i class="nav-icon history-icon"></i><span>날씨 기록</span></a
+        >
+      </nav>
+      <p class="sidebar-note">야구장 날씨를<br />한눈에 확인하세요.</p>
+    </aside>
+    <main class="weather-page">
+      <section class="weather-card">
+        <div class="weather-main">
+          <div class="temperature">
+            <strong class="hero-location">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" />
+                <circle cx="12" cy="10" r="2.5" />
+              </svg>
+              <span id="heroCity">서울</span>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="m7 10 5 5 5-5" />
+              </svg>
+            </strong>
+            <span id="heroDate" class="hero-date date-text" aria-live="polite"></span>
+            <div class="hero-temperature-line">
+              <span class="temperature-label"></span>
+              <strong id="temperature">--°</strong>
+              <span
+                class="hero-weather-icon"
+                id="heroWeatherIcon"
+                role="img"
+                aria-label="비"
+              ></span>
+            </div>
+            <span id="weatherDescription"> 날씨 정보를 불러오는 중... </span>
+            <span id="heroRainProbability" class="hero-rain-probability" aria-live="polite">
+              <span>우천취소 확률</span>
+              <strong id="heroRainProbabilityValue">--%</strong>
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <section class="hourly-section">
+        <div class="section-title">
+          <h2 id="hourlyTitle">시간별 날씨</h2>
+        </div>
+
+        <div class="hourly-weather" aria-live="polite"></div>
+      </section>
+
+      <div class="weather-details" aria-label="현재 날씨 상세">
+        <div class="weather-detail">
+          <svg
+            class="weather-detail-icon"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path d="M8 14.5V5a4 4 0 0 1 8 0v9.5a6 6 0 1 1-8 0Z" />
+            <path d="M12 6v11" />
+          </svg>
+          <span>체감온도</span>
+          <strong id="feelsLike">--%</strong>
+          <small>선선해요</small>
+        </div>
+
+        <div class="weather-detail">
+          <svg
+            class="weather-detail-icon"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+              d="M12 2.8c-2.4 3.4-4.2 5.6-4.2 8a4.2 4.2 0 0 0 8.4 0c0-2.4-1.8-4.6-4.2-8Z"
+            />
+            <path d="M8.5 17.5a4 4 0 0 0 7 1.2" />
+          </svg>
+          <span>습도</span>
+          <strong id="humidityCard">--%</strong>
+          <small>약간 높아요</small>
+        </div>
+
+        <div class="weather-detail">
+          <svg
+            class="weather-detail-icon"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path d="M3 8h11a3 3 0 1 0-2.8-4" />
+            <path d="M2 12h16a3 3 0 1 1-2.8 4" />
+            <path d="M4 16h5" />
+          </svg>
+          <span>바람</span>
+          <strong id="windCard">-- m/s</strong>
+          <small>북동 67°</small>
+        </div>
+      </div>
+
+      <section class="weather-extra-grid" aria-label="추가 날씨 정보">
+        <article class="weather-extra-card rain-probability-card">
+          <svg
+            class="weather-extra-icon"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path d="M3 12a9 9 0 0 1 18 0H3Z" />
+            <path d="M12 12v6a2 2 0 0 1-4 0" />
+            <path d="M6 8 4.5 6.5M12 5V3m6 5 1.5-1.5" />
+          </svg>
+          <div class="weather-extra-copy">
+            <span>우천취소 확률</span>
+            <strong id="rainProbabilityValue">--%</strong>
+            <small id="rainProbabilityMessage" aria-live="polite"
+              >강수 예보를 불러오는 중입니다.</small
+            >
+            <div
+              class="rain-probability-meter"
+              role="progressbar"
+              aria-label="우천취소 확률"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              aria-valuenow="0"
+            >
+              <span id="rainProbabilityMeter"></span>
+            </div>
+          </div>
+        </article>
+
+        <article class="weather-extra-card uv-index-card">
+          <svg
+            class="weather-extra-icon"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="12" r="4" />
+            <path
+              d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"
+            />
+          </svg>
+          <div class="weather-extra-copy">
+            <span>자외선 지수</span>
+            <strong id="uvIndexValue">--</strong>
+            <small id="uvIndexMessage" aria-live="polite"
+              >자외선 정보를 불러오는 중입니다.</small
+            >
+          </div>
+        </article>
+
+      </section>
+
+      <section class="weather-map-card" aria-label="날씨 지도">
+        <div class="weather-map-heading">
+          <h2>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" />
+              <circle cx="12" cy="10" r="2.5" />
+            </svg>
+            날씨 지도
+          </h2>
+        </div>
+        <div id="weatherLeafletMap" class="weather-leaflet-map" aria-label="대한민국 실시간 날씨 지도"></div>
+        <div class="weather-map-tooltip" id="weatherMapTooltip" role="status" hidden></div>
+      </section>
+    </main>
+
+    <aside class="weather-stadium-panel" aria-label="전국 구장 날씨">
+      <div class="weather-panel-search">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="10.8" cy="10.8" r="6.8" />
+          <path d="m16 16 4.5 4.5" />
+        </svg>
+        <input
+          id="stadiumSearch"
+          type="search"
+          placeholder="도시를 검색해보세요"
+          aria-label="도시 또는 야구장 검색"
+        />
+        <span class="weather-panel-current-city">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" />
+            <circle cx="12" cy="10" r="2.5" />
+          </svg>
+          <strong id="panelCity">서울</strong>
+          <span aria-hidden="true">⌄</span>
+        </span>
+      </div>
+      <h2>전국 주요 날씨</h2>
+      <div class="weather-panel-list">
+        <button type="button" data-stadium="인천 SSG랜더스필드">
+          <span class="stadium-weather-icon" aria-hidden="true">☁️</span>
+          <span class="stadium-weather-name"
+            >인천 SSG랜더스필드<small>흐림</small></span
+          ><b>21°</b><i aria-hidden="true">›</i>
+        </button>
+        <button type="button" data-stadium="잠실야구장">
+          <span class="stadium-weather-icon" aria-hidden="true">🌧️</span>
+          <span class="stadium-weather-name">잠실야구장<small>비</small></span
+          ><b>21°</b><i aria-hidden="true">›</i>
+        </button>
+        <button type="button" data-stadium="수원KT위즈파크">
+          <span class="stadium-weather-icon" aria-hidden="true">🌤️</span>
+          <span class="stadium-weather-name"
+            >수원 KT 위즈파크<small>구름 조금</small></span
+          ><b>21°</b><i aria-hidden="true">›</i>
+        </button>
+        <button type="button" data-stadium="대전 한화생명 볼파크">
+          <span class="stadium-weather-icon" aria-hidden="true">🌧️</span>
+          <span class="stadium-weather-name"
+            >대전 한화생명 볼파크<small>비</small></span
+          ><b>21°</b><i aria-hidden="true">›</i>
+        </button>
+        <button type="button" data-stadium="대구 삼성 라이온즈 파크">
+          <span class="stadium-weather-icon" aria-hidden="true">🌤️</span>
+          <span class="stadium-weather-name"
+            >대구 삼성 라이온즈 파크<small>구름 조금</small></span
+          ><b>21°</b><i aria-hidden="true">›</i>
+        </button>
+        <button type="button" data-stadium="광주기아챔피언스필드">
+          <span class="stadium-weather-icon" aria-hidden="true">☀️</span>
+          <span class="stadium-weather-name"
+            >광주-기아 챔피언스 필드<small>맑음</small></span
+          ><b>21°</b><i aria-hidden="true">›</i>
+        </button>
+        <button type="button" data-stadium="창원NC파크">
+          <span class="stadium-weather-icon" aria-hidden="true">☁️</span>
+          <span class="stadium-weather-name"
+            >창원 NC파크<small>흐림</small></span
+          ><b>21°</b><i aria-hidden="true">›</i>
+        </button>
+        <button type="button" data-stadium="사직야구장">
+          <span class="stadium-weather-icon" aria-hidden="true">🌤️</span>
+          <span class="stadium-weather-name"
+            >부산 사직야구장<small>구름 조금</small></span
+          ><b>21°</b><i aria-hidden="true">›</i>
+        </button>
+      </div>
+      <p class="weather-panel-empty" hidden>검색 결과가 없습니다.</p>
+    </aside>
+
+    <script src="weather-list-shuffle.js"></script>
+    <script src="weather-service.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+      const stadiumName =
+        localStorage.getItem("selectedStadium") || "잠실야구장";
+      const stadiums = {
+        "인천 SSG랜더스필드": { lat: 37.4371, lon: 126.6933 },
+        잠실야구장: { lat: 37.5122, lon: 127.0719 },
+        수원KT위즈파크: { lat: 37.2997, lon: 127.0098 },
+        "대전 한화생명 볼파크": { lat: 36.317, lon: 127.428 },
+        "대구 삼성 라이온즈 파크": { lat: 35.841, lon: 128.681 },
+        광주기아챔피언스필드: { lat: 35.1681, lon: 126.8891 },
+        창원NC파크: { lat: 35.2228, lon: 128.5822 },
+        사직야구장: { lat: 35.1941, lon: 129.0615 },
+      };
+      const cityNames = {
+        "인천 SSG랜더스필드": "인천",
+        잠실야구장: "서울",
+        수원KT위즈파크: "수원",
+        "대전 한화생명 볼파크": "대전",
+        "대구 삼성 라이온즈 파크": "대구",
+        광주기아챔피언스필드: "광주",
+        창원NC파크: "창원",
+        사직야구장: "부산",
+      };
+      const icons = window.weatherService.icons;
+      const uvDescriptions = [
+        { max: 2, label: "낮음" },
+        { max: 5, label: "보통" },
+        { max: 7, label: "높음" },
+        { max: 10, label: "매우 높음" },
+        { max: Infinity, label: "위험" },
+      ];
+      const place = stadiums[stadiumName] || stadiums["잠실야구장"];
+      const getElement = (id) => document.getElementById(id);
+
+      const mapRegions = [
+        { stadium: "인천 SSG랜더스필드", city: "인천", lat: 37.4371, lon: 126.6933, x: 128, y: 158 },
+        { stadium: "잠실야구장", city: "서울", lat: 37.5122, lon: 127.0719, x: 166, y: 151 },
+        { stadium: "수원KT위즈파크", city: "수원", lat: 37.2997, lon: 127.0098, x: 171, y: 181 },
+        { stadium: "대전 한화생명 볼파크", city: "대전", lat: 36.317, lon: 127.428, x: 193, y: 261 },
+        { stadium: "대구 삼성 라이온즈 파크", city: "대구", lat: 35.841, lon: 128.681, x: 298, y: 351 },
+        { stadium: "광주기아챔피언스필드", city: "광주", lat: 35.1681, lon: 126.8891, x: 126, y: 407 },
+        { stadium: "창원NC파크", city: "창원", lat: 35.2228, lon: 128.5822, x: 319, y: 414 },
+        { stadium: "사직야구장", city: "부산", lat: 35.1941, lon: 129.0615, x: 362, y: 414 },
+      ];
+      const mapWeatherCache = new Map();
+      const mapTooltip = getElement("weatherMapTooltip");
+      const mapCard = document.querySelector(".weather-map-card");
+      const leafletMap = L.map("weatherLeafletMap", {
+        center: [36.2, 127.8],
+        zoom: 7,
+        minZoom: 7,
+        maxZoom: 12,
+        maxBounds: [[33.0, 124.0], [39.6, 132.2]],
+        maxBoundsViscosity: 1,
+        zoomControl: true,
+        attributionControl: true,
+      });
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution: "&copy; OpenStreetMap contributors",
+      }).addTo(leafletMap);
+      mapRegions.forEach((region) => {
+        L.circleMarker([region.lat, region.lon], {
+          radius: 6,
+          color: "#ffffff",
+          weight: 2,
+          fillColor: "#4d98d3",
+          fillOpacity: 0.95,
+        }).addTo(leafletMap).bindTooltip(region.city, { direction: "top", offset: [0, -6] });
+      });
+      let mapRequestTimer;
+      let mapRequestId = 0;
+
+      function renderMapTooltip(region, data, x, y) {
+        const current = data?.list?.[0];
+        const probability = Number.isFinite(current?.pop)
+          ? `${Math.round(current.pop * 100)}%`
+          : "정보 없음";
+        const rainfall = Number.isFinite(current?.rain?.["3h"])
+          ? `${current.rain["3h"]}mm`
+          : "정보 없음";
+        const temperature = Number.isFinite(current?.main?.temp)
+          ? `${Math.round(current.main.temp)}°`
+          : "정보 없음";
+        const status = current?.weather?.[0]?.description || "정보 없음";
+        mapTooltip.innerHTML = `<strong>${region.city}</strong><span>우천취소 위험 ${probability}</span><span>강수량 ${rainfall}</span><span>기온 ${temperature} · ${status}</span>`;
+        mapTooltip.hidden = false;
+        const rect = mapCard.getBoundingClientRect();
+        mapTooltip.style.left = `${Math.min(Math.max(12, x + 14), rect.width - mapTooltip.offsetWidth - 12)}px`;
+        mapTooltip.style.top = `${Math.min(Math.max(54, y + 14), rect.height - mapTooltip.offsetHeight - 12)}px`;
+      }
+
+      leafletMap.on("mousemove", (event) => {
+        const rect = mapCard.getBoundingClientRect();
+        const x = event.originalEvent.clientX - rect.left;
+        const y = event.originalEvent.clientY - rect.top;
+        const region = mapRegions.reduce((nearest, candidate) => {
+          const distance = Math.hypot(candidate.lat - event.latlng.lat, (candidate.lon - event.latlng.lng) * 0.8);
+          return distance < nearest.distance ? { candidate, distance } : nearest;
+        }, { candidate: null, distance: Infinity }).candidate;
+        if (!region) return;
+        clearTimeout(mapRequestTimer);
+        mapRequestTimer = setTimeout(async () => {
+          const requestId = ++mapRequestId;
+          try {
+            let data = mapWeatherCache.get(region.stadium);
+            if (!data) {
+              data = await window.weatherService.loadForecast(region.stadium);
+              mapWeatherCache.set(region.stadium, data);
+            }
+            if (requestId === mapRequestId) renderMapTooltip(region, data, x, y);
+          } catch (error) {
+            if (requestId === mapRequestId) renderMapTooltip(region, {}, x, y);
+          }
+        }, 350);
+      });
+      leafletMap.on("mouseout", () => {
+        clearTimeout(mapRequestTimer);
+        mapRequestId += 1;
+        mapTooltip.hidden = true;
+      });
+      setTimeout(() => leafletMap.invalidateSize(), 0);
+      let mapResizeTimer;
+      const refreshLeafletSize = () => {
+        cancelAnimationFrame(mapResizeTimer);
+        requestAnimationFrame(() => {
+          leafletMap.invalidateSize({ animate: false, pan: false });
+          requestAnimationFrame(() => leafletMap.invalidateSize({ animate: false, pan: false }));
+        });
+      };
+      const mapResizeObserver = new ResizeObserver(() => refreshLeafletSize());
+      mapResizeObserver.observe(mapCard);
+      mapCard.addEventListener("pointerenter", () => {
+        mapCard.classList.add("is-expanded");
+        refreshLeafletSize();
+      });
+      mapCard.addEventListener("pointerleave", () => {
+        mapCard.classList.remove("is-expanded");
+        refreshLeafletSize();
+      });
+
+      const cityName = cityNames[stadiumName] || "서울";
+      getElement("heroCity").textContent = cityName;
+      getElement("hourlyTitle").textContent = `${cityName} 시간별 날씨`;
+      getElement("panelCity").textContent = cityName;
+
+      const stadiumSearch = getElement("stadiumSearch");
+      const stadiumButtons = [
+        ...document.querySelectorAll(".weather-panel-list button"),
+      ];
+      stadiumSearch.addEventListener("input", () => {
+        const query = stadiumSearch.value.trim().toLocaleLowerCase("ko");
+        let visibleCount = 0;
+
+        stadiumButtons.forEach((button) => {
+          const isMatch = button.textContent
+            .toLocaleLowerCase("ko")
+            .includes(query);
+          button.hidden = !isMatch;
+          if (isMatch) visibleCount += 1;
+        });
+        document.querySelector(".weather-panel-empty").hidden =
+          visibleCount > 0;
+      });
+
+      stadiumButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          localStorage.setItem("selectedStadium", button.dataset.stadium);
+          window.location.reload();
+        });
+      });
+
+      function renderRainProbability(probability) {
+        if (!Number.isFinite(probability)) {
+          getElement("rainProbabilityValue").textContent = "확인 불가";
+          getElement("rainProbabilityMessage").textContent =
+            "우천취소 확률을 확인할 수 없습니다.";
+          document.querySelector(".rain-probability-meter").setAttribute("aria-valuenow", "0");
+          getElement("rainProbabilityMeter").style.width = "0%";
+          document.querySelector(".rain-probability-card").removeAttribute("data-level");
+          return;
+        }
+        const value = Math.max(0, Math.min(100, probability));
+        const card = document.querySelector(".rain-probability-card");
+        const message =
+          value >= 60
+            ? "비가 올 가능성이 높아요."
+            : value >= 30
+              ? "비가 올 수 있어요. 우산을 준비하세요."
+              : "비가 올 가능성이 낮아요.";
+
+        getElement("rainProbabilityValue").textContent = `${value}%`;
+        getElement("rainProbabilityMessage").textContent = message;
+        document
+          .querySelector(".rain-probability-meter")
+          .setAttribute("aria-valuenow", String(value));
+        getElement("rainProbabilityMeter").style.width = `${value}%`;
+        card.dataset.level =
+          value >= 60 ? "high" : value >= 30 ? "medium" : "low";
+      }
+
+      function getForecastIcon(item) {
+        const weatherMain = item?.weather?.[0]?.main;
+        const rainProbability = Number(item?.pop);
+        const rainAmount = Number(item?.rain?.["3h"] || item?.rain?.["1h"]);
+        const hasRainForecast =
+          Number.isFinite(rainAmount) && rainAmount > 0;
+        const likelyRain =
+          Number.isFinite(rainProbability) && rainProbability >= 0.4;
+
+        if (
+          hasRainForecast ||
+          likelyRain ||
+          ["Rain", "Drizzle", "Thunderstorm"].includes(weatherMain)
+        ) {
+          return weatherMain === "Thunderstorm" ? "⛈️" : "🌧️";
+        }
+
+        return icons[weatherMain] || "☁️";
+      }
+
+      function renderHourlyForecast(items) {
+        const forecast = document.querySelector(".hourly-weather");
+        const fragment = document.createDocumentFragment();
+        const now = Math.floor(Date.now() / 1000);
+        // OpenWeather의 dt는 UTC 기준 Unix timestamp이므로 숫자 자체를 KST로 다시 보정하지 않습니다.
+        // 현재 시각 이후의 예보만 dt 순서로 정렬해 표시합니다.
+        const upcomingItems = items
+          .filter((item) => Number.isFinite(item?.dt) && item.dt >= now)
+          .sort((a, b) => a.dt - b.dt)
+          .slice(0, 12);
+
+        if (!upcomingItems.length) {
+          showForecastMessage("현재 이후 시간별 예보가 없습니다.");
+          return;
+        }
+
+        upcomingItems.forEach((item) => {
+          const hour = document.createElement("div");
+          hour.className = "hour-item";
+
+          const time = document.createElement("span");
+          time.className = "time";
+          const hourText = new Intl.DateTimeFormat("ko-KR", {
+            timeZone: "Asia/Seoul",
+            hour: "2-digit",
+            hourCycle: "h23",
+          })
+            .formatToParts(new Date(item.dt * 1000))
+            .find((part) => part.type === "hour").value;
+          time.textContent = `${hourText}시`;
+
+          const icon = document.createElement("span");
+          icon.className = "icon";
+          icon.textContent = getForecastIcon(item);
+          icon.setAttribute("aria-hidden", "true");
+
+          const temperature = document.createElement("strong");
+          temperature.textContent = `${Math.round(item.main.temp)}°`;
+
+          const rain = document.createElement("span");
+          rain.className = "rain";
+          rain.textContent = `강수 ${Math.round((item.pop || 0) * 100)}%`;
+
+          hour.append(time, icon, temperature, rain);
+          fragment.append(hour);
+        });
+
+        forecast.replaceChildren(fragment);
+      }
+
+      function showForecastMessage(message) {
+        const forecast = document.querySelector(".hourly-weather");
+        const messageElement = document.createElement("p");
+        messageElement.className = "forecast-message";
+        messageElement.textContent = message;
+        forecast.replaceChildren(messageElement);
+      }
+
+      function renderWeather(data) {
+        const current = data.list?.[0];
+        if (!current) throw new Error("날씨 예보 데이터가 비어 있습니다.");
+
+        const dateText = new Intl.DateTimeFormat("ko-KR", {
+          timeZone: "Asia/Seoul",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        }).format(new Date(current.dt * 1000));
+        getElement("heroDate").textContent = dateText;
+
+        getElement("temperature").textContent =
+          `${Math.round(current.main.temp)}°`;
+        getElement("heroWeatherIcon").textContent =
+          icons[current.weather[0].main] || "☁️";
+        getElement("heroWeatherIcon").setAttribute(
+          "aria-label",
+          current.weather[0].description || "날씨",
+        );
+        getElement("weatherDescription").textContent =
+          current.weather[0].description;
+        getElement("feelsLike").textContent =
+          `${Math.round(current.main.feels_like)}°`;
+        getElement("humidityCard").textContent = `${current.main.humidity}%`;
+        getElement("windCard").textContent =
+          `${Math.round((current.wind?.speed || 0) * 10) / 10} m/s`;
+
+        const rainProbability = Number.isFinite(current.pop)
+          ? Math.round(current.pop * 100)
+          : null;
+        renderRainProbability(rainProbability);
+        const heroRainValue = getElement("heroRainProbabilityValue");
+        heroRainValue.textContent =
+          rainProbability === null ? "확인 불가" : `${rainProbability}%`;
+        heroRainValue.classList.toggle("unavailable", rainProbability === null);
+        renderHourlyForecast(data.list);
+      }
+
+      async function loadUvIndex() {
+        const url = new URL("https://api.open-meteo.com/v1/forecast");
+        url.search = new URLSearchParams({
+          latitude: String(place.lat),
+          longitude: String(place.lon),
+          current: "uv_index",
+          timezone: "Asia/Seoul",
+          forecast_days: "1",
+        }).toString();
+
+        try {
+          const response = await fetch(url);
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          const data = await response.json();
+          const uvIndex = data.current?.uv_index;
+          if (typeof uvIndex !== "number" || !Number.isFinite(uvIndex)) {
+            throw new Error("자외선 지수 데이터가 없습니다.");
+          }
+
+          const roundedIndex = Math.round(uvIndex);
+          const category = uvDescriptions.find(
+            ({ max }) => uvIndex <= max,
+          ).label;
+          getElement("uvIndexValue").textContent = String(roundedIndex);
+          getElement("uvIndexMessage").textContent = category;
+          document.querySelector(".uv-index-card").dataset.level =
+            uvIndex <= 2 ? "low" : uvIndex <= 5 ? "medium" : "high";
+        } catch (error) {
+          console.error("자외선 지수를 불러오지 못했습니다.", error);
+          getElement("uvIndexMessage").textContent =
+            "자외선 정보를 불러오지 못했습니다.";
+        }
+      }
+
+      async function loadWeather() {
+        try {
+          renderWeather(await window.weatherService.loadForecast(stadiumName));
+        } catch (error) {
+          console.error("날씨 정보를 불러오지 못했습니다.", error);
+          getElement("weatherDescription").textContent =
+            "날씨 정보를 불러오지 못했습니다.";
+          getElement("rainProbabilityMessage").textContent =
+            "우천취소 확률을 불러오지 못했습니다.";
+          const heroRainValue = getElement("heroRainProbabilityValue");
+          heroRainValue.textContent = "확인 불가";
+          heroRainValue.classList.add("unavailable");
+          showForecastMessage("시간별 날씨 정보를 불러오지 못했습니다.");
+        }
+      }
+
+      loadWeather();
+      loadUvIndex();
+      window.weatherService.loadPanelWeather();
+    </script>
+  </body>
+</html>
