@@ -116,8 +116,8 @@
   body.history-body .before-weather {
     border: 1px solid rgba(255, 255, 255, 0.22) !important;
     border-radius: 16px !important;
-    background: rgba(42, 130, 184, 0.26) !important;
-    box-shadow: 0 8px 22px rgba(20, 80, 120, 0.12) !important;
+    background: var(--sky-tone-1) !important;
+    box-shadow: 0 8px 22px var(--sky-tone-37) !important;
   }
 
   body.history-body > .history-page > .weather-stadium-panel {
@@ -135,7 +135,7 @@
     padding: 8px 14px 16px !important;
     border: 1px solid rgba(224, 240, 251, 0.2) !important;
     border-radius: 16px !important;
-    background: rgba(76, 118, 149, 0.62) !important;
+    background: var(--sky-tone-3) !important;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
     font-size: 17px !important;
     overflow: hidden !important;
@@ -153,7 +153,7 @@
     gap: 9px !important;
     border: 1px solid rgba(228, 243, 253, 0.24) !important;
     border-radius: 14px !important;
-    background: rgba(105, 153, 189, 0.28) !important;
+    background: var(--sky-tone-4) !important;
     color: #f2f8fc !important;
     font-family: inherit !important;
     font-size: 17px !important;
@@ -251,7 +251,7 @@
     gap: 8px !important;
     border: 1px solid rgba(227, 242, 252, 0.24) !important;
     border-radius: 16px !important;
-    background: rgba(114, 157, 190, 0.25) !important;
+    background: var(--sky-tone-5) !important;
     color: #f2f8fc !important;
     font-family: inherit !important;
     font-size: 19px !important;
@@ -262,7 +262,7 @@
   body.history-body .weather-panel-list button:hover,
   body.history-body .weather-panel-list button:focus-visible {
     border-color: rgba(235, 247, 255, 0.48) !important;
-    background: rgba(145, 184, 212, 0.3) !important;
+    background: var(--sky-tone-6) !important;
   }
 
   body.history-body .weather-panel-list button span {
@@ -386,7 +386,7 @@
     padding: 8px 14px 16px !important;
     border: 1px solid rgba(224, 240, 251, 0.2) !important;
     border-radius: 16px !important;
-    background: rgba(76, 118, 149, 0.62) !important;
+    background: var(--sky-tone-3) !important;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
     color: #fff !important;
     font-size: 17px !important;
@@ -405,7 +405,7 @@
     gap: 9px !important;
     border: 1px solid rgba(228, 243, 253, 0.24) !important;
     border-radius: 14px !important;
-    background: rgba(105, 153, 189, 0.28) !important;
+    background: var(--sky-tone-4) !important;
     color: #f2f8fc !important;
     font-family: inherit !important;
     font-size: 17px !important;
@@ -503,7 +503,7 @@
     gap: 8px !important;
     border: 1px solid rgba(227, 242, 252, 0.24) !important;
     border-radius: 16px !important;
-    background: rgba(114, 157, 190, 0.25) !important;
+    background: var(--sky-tone-5) !important;
     color: #f2f8fc !important;
     font-family: inherit !important;
     text-align: left !important;
@@ -513,7 +513,7 @@
   body.history-body .weather-panel-list button:hover,
   body.history-body .weather-panel-list button:focus-visible {
     border-color: rgba(235, 247, 255, 0.48) !important;
-    background: rgba(145, 184, 212, 0.3) !important;
+    background: var(--sky-tone-6) !important;
   }
 
   body.history-body .weather-panel-list button span {
@@ -688,8 +688,8 @@ body.history-body .five-day-forecast {
   padding: 22px 24px !important;
   border: 1px solid rgba(255, 255, 255, 0.28) !important;
   border-radius: 18px !important;
-  background: rgba(67, 143, 194, 0.3) !important;
-  box-shadow: 0 8px 22px rgba(20, 80, 120, 0.12) !important;
+  background: var(--sky-tone-38) !important;
+  box-shadow: 0 8px 22px var(--sky-tone-37) !important;
 }
 
 body.history-body .date-select-section {
@@ -744,6 +744,14 @@ body.history-body .five-day-forecast-item .date-text {
 body.history-body .five-day-forecast-item strong {
   font-size: clamp(28px, 3vw, 42px) !important;
   line-height: 1 !important;
+}
+
+/* 예보가 없는 날의 "확인 불가"는 작게 한 줄로 */
+body.history-body .five-day-forecast-item strong.is-unavailable {
+  font-size: 18px !important;
+  line-height: 42px !important;
+  white-space: nowrap !important;
+  opacity: 0.75;
 }
 
 body.history-body .five-day-forecast-item small {

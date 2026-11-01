@@ -66,7 +66,7 @@
   body.history-body .history-intro {
     border: 1px solid rgba(255, 255, 255, 0.22) !important;
     border-radius: 18px !important;
-    background: rgba(42, 130, 184, 0.26) !important;
+    background: var(--sky-tone-1) !important;
   }
   body.history-body .weather-summary {
     min-height: 180px;
@@ -214,7 +214,7 @@
     right: 462px !important;
     bottom: 22px !important;
     border-radius: 16px !important;
-    background: rgba(39, 123, 177, 0.28) !important;
+    background: color-mix(in srgb, var(--sky-tone-2) 25%, transparent) !important;
     justify-content: flex-start !important;
   }
   body.index-body .map-section::before {
@@ -271,7 +271,7 @@ body.index-body .index-weather-panel.weather-stadium-panel {
   padding: 8px 14px 16px !important;
   border: 1px solid rgba(224, 240, 251, 0.2) !important;
   border-radius: 16px !important;
-  background: rgba(76, 118, 149, 0.62) !important;
+  background: var(--sky-tone-3) !important;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
   color: #fff !important;
   font-size: 17px !important;
@@ -290,7 +290,7 @@ body.index-body .weather-panel-search {
   gap: 9px !important;
   border: 1px solid rgba(228, 243, 253, 0.24) !important;
   border-radius: 14px !important;
-  background: rgba(105, 153, 189, 0.28) !important;
+  background: var(--sky-tone-4) !important;
   color: #f2f8fc !important;
 }
 
@@ -384,7 +384,7 @@ body.index-body .weather-panel-list button {
   gap: 8px !important;
   border: 1px solid rgba(227, 242, 252, 0.24) !important;
   border-radius: 16px !important;
-  background: rgba(114, 157, 190, 0.25) !important;
+  background: var(--sky-tone-5) !important;
   color: #f2f8fc !important;
   text-align: left !important;
   overflow: hidden !important;
@@ -397,7 +397,7 @@ body.index-body .weather-panel-list button {
 body.index-body .weather-panel-list button:hover,
 body.index-body .weather-panel-list button:focus-visible {
   border-color: rgba(235, 247, 255, 0.48) !important;
-  background: rgba(145, 184, 212, 0.3) !important;
+  background: var(--sky-tone-6) !important;
 }
 
 body.index-body .weather-panel-list button span {
@@ -470,7 +470,7 @@ html {
   width: 100%;
   min-height: 100%;
   overscroll-behavior-y: none;
-  background: #6bb0df !important;
+  background: var(--sky-tone-7) !important;
 }
 
 body {
@@ -508,7 +508,7 @@ a {
   z-index: 2;
 
   transition: 0.15s ease;
-  border: 1px solid #33415a !important;
+  border: 1px solid var(--sky-tone-8) !important;
 }
 
 .back-button {
@@ -707,7 +707,7 @@ body.history-body .weather-timeline {
   --brick-red: #d84315;
   --light-gray: #f5f5f5;
   --sky-blue: #e0f7fa;
-  --ink: #263238;
+  --ink: var(--sky-tone-9);
   --muted: #6d7a7d;
   --line: #e1e7e8;
   --field-green: #2e7d32;
@@ -862,7 +862,7 @@ body.index-body {
       rgba(255, 250, 232, 0.28) 12%,
       transparent 31%
     ),
-    linear-gradient(145deg, #87aeca 0%, #4c8fc4 38%, #2479b4 72%, #78b9dc 100%) !important;
+    linear-gradient(145deg, var(--sky-tone-10) 0%, var(--sky-tone-11) 38%, var(--sky-tone-12) 72%, var(--sky-tone-13) 100%) !important;
 }
 body.index-body .main-page {
   background: transparent !important;
@@ -872,15 +872,19 @@ body.index-body .main-page {
 }
 body.index-body .korea-map {
   border-radius: 18px !important;
-  box-shadow: 0 12px 28px rgba(18, 70, 115, 0.18) !important;
+  box-shadow: 0 12px 28px var(--sky-tone-14) !important;
   border: 1px solid rgba(255, 255, 255, 0.24) !important;
   background:
     radial-gradient(
       circle at 26% 18%,
-      rgba(255, 255, 255, 0.2),
+      rgba(255, 255, 255, 0.06),
       transparent 30%
     ),
-    linear-gradient(145deg, rgba(80, 163, 212, 0.58), rgba(32, 122, 184, 0.36)) !important;
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--sky-tone-15) 25%, transparent),
+      color-mix(in srgb, var(--sky-tone-16) 25%, transparent)
+    ) !important;
 }
 body.index-body .korea-svg-img {
   opacity: 0.34 !important;
@@ -888,10 +892,13 @@ body.index-body .korea-svg-img {
   object-fit: fill !important;
 }
 body.index-body .stadium-marker {
-  background: rgba(35, 118, 188, 0.55) !important;
-  border-color: rgba(255, 255, 255, 0.3) !important;
+  /* 밝은 지도 위에서도 글씨가 보이도록 날씨 톤을 짙게 섞은 배경 */
+  background: color-mix(in srgb, var(--sky-tone-17) 45%, rgba(12, 22, 36, 0.86)) !important;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  border-color: rgba(255, 255, 255, 0.45) !important;
   color: #fff !important;
-  box-shadow: 0 5px 14px rgba(18, 64, 105, 0.18) !important;
+  box-shadow: 0 5px 14px var(--sky-tone-18) !important;
   border-radius: 15px !important;
   display: flex !important;
   align-items: center !important;
@@ -1070,9 +1077,11 @@ body.index-body .stadium-name {
   line-height: 1.1 !important;
   color: #fff !important;
   font-size: 15px !important;
-  font-weight: 700 !important;
+  font-weight: 800 !important;
   white-space: nowrap !important;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35) !important;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.8),
+    0 0 6px rgba(0, 0, 0, 0.35) !important;
 }
 body.index-body .stadium-marker-info small {
   line-height: 1 !important;
@@ -1082,7 +1091,7 @@ body.index-body .stadium-marker .marker {
   flex: 0 0 14px !important;
   border: 3px solid rgba(255, 255, 255, 0.95) !important;
   border-radius: 50% !important;
-  background: #4d8fe0 !important;
+  background: var(--sky-tone-19) !important;
   box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.25) !important;
   width: 18px !important;
   height: 18px !important;
@@ -1159,7 +1168,7 @@ body.index-body .quick-weather span {
 }
 body.index-body .quick-weather {
   position: relative;
-  box-shadow: 0 4px 10px rgba(7, 75, 128, 0.08) !important;
+  box-shadow: 0 4px 10px var(--sky-tone-20) !important;
   font-size: 19px !important;
 }
 body.index-body .quick-weather b {
@@ -1227,7 +1236,7 @@ body.index-body .marker-changwon:focus-visible {
   transform: translate(-8px, -55%) !important;
 }
 body.index-body .marker-gwangju .stadium-marker-info small {
-  font-size: 6.5px !important;
+  font-size: 9px !important;
 }
 body.index-body .marker-incheon {
   flex-direction: row !important;
@@ -1250,7 +1259,7 @@ body.weather-body .hero-location {
 /* Clean iPhone Weather-style history UI. */
 body.history-body {
   color: #fff !important;
-  background: linear-gradient(180deg, #4b8fc4 0%, #68a9da 100%) !important;
+  background: linear-gradient(180deg, var(--sky-tone-21) 0%, var(--sky-tone-22) 100%) !important;
 }
 body.history-body .history-page {
   font-family:
@@ -1300,7 +1309,7 @@ body.history-body .date-button:hover {
 }
 body.history-body .history-weather {
   border-radius: 14px !important;
-  background: rgba(22, 116, 181, 0.34) !important;
+  background: var(--sky-tone-23) !important;
   position: relative !important;
 }
 body.history-body .history-weather .section-title,
@@ -1476,7 +1485,7 @@ body.history-body .history-intro p {
   body.index-body .stadium-marker,
   body.index-body .stadium-marker-info small {
     color: #fff !important;
-    text-shadow: 0 1px 2px rgba(0, 45, 85, 0.35);
+    text-shadow: 0 1px 2px var(--sky-tone-24);
   }
 
   html,
@@ -1503,11 +1512,13 @@ body.history-body .history-intro p {
 body.index-body .stadium-marker-info small {
   display: block !important;
   margin-top: 4px !important;
-  color: rgba(255, 255, 255, 0.95) !important;
-  font-size: 10px !important;
-  font-weight: 600 !important;
+  color: #fff !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
   white-space: nowrap !important;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35) !important;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.8),
+    0 0 6px rgba(0, 0, 0, 0.35) !important;
 }
 
 @media (max-width: 900px) {
@@ -1803,7 +1814,10 @@ body.history-body > .app-sidebar {
   min-width: 240px !important;
   padding: 28px 16px !important;
   border-right: 1px solid rgba(255, 255, 255, 0.1) !important;
-  background: rgb(50, 107, 157) !important;
+  /* 날씨 배경이 살짝 비치는 반투명 유리 느낌 */
+  background: color-mix(in srgb, var(--sky-tone-25) 25%, transparent) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(1.1);
+  backdrop-filter: blur(18px) saturate(1.1);
   color: #fff !important;
   font-family:
     "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif !important;
@@ -1895,8 +1909,8 @@ body.history-body .history-weather .history-tooltip {
   padding: 8px 11px;
   border: 1px solid rgba(255, 255, 255, 0.24);
   border-radius: 8px;
-  background: rgba(21, 73, 116, 0.94);
-  box-shadow: 0 8px 20px rgba(8, 42, 72, 0.24);
+  background: var(--sky-tone-26);
+  box-shadow: 0 8px 20px var(--sky-tone-27);
   color: #fff;
   line-height: 1.35;
   pointer-events: none;

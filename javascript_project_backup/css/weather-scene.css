@@ -1,0 +1,261 @@
+/* =========================================================
+   날씨·시간대별 배경 (weather-scene.js가 생성하는 .sky-scene)
+   레이어 순서: 사진 → 빛/별 → 구름 → 가독성용 어둡게 → 빗줄기
+========================================================= */
+
+/* 기존 화면의 파란 계열 색. 날씨 장면에 맞춰 weather-scene.js가 같은 투명도로 색조만 바꿉니다. */
+:root {
+  --sky-tone-1: rgba(42, 130, 184, 0.26);
+  --sky-tone-2: rgba(39, 123, 177, 0.28);
+  --sky-tone-3: rgba(76, 118, 149, 0.62);
+  --sky-tone-4: rgba(105, 153, 189, 0.28);
+  --sky-tone-5: rgba(114, 157, 190, 0.25);
+  --sky-tone-6: rgba(145, 184, 212, 0.3);
+  --sky-tone-7: #6bb0df;
+  --sky-tone-8: #33415a;
+  --sky-tone-9: #263238;
+  --sky-tone-10: #87aeca;
+  --sky-tone-11: #4c8fc4;
+  --sky-tone-12: #2479b4;
+  --sky-tone-13: #78b9dc;
+  --sky-tone-14: rgba(18, 70, 115, 0.18);
+  --sky-tone-15: rgba(80, 163, 212, 0.58);
+  --sky-tone-16: rgba(32, 122, 184, 0.36);
+  --sky-tone-17: rgba(35, 118, 188, 0.55);
+  --sky-tone-18: rgba(18, 64, 105, 0.18);
+  --sky-tone-19: #4d8fe0;
+  --sky-tone-20: rgba(7, 75, 128, 0.08);
+  --sky-tone-21: #4b8fc4;
+  --sky-tone-22: #68a9da;
+  --sky-tone-23: rgba(22, 116, 181, 0.34);
+  --sky-tone-24: rgba(0, 45, 85, 0.35);
+  --sky-tone-25: rgb(50, 107, 157);
+  --sky-tone-26: rgba(21, 73, 116, 0.94);
+  --sky-tone-27: rgba(8, 42, 72, 0.24);
+  --sky-tone-28: rgba(9, 57, 91, 0.3);
+  --sky-tone-29: rgba(20, 78, 118, 0.9);
+  --sky-tone-30: rgba(7, 44, 70, 0.25);
+  --sky-tone-31: #5d9dcc;
+  --sky-tone-32: rgba(20, 70, 105, 0.24);
+  --sky-tone-33: #245b80;
+  --sky-tone-34: rgba(93, 136, 166, 0.28);
+  --sky-tone-35: rgba(37, 77, 103, 0.3);
+  --sky-tone-36: rgba(37, 77, 103, 0.38);
+  --sky-tone-37: rgba(20, 80, 120, 0.12);
+  --sky-tone-38: rgba(67, 143, 194, 0.3);
+}
+
+/* 배경 장면이 기존 페이지 그라디언트 배경을 대신합니다. */
+html.has-sky-scene body.index-body,
+html.has-sky-scene body.weather-body,
+html.has-sky-scene body.history-body {
+  background: transparent !important;
+}
+
+html.has-sky-scene body.weather-body::before {
+  content: none !important;
+}
+
+/* 장면별 사진과 가독성용 어둡게 처리.
+   html 배경에도 깔아두어 스크립트 실행 전 첫 화면부터 같은 배경이 보이게 합니다.
+   --sky-base는 사진의 평균 색으로, 사진이 그려지기 전 순간에 보이는 바탕색입니다. */
+html[data-sky="sunny"] {
+  --sky-photo: url("images/sunny.jpg");
+  --sky-base: #5984bb;
+  --sky-scrim: linear-gradient(rgba(8, 42, 82, 0.12), rgba(8, 42, 82, 0.26));
+  --sky-photo-position: center top;
+}
+
+html[data-sky="sunset"] {
+  --sky-photo: url("images/sunset.jpg");
+  --sky-base: #7f7c91;
+  --sky-scrim: linear-gradient(rgba(36, 28, 60, 0.12), rgba(36, 28, 60, 0.3));
+  --sky-photo-position: center top;
+}
+
+html[data-sky="night"] {
+  --sky-photo: url("images/night.jpg");
+  --sky-base: #242843;
+  --sky-scrim: linear-gradient(rgba(6, 10, 30, 0.08), rgba(6, 10, 30, 0.25));
+  --sky-photo-position: center top;
+}
+
+html[data-sky="cloudy"] {
+  --sky-photo: url("images/cloudy.jpg");
+  --sky-base: #727272;
+  --sky-scrim: linear-gradient(rgba(22, 32, 48, 0.28), rgba(22, 32, 48, 0.38));
+}
+
+html[data-sky="rain"] {
+  --sky-photo: url("images/rain.jpg");
+  --sky-base: #949395;
+  --sky-scrim: linear-gradient(rgba(14, 22, 34, 0.36), rgba(14, 22, 34, 0.48));
+}
+
+html.has-sky-scene[data-sky] {
+  background:
+    var(--sky-scrim),
+    var(--sky-photo) var(--sky-photo-position, center) / cover no-repeat,
+    var(--sky-base) !important;
+}
+
+/* 구장 선택 화면의 지도 실루엣이 배경 사진에 묻히지 않도록 밝고 선명하게 */
+html.has-sky-scene[data-sky] body.index-body .korea-svg-img,
+html.has-sky-scene[data-sky] body.weather-body .weather-map-silhouette {
+  opacity: 0.82 !important;
+  filter: grayscale(1) brightness(1.8) contrast(0.9)
+    drop-shadow(0 6px 18px rgba(0, 0, 0, 0.25)) !important;
+}
+
+/* 맑은 낮은 파란 배경 위라 조금 덜 하얗게 */
+html.has-sky-scene[data-sky="sunny"] body.index-body .korea-svg-img,
+html.has-sky-scene[data-sky="sunny"] body.weather-body .weather-map-silhouette {
+  opacity: 0.55 !important;
+}
+
+.sky-scene {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.sky-scene > * {
+  position: absolute;
+  inset: 0;
+}
+
+.sky-photo {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+
+/* 해·노을·별이 있는 사진은 하늘 윗부분이 보이도록 위쪽 기준으로 자릅니다. */
+.sky-photo[data-scene="sunny"],
+.sky-photo[data-scene="sunset"],
+.sky-photo[data-scene="night"] {
+  background-position: center top;
+}
+
+.sky-photo.is-visible {
+  opacity: 1;
+}
+
+.sky-glow,
+.sky-stars,
+.sky-rain {
+  opacity: 0;
+  transition: opacity 1.5s ease;
+}
+
+.sky-scene[data-scene="sunny"] .sky-glow {
+  background: radial-gradient(
+    circle at 30% 8%,
+    rgba(255, 248, 225, 0.55) 0,
+    rgba(255, 240, 200, 0.18) 18%,
+    transparent 45%
+  );
+  opacity: 1;
+  /* 느린 효과는 초당 10번만 갱신해 뒤를 흐리게 하는 박스들의 재계산을 줄입니다. */
+  animation: sky-glow-pulse 9s steps(90) infinite alternate;
+}
+
+.sky-scene[data-scene="sunset"] .sky-glow {
+  background: linear-gradient(
+    to top,
+    rgba(255, 176, 128, 0.28) 0,
+    rgba(240, 150, 140, 0.12) 35%,
+    transparent 65%
+  );
+  opacity: 1;
+}
+
+.sky-stars {
+  inset: 0 auto auto 0;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+}
+
+.sky-scene[data-scene="night"] .sky-stars {
+  opacity: 1;
+  animation: sky-twinkle 5s steps(50) infinite alternate;
+}
+
+.sky-scene[data-scene="night"] .sky-stars + .sky-stars {
+  animation-duration: 7s;
+  animation-timing-function: steps(70);
+  animation-delay: -3s;
+}
+
+.sky-clouds {
+  inset: -4% auto auto 0;
+  width: calc(100% + var(--tile));
+  height: 62%;
+  background: url("images/clouds.svg") repeat-x 0 0 / var(--tile) 100%;
+  opacity: var(--opacity, 0);
+  filter: brightness(var(--brightness, 1));
+  /* 구름은 아주 느리게 움직이므로 초당 10번(--steps)만 위치를 갱신합니다. */
+  animation: sky-drift var(--speed, 240s) steps(var(--steps, 2400)) infinite;
+  transition: opacity 1.5s ease;
+  will-change: transform;
+}
+
+.sky-clouds-far {
+  --tile: 1200px;
+}
+
+.sky-clouds-near {
+  --tile: 1700px;
+  top: 6%;
+  height: 70%;
+}
+
+.sky-scrim {
+  background: var(--sky-scrim, transparent);
+}
+
+/* 저장된 장면으로 시작할 때는 페이드 없이 바로 표시 */
+.sky-scene.is-instant > * {
+  transition: none !important;
+}
+
+.sky-rain.is-active {
+  opacity: 1;
+}
+
+@keyframes sky-drift {
+  to {
+    transform: translate3d(calc(-1 * var(--tile)), 0, 0);
+  }
+}
+
+@keyframes sky-glow-pulse {
+  from {
+    opacity: 0.65;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes sky-twinkle {
+  from {
+    opacity: 0.35;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sky-clouds,
+  .sky-glow,
+  .sky-stars {
+    animation: none !important;
+  }
+}

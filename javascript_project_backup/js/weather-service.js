@@ -60,7 +60,8 @@
     return "조회 실패";
   }
 
-  async function loadPanelWeather(buttons) {
+  // sceneStadium: 배경(weather-scene.js)에 반영할 선택 구장
+  async function loadPanelWeather(buttons, sceneStadium) {
     await Promise.all(
       buttons.map(async (button) => {
         const icon = button.querySelector(".stadium-weather-icon");
@@ -81,12 +82,14 @@
           icon.textContent = icons[current.weather[0].main] || "☁️";
           description.textContent = current.weather[0].description;
           temperature.textContent = `${Math.round(current.main.temp)}°`;
+          if (button.dataset.stadium === sceneStadium) window.weatherScene?.update(data);
         } catch (error) {
           console.error(`${button.dataset.stadium} 날씨 조회 실패:`, error);
           icon.textContent = "⚠️";
           description.textContent = getFailureMessage(error);
           button.title =
             error instanceof Error ? error.message : "날씨 조회에 실패했습니다.";
+          if (button.dataset.stadium === sceneStadium) window.weatherScene?.update(null);
         }
         button.removeAttribute("aria-busy");
       }),
@@ -110,9 +113,8 @@
     });
     list.replaceChildren(...buttons);
 
-    document.getElementById("panelCity").textContent = getCityName(
-      localStorage.getItem("selectedStadium"),
-    );
+    const selectedStadium = localStorage.getItem("selectedStadium");
+    document.getElementById("panelCity").textContent = getCityName(selectedStadium);
 
     const search = document.getElementById("stadiumSearch");
     search.addEventListener("input", () => {
@@ -127,7 +129,10 @@
       document.querySelector(".weather-panel-empty").hidden = visibleCount > 0;
     });
 
-    loadPanelWeather(buttons);
+    loadPanelWeather(
+      buttons,
+      Object.hasOwn(stadiums, selectedStadium) ? selectedStadium : "잠실야구장",
+    );
   }
 
   window.weatherService = {

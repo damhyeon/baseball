@@ -8,6 +8,8 @@
 
     <link rel="stylesheet" href="style.css?v=20261023-10" />
     <link rel="stylesheet" href="history.css?v=20261023-5" />
+    <link rel="stylesheet" href="weather-scene.css" />
+    <script src="weather-scene-boot.js"></script>
   </head>
 
   <body class="history-body">
@@ -145,6 +147,7 @@
     </main>
 
     <script src="weather-list-shuffle.js"></script>
+    <script src="weather-scene.js"></script>
     <script src="weather-service.js"></script>
     <script>
       const storedStadium = localStorage.getItem("selectedStadium");
@@ -162,6 +165,12 @@
       });
 
       const today = new Date();
+      // 오늘 포함 향후 5일: 우천취소 확률과 날짜 선택 버튼이 함께 사용합니다.
+      const upcomingDates = Array.from({ length: 5 }, (_, index) => {
+        const date = new Date(today);
+        date.setDate(today.getDate() + index);
+        return date;
+      });
       const toDateKey = (date) => {
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -186,17 +195,15 @@
       async function loadFiveDayForecast() {
         try {
           const data = await window.weatherService.loadForecast(stadiumName);
-          const dates = Array.from({ length: 5 }, (_, index) => {
-            const date = new Date(today);
-            date.setDate(today.getDate() + index);
-            return date;
-          });
-          const daily = new Map(dates.map((date) => [toDateKey(date), []]));
+          const daily = new Map(upcomingDates.map((date) => [toDateKey(date), []]));
           (data.list || []).forEach((item) => {
             const key = getSeoulDateKey(item.dt);
             if (daily.has(key) && Number.isFinite(item.pop)) daily.get(key).push(item.pop);
           });
-          fiveDayList.replaceChildren(...dates.map((date) => {
+          // 저녁·밤에는 오늘 남은 예보 칸이 없으므로, 오늘 값에는 현재 예보(날씨 화면과 같은 값)를 항상 포함합니다.
+          const currentPop = data.list?.[0]?.pop;
+          if (Number.isFinite(currentPop)) daily.get(toDateKey(today)).push(currentPop);
+          fiveDayList.replaceChildren(...upcomingDates.map((date) => {
             const item = document.createElement("div");
             item.className = "five-day-forecast-item";
             const dateElement = document.createElement("span");
@@ -209,6 +216,7 @@
             value.textContent = probabilities.length
               ? `${Math.round(Math.max(...probabilities) * 100)}%`
               : "확인 불가";
+            value.classList.toggle("is-unavailable", !probabilities.length);
             const label = document.createElement("small");
             label.textContent = "우천취소 확률";
             item.append(dateElement, value, label);
@@ -227,13 +235,10 @@
       const dateFormatter = new Intl.DateTimeFormat("ko-KR", { timeZone: "Asia/Seoul", year: "numeric", month: "long", day: "numeric" });
       const monthDayFormatter = new Intl.DateTimeFormat("ko-KR", { timeZone: "Asia/Seoul", month: "numeric", day: "numeric" });
       const weatherCodes = { 0: ["☀️", "맑음"], 1: ["🌤️", "대체로 맑음"], 2: ["⛅", "부분적으로 흐림"], 3: ["☁️", "흐림"], 45: ["🌫️", "안개"], 51: ["🌦️", "이슬비"], 61: ["🌧️", "비"], 71: ["❄️", "눈"], 80: ["🌧️", "소나기"], 95: ["⛈️", "뇌우"] };
-      const selectedDates = Array.from({ length: 5 }, (_, index) => {
-        const date = new Date(today);
-        date.setFullYear(date.getFullYear() - 1);
-        date.setDate(date.getDate() - index);
-        return date;
-      });
-      async function loadHistory(date) {
+      // 선택한 날짜의 작년 같은 날 관측 기록을 보여줍니다.
+      async function loadHistory(selectedDate) {
+        const date = new Date(selectedDate);
+        date.setFullYear(selectedDate.getFullYear() - 1);
         getElement("historyDate").textContent = dateFormatter.format(date);
         getElement("historyDescription").textContent = "과거 관측 데이터를 불러오는 중입니다.";
         try {
@@ -253,7 +258,7 @@
           getElement("historyIcon").textContent = "⚠️";
         }
       }
-      const dateButtons = selectedDates.map((date, index) => {
+      const dateButtons = upcomingDates.map((date, index) => {
         const button = document.createElement("button");
         button.className = `date-button${index === 0 ? " active" : ""}`;
         button.type = "button";
@@ -266,7 +271,7 @@
         return button;
       });
       getElement("dateButtons").append(...dateButtons);
-      loadHistory(selectedDates[0]);
+      loadHistory(upcomingDates[0]);
     </script>
   </body>
 </html>

@@ -8,6 +8,8 @@
 
     <link rel="stylesheet" href="style.css?v=20261023-1" />
     <link rel="stylesheet" href="weather.css?v=20261023-1" />
+    <link rel="stylesheet" href="weather-scene.css" />
+    <script src="weather-scene-boot.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   </head>
 
@@ -210,6 +212,7 @@
     </aside>
 
     <script src="weather-list-shuffle.js"></script>
+    <script src="weather-scene.js"></script>
     <script src="weather-service.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
@@ -226,40 +229,51 @@
       ];
       const getElement = (id) => document.getElementById(id);
 
+      // 날씨 지도: 8개 구장이 한눈에 보이도록 고정된 지도 (드래그·확대 없음)
       const mapRegions = Object.entries(stadiums).map(([stadium, { city, lat, lon }]) => ({
         stadium,
         city,
         lat,
         lon,
       }));
+      // 수도권·경남처럼 가까운 구장의 이름표가 겹치지 않도록 방향을 정합니다.
+      const mapLabelDirections = {
+        인천: "left",
+        서울: "right",
+        수원: "bottom",
+        광주: "left",
+        창원: "bottom",
+      };
       const mapWeatherCache = new Map();
       const mapTooltip = getElement("weatherMapTooltip");
       const mapCard = document.querySelector(".weather-map-card");
-      const leafletMap = L.map("weatherLeafletMap", {
-        center: [36.2, 127.8],
-        zoom: 7,
-        minZoom: 7,
-        maxZoom: 12,
-        maxBounds: [[33.0, 124.0], [39.6, 132.2]],
-        maxBoundsViscosity: 1,
+      const mapElement = getElement("weatherLeafletMap");
+      // 구장이 모두 들어가는 본토 전체 범위 (울릉도 등 먼 섬 제외)
+      const mainlandBounds = L.latLngBounds([[34.3, 125.95], [38.62, 129.6]]);
+      const leafletMap = L.map(mapElement, {
+        zoomControl: false,
+        dragging: false,
+        touchZoom: false,
+        scrollWheelZoom: false,
+        doubleClickZoom: false,
+        boxZoom: false,
+        keyboard: false,
+        zoomSnap: 0,
+        attributionControl: false,
       });
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        maxZoom: 19,
-        attribution: "&copy; OpenStreetMap contributors",
+      // 구장 선택 화면과 같은 한국 지도 실루엣을 지도 배경으로 씁니다.
+      // 범위는 SVG 속 시·도 경계와 실제 위경도를 맞춰 구한 값입니다.
+      L.imageOverlay("assets/korea-map.svg?v=20260911", [[33.207, 125.339], [38.641, 130.946]], {
+        className: "weather-map-silhouette",
       }).addTo(leafletMap);
-      mapRegions.forEach((region) => {
-        L.circleMarker([region.lat, region.lon], {
-          radius: 6,
-          color: "#ffffff",
-          weight: 2,
-          fillColor: "#4d98d3",
-          fillOpacity: 0.95,
-        }).addTo(leafletMap).bindTooltip(region.city, { direction: "top", offset: [0, -6] });
-      });
-      let mapRequestTimer;
-      let mapRequestId = 0;
+      const fitStadiums = () => {
+        leafletMap.invalidateSize({ animate: false, pan: false });
+        leafletMap.fitBounds(mainlandBounds, { padding: [12, 12], animate: false });
+      };
+      fitStadiums();
+      new ResizeObserver(() => requestAnimationFrame(fitStadiums)).observe(mapElement);
 
-      function renderMapTooltip(region, data, x, y) {
+      function renderMapTooltip(region, data, marker) {
         const current = data?.list?.[0];
         const probability = Number.isFinite(current?.pop)
           ? `${Math.round(current.pop * 100)}%`
@@ -273,21 +287,36 @@
         const status = current?.weather?.[0]?.description || "정보 없음";
         mapTooltip.innerHTML = `<strong>${region.city}</strong><span>우천취소 위험 ${probability}</span><span>강수량 ${rainfall}</span><span>기온 ${temperature} · ${status}</span>`;
         mapTooltip.hidden = false;
-        const rect = mapCard.getBoundingClientRect();
-        mapTooltip.style.left = `${Math.min(Math.max(12, x + 14), rect.width - mapTooltip.offsetWidth - 12)}px`;
-        mapTooltip.style.top = `${Math.min(Math.max(54, y + 14), rect.height - mapTooltip.offsetHeight - 12)}px`;
+        // 마커 옆, 구장 이름표의 반대쪽에 고정해서 표시하고 카드 밖으로 나가지 않게 맞춥니다.
+        const point = leafletMap.latLngToContainerPoint(marker.getLatLng());
+        const x = mapElement.offsetLeft + point.x;
+        const y = mapElement.offsetTop + point.y;
+        const fitsRight = x + 16 + mapTooltip.offsetWidth <= mapCard.clientWidth - 12;
+        const fitsLeft = x - 16 - mapTooltip.offsetWidth >= 12;
+        const labelOnRight = (mapLabelDirections[region.city] || "right") === "right";
+        const right = labelOnRight ? !fitsLeft : fitsRight;
+        mapTooltip.style.left = `${right ? x + 16 : x - 16 - mapTooltip.offsetWidth}px`;
+        mapTooltip.style.top = `${Math.min(Math.max(12, y - mapTooltip.offsetHeight / 2), mapCard.clientHeight - mapTooltip.offsetHeight - 12)}px`;
       }
 
-      leafletMap.on("mousemove", (event) => {
-        const rect = mapCard.getBoundingClientRect();
-        const x = event.originalEvent.clientX - rect.left;
-        const y = event.originalEvent.clientY - rect.top;
-        const region = mapRegions.reduce((nearest, candidate) => {
-          const distance = Math.hypot(candidate.lat - event.latlng.lat, (candidate.lon - event.latlng.lng) * 0.8);
-          return distance < nearest.distance ? { candidate, distance } : nearest;
-        }, { candidate: null, distance: Infinity }).candidate;
-        clearTimeout(mapRequestTimer);
-        mapRequestTimer = setTimeout(async () => {
+      let mapRequestId = 0;
+      mapRegions.forEach((region) => {
+        const isSelected = region.stadium === stadiumName;
+        const marker = L.circleMarker([region.lat, region.lon], {
+          radius: isSelected ? 8 : 6,
+          color: "#ffffff",
+          weight: 2,
+          fillColor: isSelected ? "#ffd37e" : "#9fd0f2",
+          fillOpacity: 1,
+          className: "stadium-map-marker",
+        }).addTo(leafletMap);
+        marker.bindTooltip(region.city, {
+          permanent: true,
+          direction: mapLabelDirections[region.city] || "right",
+          offset: [0, 0],
+          className: `stadium-map-label${isSelected ? " is-selected" : ""}`,
+        });
+        marker.on("mouseover", async () => {
           const requestId = ++mapRequestId;
           try {
             let data = mapWeatherCache.get(region.stadium);
@@ -295,31 +324,19 @@
               data = await loadForecast(region.stadium);
               mapWeatherCache.set(region.stadium, data);
             }
-            if (requestId === mapRequestId) renderMapTooltip(region, data, x, y);
+            if (requestId === mapRequestId) renderMapTooltip(region, data, marker);
           } catch {
-            if (requestId === mapRequestId) renderMapTooltip(region, {}, x, y);
+            if (requestId === mapRequestId) renderMapTooltip(region, {}, marker);
           }
-        }, 350);
-      });
-      leafletMap.on("mouseout", () => {
-        clearTimeout(mapRequestTimer);
-        mapRequestId += 1;
-        mapTooltip.hidden = true;
-      });
-      const refreshLeafletSize = () => {
-        requestAnimationFrame(() => {
-          leafletMap.invalidateSize({ animate: false, pan: false });
-          requestAnimationFrame(() => leafletMap.invalidateSize({ animate: false, pan: false }));
         });
-      };
-      new ResizeObserver(refreshLeafletSize).observe(mapCard);
-      mapCard.addEventListener("pointerenter", () => {
-        mapCard.classList.add("is-expanded");
-        refreshLeafletSize();
-      });
-      mapCard.addEventListener("pointerleave", () => {
-        mapCard.classList.remove("is-expanded");
-        refreshLeafletSize();
+        marker.on("mouseout", () => {
+          mapRequestId += 1;
+          mapTooltip.hidden = true;
+        });
+        marker.on("click", () => {
+          localStorage.setItem("selectedStadium", region.stadium);
+          window.location.reload();
+        });
       });
 
       const cityName = getCityName(stadiumName);

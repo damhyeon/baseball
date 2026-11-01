@@ -27,6 +27,7 @@ const contentTypes = {
   ".html": "text/html; charset=utf-8",
   ".js": "text/javascript; charset=utf-8",
   ".svg": "image/svg+xml",
+  ".jpg": "image/jpeg",
 };
 
 // 이 목록에 있는 파일만 제공합니다. (.env, 서버 코드 등은 노출되지 않습니다.)
@@ -40,7 +41,15 @@ const publicFiles = new Map([
   ["/history.css", "css/history.css"],
   ["/weather-list-shuffle.js", "js/weather-list-shuffle.js"],
   ["/weather-service.js", "js/weather-service.js"],
+  ["/weather-scene.css", "css/weather-scene.css"],
+  ["/weather-scene.js", "js/weather-scene.js"],
+  ["/weather-scene-boot.js", "js/weather-scene-boot.js"],
   ["/assets/korea-map.svg", "assets/korea-map.svg"],
+  ["/images/clouds.svg", "images/clouds.svg"],
+  ...["sunny", "sunset", "night", "cloudy", "rain"].map((name) => [
+    `/images/${name}.jpg`,
+    `images/${name}.jpg`,
+  ]),
 ]);
 
 function loadLocalEnv() {
@@ -203,7 +212,11 @@ async function handleRequest(request, response) {
   }
 
   const filePath = path.join(root, relativePath);
-  response.writeHead(200, { "Content-Type": contentTypes[path.extname(filePath)] });
+  response.writeHead(200, {
+    "Content-Type": contentTypes[path.extname(filePath)],
+    // 배경 사진은 페이지를 옮길 때마다 다시 받지 않도록 브라우저에 하루 동안 보관합니다.
+    ...(relativePath.startsWith("images/") && { "Cache-Control": "public, max-age=86400" }),
+  });
   if (request.method === "HEAD") {
     response.end();
     return;
