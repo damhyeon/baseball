@@ -43,6 +43,8 @@
   --sky-tone-36: rgba(37, 77, 103, 0.38);
   --sky-tone-37: rgba(20, 80, 120, 0.12);
   --sky-tone-38: rgba(67, 143, 194, 0.3);
+  /* 오른쪽 "전국 주요 날씨" 패널: 장면 색에 회색을 섞어 채도를 낮추고 덜 투명하게 */
+  --sky-panel: color-mix(in srgb, var(--sky-tone-3) 50%, rgba(98, 104, 112, 0.95));
 }
 
 /* 배경 장면이 기존 페이지 그라디언트 배경을 대신합니다. */
@@ -102,15 +104,9 @@ html.has-sky-scene[data-sky] {
 /* 구장 선택 화면의 지도 실루엣이 배경 사진에 묻히지 않도록 밝고 선명하게 */
 html.has-sky-scene[data-sky] body.index-body .korea-svg-img,
 html.has-sky-scene[data-sky] body.weather-body .weather-map-silhouette {
-  opacity: 0.82 !important;
-  filter: grayscale(1) brightness(1.8) contrast(0.9)
+  opacity: 1 !important;
+  filter: grayscale(1) brightness(2) contrast(0.95)
     drop-shadow(0 6px 18px rgba(0, 0, 0, 0.25)) !important;
-}
-
-/* 맑은 낮은 파란 배경 위라 조금 덜 하얗게 */
-html.has-sky-scene[data-sky="sunny"] body.index-body .korea-svg-img,
-html.has-sky-scene[data-sky="sunny"] body.weather-body .weather-map-silhouette {
-  opacity: 0.55 !important;
 }
 
 .sky-scene {

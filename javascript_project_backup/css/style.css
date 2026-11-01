@@ -271,7 +271,7 @@ body.index-body .index-weather-panel.weather-stadium-panel {
   padding: 8px 14px 16px !important;
   border: 1px solid rgba(224, 240, 251, 0.2) !important;
   border-radius: 16px !important;
-  background: var(--sky-tone-3) !important;
+  background: var(--sky-panel) !important;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
   color: #fff !important;
   font-size: 17px !important;
@@ -885,6 +885,11 @@ body.index-body .korea-map {
       color-mix(in srgb, var(--sky-tone-15) 25%, transparent),
       color-mix(in srgb, var(--sky-tone-16) 25%, transparent)
     ) !important;
+}
+/* SVG 안에서 본토가 왼쪽 위로 치우쳐 있어(오른쪽은 울릉도 여백, 아래는 빈 공간)
+   본토 중심이 박스 정가운데에 오도록 이미지 크기 기준으로 옮깁니다. 지역 버튼 위치는 그대로입니다. */
+body.index-body .korea-map .korea-svg-img {
+  transform: translate(5%, 8.22%) !important;
 }
 body.index-body .korea-svg-img {
   opacity: 0.34 !important;
@@ -1814,10 +1819,14 @@ body.history-body > .app-sidebar {
   min-width: 240px !important;
   padding: 28px 16px !important;
   border-right: 1px solid rgba(255, 255, 255, 0.1) !important;
-  /* 날씨 배경이 살짝 비치는 반투명 유리 느낌 */
-  background: color-mix(in srgb, var(--sky-tone-25) 25%, transparent) !important;
-  -webkit-backdrop-filter: blur(18px) saturate(1.1);
-  backdrop-filter: blur(18px) saturate(1.1);
+  /* 날씨 배경이 살짝 비치는 반투명 유리 느낌 (회색을 섞어 채도를 낮춤) */
+  background: color-mix(
+    in srgb,
+    color-mix(in srgb, var(--sky-tone-25) 60%, rgb(108, 114, 122)) 50%,
+    transparent
+  ) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(0.7);
+  backdrop-filter: blur(18px) saturate(0.7);
   color: #fff !important;
   font-family:
     "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif !important;
@@ -1907,11 +1916,13 @@ body.history-body .history-weather .history-tooltip {
   top: 18px;
   right: 24px;
   padding: 8px 11px;
-  border: 1px solid rgba(255, 255, 255, 0.24);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 8px;
-  background: var(--sky-tone-26);
-  box-shadow: 0 8px 20px var(--sky-tone-27);
+  /* 날씨 색에 따라 밝아지지 않도록 항상 어두운 배경 */
+  background: rgba(16, 22, 30, 0.92);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
   color: #fff;
+  font-weight: 600 !important;
   line-height: 1.35;
   pointer-events: none;
   transform: translateY(-4px);

@@ -171,8 +171,10 @@
         const width = mapCanvas.clientWidth;
         const height = mapCanvas.clientHeight;
         const scale = Math.min(width / 524, height / 631);
-        const offsetX = (width - 524 * scale) / 2;
-        const offsetY = (height - 631 * scale) / 2;
+        // 지도 이미지를 가운데로 옮긴 만큼(CSS transform) 버튼도 함께 옮겨 도시 위치를 맞춥니다.
+        const shift = new DOMMatrixReadOnly(getComputedStyle(mapImage).transform);
+        const offsetX = (width - 524 * scale) / 2 + shift.m41;
+        const offsetY = (height - 631 * scale) / 2 + shift.m42;
         stadiumMarkers.forEach((marker) => {
           const point = stadiumCoordinates[marker.dataset.stadium];
           marker.style.setProperty("left", `${offsetX + point.x * scale}px`, "important");

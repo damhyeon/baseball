@@ -135,7 +135,7 @@
     padding: 8px 14px 16px !important;
     border: 1px solid rgba(224, 240, 251, 0.2) !important;
     border-radius: 16px !important;
-    background: var(--sky-tone-3) !important;
+    background: var(--sky-panel) !important;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
     font-size: 17px !important;
     overflow: hidden !important;
@@ -386,7 +386,7 @@
     padding: 8px 14px 16px !important;
     border: 1px solid rgba(224, 240, 251, 0.2) !important;
     border-radius: 16px !important;
-    background: var(--sky-tone-3) !important;
+    background: var(--sky-panel) !important;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
     color: #fff !important;
     font-size: 17px !important;
