@@ -13,13 +13,7 @@ body.weather-body {
       rgba(255, 250, 232, 0.28) 12%,
       transparent 31%
     ),
-    linear-gradient(
-      145deg,
-      #87aeca 0%,
-      #4c8fc4 38%,
-      #2479b4 72%,
-      #78b9dc 100%
-    ) !important;
+    linear-gradient(145deg, #87aeca 0%, #4c8fc4 38%, #2479b4 72%, #78b9dc 100%) !important;
 }
 
 body.weather-body::before {
@@ -29,7 +23,6 @@ body.weather-body::before {
 body.weather-body > .app-sidebar,
 body.weather-body > .weather-page,
 body.weather-body > .weather-stadium-panel {
-  box-sizing: border-box !important;
   min-width: 0 !important;
 }
 
@@ -37,7 +30,6 @@ body.weather-body .app-sidebar {
   position: relative !important;
   grid-column: 1 !important;
   grid-row: 1 !important;
-  height: 100dvh !important;
 }
 
 body.weather-body .weather-page {
@@ -50,12 +42,9 @@ body.weather-body .weather-page {
   align-content: start !important;
   width: auto !important;
   max-width: none !important;
-  min-width: 0 !important;
   min-height: 0 !important;
   height: 100dvh !important;
-  margin: 0 !important;
   padding: 22px 24px !important;
-  gap: 18px !important;
   overflow-x: hidden !important;
   overflow-y: auto !important;
   overscroll-behavior: contain !important;
@@ -66,7 +55,6 @@ body.weather-body .weather-card,
 body.weather-body .hourly-section,
 body.weather-body .weather-details,
 body.weather-body .weather-detail {
-  box-sizing: border-box !important;
   min-width: 0 !important;
 }
 
@@ -74,15 +62,14 @@ body.weather-body .weather-card {
   position: static !important;
   display: block !important;
   width: 100% !important;
-  height: 190px !important;
   min-height: 0 !important;
-  margin: 0 !important;
   padding: 8px 26px 0 !important;
   border: 0 !important;
   border-radius: 0 !important;
   background: transparent !important;
   box-shadow: none !important;
   backdrop-filter: none !important;
+  height: 142px !important;
 }
 
 body.weather-body .weather-main,
@@ -90,70 +77,60 @@ body.weather-body .temperature {
   position: static !important;
   width: 100% !important;
   min-width: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
   text-align: left !important;
 }
 
 body.weather-body .temperature {
-  display: flex !important;
   flex-direction: column !important;
-  align-items: flex-start !important;
-  gap: 6px !important;
+  align-items: center !important;
+  column-gap: clamp(24px, 6vw, 96px) !important;
 }
 
 body.weather-body .hero-location {
-  display: inline-flex !important;
   align-items: center !important;
   width: fit-content !important;
   max-width: 100% !important;
   gap: 8px !important;
-  color: rgba(242, 249, 255, 0.95) !important;
-  font-size: clamp(18px, 1.8vw, 23px) !important;
   font-weight: 300 !important;
+  display: none !important;
+  grid-column: 1 !important;
+  grid-row: 1 !important;
 }
 
 body.weather-body .hero-location svg {
-  width: 21px;
-  height: 21px;
   flex: 0 0 auto;
   fill: none;
   stroke: currentColor;
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-width: 1.8;
+  width: 18px !important;
+  height: 18px !important;
 }
 
 body.weather-body .hero-temperature-line {
-  display: grid !important;
   grid-template-columns: max-content max-content !important;
   grid-template-rows: max-content max-content !important;
   align-items: center !important;
   justify-content: start !important;
   column-gap: 12px !important;
   row-gap: 0 !important;
-  margin-top: 0 !important;
 }
 
 body.weather-body .temperature-label {
   grid-column: 1 / -1 !important;
   margin: 0 !important;
-  color: rgba(225, 239, 249, 0.78) !important;
-  font-size: 12px !important;
-  font-weight: 300 !important;
-  line-height: 1.3 !important;
   letter-spacing: 0.02em;
 }
 
 body.weather-body #temperature {
   grid-column: 1 !important;
   grid-row: 2 !important;
-  display: block !important;
   margin: 0 !important;
-  font-size: clamp(46px, 5vw, 64px) !important;
-  font-weight: 300 !important;
   letter-spacing: -0.04em !important;
   line-height: 1 !important;
+  font-size: clamp(46px, 5vw, 64px) !important;
+  font-weight: 300 !important;
 }
 
 body.weather-body .hero-weather-icon {
@@ -165,197 +142,52 @@ body.weather-body .hero-weather-icon {
   min-width: 52px;
   height: 52px;
   margin: 0 !important;
-  color: rgba(223, 240, 250, 0.92);
-  font-size: clamp(35px, 4vw, 48px) !important;
-  line-height: 1;
 }
 
 body.weather-body #weatherDescription {
-  display: block !important;
   margin: 0 !important;
   color: rgba(218, 235, 247, 0.8) !important;
+  letter-spacing: 0.04em;
   font-size: 14px !important;
   font-weight: 300 !important;
-  letter-spacing: 0.04em;
-}
-
-body.weather-body .hero-rain-probability {
-  display: flex !important;
-  align-items: baseline !important;
-  gap: 10px !important;
-  margin-top: 4px !important;
-  padding: 8px 0 2px !important;
-  color: rgba(226, 240, 249, 0.82) !important;
-  font-size: 13px !important;
-  font-weight: 300 !important;
-  line-height: 1.1 !important;
+  grid-column: 1 !important;
+  grid-row: 4 !important;
 }
 
 body.weather-body .hero-rain-probability strong {
-  color: #fff !important;
-  font-size: clamp(24px, 2.4vw, 34px) !important;
-  font-weight: 700 !important;
   letter-spacing: -0.04em !important;
-  white-space: nowrap !important;
-}
-
-body.weather-body .hero-location svg {
-  width: 18px !important;
-  height: 18px !important;
 }
 
 @media (max-width: 700px) {
-  body.weather-body .hero-location {
-    font-size: 18px !important;
-  }
-
   body.weather-body .hero-temperature-line {
     column-gap: 8px !important;
   }
 
-  body.weather-body #temperature {
-    font-size: 48px !important;
+  body.weather-body .hero-rain-probability,
+  body.weather-body .hero-temperature-line,
+  body.weather-body #weatherDescription {
+    justify-self: start !important;
   }
-
-  body.weather-body .hero-rain-probability {
-    gap: 8px !important;
-    font-size: 12px !important;
-  }
-
-  body.weather-body .hero-rain-probability strong {
-    font-size: 28px !important;
-  }
-}
-
-/* Leaflet 지도 확장은 중앙 콘텐츠 안에서만 높이를 늘립니다. */
-body.weather-body .weather-map-card {
-  position: relative !important;
-  inset: auto !important;
-  width: 100% !important;
-  height: 170px !important;
-  min-height: 0 !important;
-  overflow: hidden !important;
-  transform: none !important;
-  transition: height 220ms ease, box-shadow 220ms ease !important;
-}
-
-/* 지도는 중앙 콘텐츠 열 안에서만 스크롤 고정 */
-body.weather-body .weather-page > .weather-map-card {
-  position: sticky !important;
-  top: 18px !important;
-  align-self: start !important;
-  z-index: 20 !important;
-}
-
-body.weather-body .weather-map-card.is-expanded {
-  position: relative !important;
-  inset: auto !important;
-  width: 100% !important;
-  height: clamp(65vh, 70vh, 75vh) !important;
-  z-index: 20 !important;
-  overflow: hidden !important;
-  box-shadow: 0 18px 42px rgba(9, 57, 91, 0.3) !important;
-}
-
-body.weather-body .weather-map-card .weather-leaflet-map,
-body.weather-body .weather-map-card.is-expanded .weather-leaflet-map {
-  inset: 58px 0 0 !important;
-  width: 100% !important;
-  height: auto !important;
-}
-
-@media (max-width: 700px) {
-  body.weather-body .weather-map-card {
-    height: 150px !important;
-  }
-
-  body.weather-body .weather-map-card.is-expanded {
-    height: 65vh !important;
-  }
-
-  body.weather-body .weather-page > .weather-map-card {
-    top: 12px !important;
-  }
-}
-
-/* Final sticky rule: never promote the map to a viewport-fixed layer. */
-body.weather-body .weather-page > .weather-map-card,
-body.weather-body .weather-page > .weather-map-card.is-expanded {
-  position: sticky !important;
-  top: 18px !important;
-  left: auto !important;
-  right: auto !important;
-  inset-inline: auto !important;
-  width: 100% !important;
-  align-self: start !important;
-  z-index: 20 !important;
-}
-
-@media (max-width: 700px) {
-  body.weather-body .weather-page > .weather-map-card,
-  body.weather-body .weather-page > .weather-map-card.is-expanded {
-    top: 12px !important;
-  }
-}
-
-/* 상단 날짜와 강수확률을 하나의 왼쪽 정렬 정보 영역으로 통일 */
-body.weather-body .weather-card {
-  height: 142px !important;
-  padding-top: 0 !important;
-}
-
-body.weather-body .temperature {
-  align-items: start !important;
-  row-gap: 3px !important;
-}
-
-body.weather-body .hero-date {
-  font-family: "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif !important;
-  justify-self: start !important;
-  margin: 0 !important;
-}
-
-body.weather-body .hero-rain-probability {
-  justify-self: start !important;
-  align-items: flex-start !important;
-  margin: 7px 0 0 !important;
-  gap: 4px !important;
-}
-
-body.weather-body .hero-rain-probability strong,
-body.weather-body #heroRainProbabilityValue {
-  font-size: clamp(46px, 5vw, 64px) !important;
-}
-
-body.weather-body .hourly-section {
-  margin-top: 0 !important;
 }
 
 body.weather-body .hourly-section .section-title h2,
 body.weather-body #hourlyTitle {
-  font-family: "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif !important;
   font-size: 18px !important;
   font-weight: 300 !important;
   letter-spacing: normal !important;
   text-shadow: none !important;
 }
 
-@media (max-width: 700px) {
-  body.weather-body .weather-card {
-    height: 154px !important;
-  }
-}
-
-/* 시간별 예보는 항목 너비를 유지하고 영역 내부에서만 가로 스크롤 */
-body.weather-body .hourly-section {
-  min-width: 0 !important;
-  overflow: hidden !important;
-}
-
 body.weather-body .hourly-weather {
-  grid-auto-columns: 92px !important;
-  width: 100% !important;
   max-width: 100% !important;
+  display: grid !important;
+  grid-auto-flow: column !important;
+  grid-auto-columns: 92px !important;
+  grid-template-columns: none !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  padding: 8px 0 4px !important;
+  gap: 0 !important;
   overflow-x: auto !important;
   overflow-y: hidden !important;
   overscroll-behavior-x: contain !important;
@@ -372,31 +204,26 @@ body.weather-body .hourly-weather::-webkit-scrollbar-thumb {
   border-radius: 999px !important;
 }
 
-body.weather-body .hour-item {
-  width: 92px !important;
-  min-width: 92px !important;
-  flex: 0 0 92px !important;
-}
-
 body.weather-body .weather-map-card {
-  position: relative !important;
-  overflow: hidden !important;
+  contain: layout paint !important;
+  grid-column: 1 / -1;
+  padding: 18px 20px;
+  inset: auto !important;
   height: 170px !important;
   min-height: 0 !important;
-  z-index: 1 !important;
-  transition: width 220ms ease, height 220ms ease, top 220ms ease, left 220ms ease, right 220ms ease, border-radius 220ms ease, box-shadow 220ms ease !important;
-  contain: layout paint !important;
+  transform: none !important;
+  transition:
+    height 220ms ease,
+    box-shadow 220ms ease !important;
 }
 
 body.weather-body .weather-map-card:hover,
 body.weather-body .weather-map-card:focus-within {
-  z-index: 30 !important;
   box-shadow: 0 18px 42px rgba(9, 57, 91, 0.3) !important;
 }
 
 body.weather-body .weather-map-tooltip {
   position: absolute !important;
-  z-index: 5 !important;
   display: flex !important;
   width: max-content !important;
   max-width: min(240px, calc(100% - 24px)) !important;
@@ -408,11 +235,13 @@ body.weather-body .weather-map-tooltip {
   background: rgba(20, 78, 118, 0.9) !important;
   box-shadow: 0 8px 18px rgba(7, 44, 70, 0.25) !important;
   color: #f2f8fc !important;
-  font-family: "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif !important;
+  font-family:
+    "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif !important;
   font-size: 12px !important;
   line-height: 1.35 !important;
   pointer-events: none !important;
   white-space: nowrap !important;
+  z-index: 1000 !important;
 }
 
 body.weather-body .weather-map-tooltip[hidden] {
@@ -432,7 +261,6 @@ body.weather-body .weather-map-tooltip span {
 
 body.weather-body .weather-leaflet-map {
   position: absolute !important;
-  inset: 58px 0 0 !important;
   z-index: 1 !important;
   min-height: 180px !important;
   border-radius: 14px !important;
@@ -457,28 +285,23 @@ body.weather-body .weather-leaflet-map .leaflet-control-attribution {
   font-size: 10px !important;
 }
 
-body.weather-body .weather-map-tooltip {
-  z-index: 1000 !important;
-}
-
 body.weather-body .hourly-section {
   position: static !important;
   width: 100% !important;
   height: auto !important;
   min-height: 200px !important;
-  margin: 0 !important;
   padding: 18px !important;
   border: 1px solid rgba(220, 239, 251, 0.2) !important;
   border-radius: 18px !important;
   background: rgba(93, 136, 166, 0.28) !important;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
   backdrop-filter: blur(14px) !important;
+  overflow: hidden !important;
 }
 
 body.weather-body .section-title {
   display: flex !important;
   align-items: flex-start !important;
-  justify-content: space-between !important;
   margin: 0 0 12px !important;
   padding: 0 0 10px !important;
   gap: 12px !important;
@@ -487,8 +310,6 @@ body.weather-body .section-title {
 
 body.weather-body .section-title h2 {
   min-width: 0 !important;
-  margin: 0 !important;
-  font-size: 17px !important;
   line-height: 1.45 !important;
   overflow-wrap: anywhere !important;
 }
@@ -497,29 +318,7 @@ body.weather-body .section-title h2::before {
   content: none !important;
 }
 
-body.weather-body .hourly-weather {
-  display: grid !important;
-  grid-auto-flow: column !important;
-  grid-auto-columns: 92px !important;
-  grid-template-columns: none !important;
-  min-width: 0 !important;
-  width: 100% !important;
-  padding: 8px 0 4px !important;
-  gap: 0 !important;
-  overflow-x: auto !important;
-  overflow-y: hidden !important;
-  overscroll-behavior-x: contain !important;
-  scrollbar-width: thin !important;
-  scrollbar-color: rgba(226, 241, 250, 0.55) transparent !important;
-}
-
-body.weather-body .hourly-section {
-  min-width: 0 !important;
-  overflow: hidden !important;
-}
-
 body.weather-body .forecast-message {
-  margin: 0;
   padding: 24px 12px;
   color: rgba(218, 235, 247, 0.8);
   font-size: 14px;
@@ -549,7 +348,6 @@ body.weather-body .hour-item .rain {
 }
 
 body.weather-body .hour-item .icon {
-  margin: 0 !important;
   font-size: 24px !important;
 }
 
@@ -561,7 +359,6 @@ body.weather-body .weather-details {
   display: grid !important;
   grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
   width: 100% !important;
-  margin: 0 !important;
   gap: 10px !important;
 }
 
@@ -628,7 +425,6 @@ body.weather-body .weather-extra-grid {
 body.weather-body .weather-extra-card,
 body.weather-body .weather-map-card {
   position: relative;
-  box-sizing: border-box;
   min-width: 0;
   overflow: hidden;
   border: 1px solid rgba(220, 239, 251, 0.2);
@@ -718,24 +514,22 @@ body.weather-body .rain-probability-meter span {
     background-color 220ms ease;
 }
 
-body.weather-body .rain-probability-card[data-level="medium"]
-  .rain-probability-meter span {
+body.weather-body
+  .rain-probability-card[data-level="medium"]
+  .rain-probability-meter
+  span {
   background: #ffd37e;
 }
 
-body.weather-body .rain-probability-card[data-level="high"]
-  .rain-probability-meter span {
+body.weather-body
+  .rain-probability-card[data-level="high"]
+  .rain-probability-meter
+  span {
   background: #ff9696;
 }
 
 body.weather-body .uv-index-card[data-level="high"] {
   border-color: rgba(255, 211, 126, 0.52);
-}
-
-body.weather-body .weather-map-card {
-  grid-column: 1 / -1;
-  min-height: 126px;
-  padding: 18px 20px;
 }
 
 body.weather-body .weather-map-heading {
@@ -750,7 +544,6 @@ body.weather-body .weather-map-heading {
 body.weather-body .weather-map-heading h2 {
   display: flex;
   align-items: center;
-  margin: 0;
   gap: 9px;
   font-size: 16px;
   font-weight: 600;
@@ -774,11 +567,7 @@ body.weather-body .weather-stadium-panel {
   flex-direction: column !important;
   align-self: center !important;
   width: auto !important;
-  min-width: 0 !important;
-  height: max-content !important;
   min-height: 0 !important;
-  max-height: calc(100dvh - 24px) !important;
-  margin: 0 12px 0 0 !important;
   padding: 8px 14px 16px !important;
   border: 1px solid rgba(224, 240, 251, 0.2) !important;
   border-radius: 16px !important;
@@ -795,7 +584,6 @@ body.weather-body .weather-panel-search {
   width: 100% !important;
   min-width: 0 !important;
   min-height: 48px !important;
-  margin: 0 !important;
   padding: 8px 12px !important;
   gap: 9px !important;
   border: 1px solid rgba(228, 243, 253, 0.24) !important;
@@ -819,7 +607,6 @@ body.weather-body .weather-panel-search input {
   flex: 1 1 auto;
   width: 0;
   min-width: 0;
-  padding: 0;
   border: 0;
   outline: 0;
   background: transparent;
@@ -880,7 +667,6 @@ body.weather-body .weather-panel-list {
   flex: 0 1 auto !important;
   min-width: 0 !important;
   min-height: 0 !important;
-  max-height: calc(100dvh - 210px) !important;
   padding: 0 1px 2px !important;
   gap: 4px !important;
   overflow-x: hidden !important;
@@ -927,7 +713,6 @@ body.weather-body .weather-panel-list button .stadium-weather-icon {
   place-items: center;
   width: 32px;
   font-size: 26px !important;
-  line-height: 1;
 }
 
 body.weather-body .weather-panel-list button .stadium-weather-name {
@@ -944,13 +729,11 @@ body.weather-body .weather-panel-list button small {
 }
 
 body.weather-body .weather-panel-list button b {
-  margin: 0 !important;
   font-size: 21px !important;
   font-weight: 400 !important;
 }
 
 body.weather-body .weather-panel-list button i {
-  margin: 0 !important;
   font-size: 18px !important;
   font-style: normal !important;
   opacity: 0.9 !important;
@@ -973,19 +756,16 @@ body.weather-body .weather-panel-empty {
     grid-template-rows: auto auto !important;
     height: auto !important;
     min-height: 100dvh !important;
-    overflow-x: hidden !important;
     overflow-y: auto !important;
   }
 
   body.weather-body .app-sidebar {
     position: sticky !important;
     grid-row: 1 / 3 !important;
-    height: 100dvh !important;
   }
 
   body.weather-body .weather-page {
     height: auto !important;
-    min-height: 0 !important;
     overflow: visible !important;
   }
 
@@ -1024,7 +804,6 @@ body.weather-body .weather-panel-empty {
 
   body.weather-body .hourly-weather {
     grid-auto-columns: minmax(76px, 1fr) !important;
-    overflow-x: auto !important;
   }
 }
 
@@ -1036,10 +815,6 @@ body.weather-body .weather-panel-empty {
     overflow: visible !important;
   }
 
-  body.weather-body .app-sidebar {
-    height: auto !important;
-  }
-
   body.weather-body .app-sidebar nav {
     font-size: 15px !important;
   }
@@ -1048,17 +823,16 @@ body.weather-body .weather-panel-empty {
     width: 100% !important;
     height: auto !important;
     padding: 18px 14px 20px !important;
-    gap: 14px !important;
     overflow: visible !important;
+    gap: 12px !important;
   }
 
   body.weather-body .weather-card {
-    min-height: 0 !important;
     padding: 8px 0 !important;
+    height: 154px !important;
   }
 
   body.weather-body .weather-stadium-panel {
-    width: auto !important;
     height: auto !important;
     max-height: min(420px, calc(100dvh - 24px)) !important;
     margin: 0 14px 20px !important;
@@ -1102,10 +876,9 @@ body.weather-body .weather-panel-empty {
   }
 
   body.weather-body .weather-map-card {
-    min-height: 120px;
     padding: 15px;
+    height: 150px !important;
   }
-
 }
 
 @media (min-width: 1101px) {
@@ -1114,19 +887,11 @@ body.weather-body .weather-panel-empty {
   }
 
   body.weather-body .weather-stadium-panel {
-    align-self: center !important;
-    width: auto !important;
     height: calc(100dvh - 112px) !important;
     max-height: calc(100dvh - 48px) !important;
     margin: 0 12px 0 0 !important;
-    padding: 8px 14px 16px !important;
-    font-family: "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif !important;
-  }
-
-  body.weather-body .weather-stadium-panel h2 {
-    margin: 14px 8px 10px !important;
-    font-size: 16px !important;
-    line-height: 1.4 !important;
+    font-family:
+      "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif !important;
   }
 
   body.weather-body .weather-panel-search {
@@ -1151,14 +916,9 @@ body.weather-body .weather-panel-empty {
     font-size: 14px !important;
   }
 
-  body.weather-body .weather-stadium-panel h2 {
-    padding-bottom: 10px !important;
-  }
-
   body.weather-body .weather-panel-list {
     grid-auto-rows: 82px !important;
     max-height: none !important;
-    gap: 4px !important;
   }
 
   body.weather-body .weather-panel-list button {
@@ -1174,6 +934,7 @@ body.weather-body .weather-panel-empty {
 
   body.weather-body .weather-panel-list button .stadium-weather-icon {
     font-weight: 600 !important;
+    font-size: 30px !important;
   }
 
   body.weather-body .weather-panel-list button small {
@@ -1186,94 +947,36 @@ body.weather-body .weather-panel-empty {
     line-height: 1 !important;
   }
 
-  body.weather-body .weather-panel-list button .stadium-weather-icon {
-    font-size: 30px !important;
-  }
-
   body.weather-body .weather-panel-list button i {
     color: rgb(216, 220, 237) !important;
   }
 }
 
-/* 상단 날씨 요약의 시각적 우선순위 */
-body.weather-body .weather-card {
-  height: 230px !important;
-}
-
-body.weather-body .hero-location {
-  font-size: clamp(18px, 1.8vw, 23px) !important;
-  font-weight: 300 !important;
-}
-
-body.weather-body .hero-location svg {
-  width: 18px !important;
-  height: 18px !important;
-}
-
-body.weather-body .temperature-label {
-  font-size: 12px !important;
-  font-weight: 300 !important;
-}
-
-body.weather-body #temperature {
-  font-size: clamp(46px, 5vw, 64px) !important;
-  font-weight: 300 !important;
-  font-family: "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif !important;
-}
-
-body.weather-body .temperature-label {
-  font-weight: 300 !important;
-  font-family: "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif !important;
-}
-
-body.weather-body,
-body.weather-body button,
-body.weather-body input,
-body.weather-body h1,
-body.weather-body h2,
-body.weather-body h3,
-body.weather-body strong,
-body.weather-body span,
-body.weather-body p,
-body.weather-body a {
-  font-family: "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif !important;
-}
-
-body.weather-body #weatherDescription {
-  font-size: 14px !important;
-  font-weight: 300 !important;
-}
-
 body.weather-body .hero-rain-probability {
   display: flex !important;
-  align-items: baseline !important;
-  gap: 10px !important;
-  margin-top: 4px !important;
-  padding: 8px 0 2px !important;
-  font-size: 13px !important;
-  font-weight: 300 !important;
-  line-height: 1.1 !important;
+  flex-direction: column !important;
+  grid-column: 1 !important;
+  grid-row: 2 !important;
+  justify-self: center !important;
+  align-self: center !important;
+  align-items: center !important;
+  gap: 5px !important;
+  margin: 8px 0 0 !important;
 }
 
 body.weather-body .hero-rain-probability strong,
 body.weather-body #heroRainProbabilityValue {
-  color: #fff !important;
-  font-size: clamp(24px, 2.4vw, 34px) !important;
-  font-weight: 300 !important;
-  line-height: 1 !important;
   white-space: nowrap !important;
+  order: 1 !important;
+  font-size: clamp(48px, 6vw, 76px) !important;
+  font-weight: 300 !important;
+  line-height: 0.95 !important;
 }
 
 body.weather-body .hero-rain-probability > span {
   font-weight: 300 !important;
-}
-
-body.weather-body > .app-sidebar .brand,
-body.weather-body > .app-sidebar .brand span,
-body.weather-body > .app-sidebar nav a,
-body.weather-body > .app-sidebar nav a span {
-  font-family: "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif !important;
-  font-weight: 300 !important;
+  order: 2 !important;
+  font-size: 13px !important;
 }
 
 body.weather-body #heroRainProbabilityValue.unavailable {
@@ -1283,115 +986,27 @@ body.weather-body #heroRainProbabilityValue.unavailable {
 
 body.weather-body .hourly-weather,
 body.weather-body .hourly-weather .time,
-body.weather-body .hourly-weather .temperature,
 body.weather-body .hourly-weather .rain {
-  font-family: "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif !important;
+  font-family:
+    "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif !important;
   font-weight: 300 !important;
-}
-
-/* 상단 날씨 요약: 왼쪽 현재 상태, 오른쪽 강수확률 */
-body.weather-body .temperature {
-  display: grid !important;
-  grid-template-columns: minmax(0, 1fr) minmax(150px, 0.55fr) !important;
-  grid-template-rows: auto auto 1fr !important;
-  align-items: center !important;
-  column-gap: clamp(24px, 6vw, 96px) !important;
-  row-gap: 4px !important;
-}
-
-body.weather-body .hero-location,
-body.weather-body .hero-date {
-  grid-column: 1 / -1 !important;
-}
-
-body.weather-body .hero-location {
-  grid-row: 1 !important;
-}
-
-body.weather-body .hero-date {
-  grid-row: 2 !important;
-  color: rgba(218, 235, 247, 0.72) !important;
-  font-size: 13px !important;
-  font-weight: 300 !important;
-  line-height: 1.3 !important;
 }
 
 body.weather-body .hero-temperature-line {
   grid-column: 1 !important;
   grid-row: 3 !important;
 }
-
-body.weather-body #weatherDescription {
-  grid-column: 1 !important;
-  grid-row: 4 !important;
-}
-
-body.weather-body .hero-rain-probability {
-  grid-column: 2 !important;
-  grid-row: 3 / 5 !important;
-  justify-self: end !important;
-  align-self: center !important;
-  flex-direction: column !important;
-  align-items: flex-end !important;
-  gap: 8px !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-body.weather-body .hero-rain-probability strong {
-  font-size: clamp(32px, 4vw, 52px) !important;
-}
-
-@media (max-width: 700px) {
-  body.weather-body .temperature {
-    grid-template-columns: minmax(0, 1fr) !important;
-    row-gap: 5px !important;
-  }
-
-  body.weather-body .hero-rain-probability,
-  body.weather-body .hero-temperature-line,
-  body.weather-body #weatherDescription {
-    grid-column: 1 !important;
-    justify-self: start !important;
-  }
-
-  body.weather-body .hero-rain-probability {
-    grid-row: 5 !important;
-    align-items: flex-start !important;
-  }
-}
-
-@media (max-width: 700px) {
-  body.weather-body .weather-card {
-    height: 220px !important;
-  }
-
-  body.weather-body .hero-rain-probability strong,
-  body.weather-body #heroRainProbabilityValue {
-    font-size: 28px !important;
-  }
-}
-
-/* Final top-summary alignment */
 @media (min-width: 701px) {
   body.weather-body .weather-page {
     gap: 10px !important;
   }
 
   body.weather-body .weather-card {
-    height: 188px !important;
     padding-top: 4px !important;
   }
 
   body.weather-body .temperature {
-    grid-template-columns: minmax(0, 1fr) minmax(180px, 0.42fr) !important;
-    grid-template-rows: auto auto auto auto !important;
     column-gap: clamp(28px, 5vw, 72px) !important;
-    row-gap: 3px !important;
-  }
-
-  body.weather-body .hero-temperature-line {
-    align-items: center !important;
   }
 
   body.weather-body #temperature {
@@ -1401,33 +1016,7 @@ body.weather-body .hero-rain-probability strong {
   body.weather-body .hero-weather-icon {
     min-width: 64px !important;
     height: 64px !important;
-    font-size: clamp(44px, 4.5vw, 60px) !important;
   }
-
-  body.weather-body .hero-rain-probability {
-    align-self: center !important;
-    justify-self: start !important;
-    align-items: flex-start !important;
-  }
-}
-
-@media (max-width: 700px) {
-  body.weather-body .weather-page {
-    gap: 12px !important;
-  }
-
-  body.weather-body .weather-card {
-    height: 245px !important;
-  }
-}
-
-/* 상단 메인 정보를 현재 기온 대신 강수확률로 표시 */
-body.weather-body .hero-location {
-  display: none !important;
-}
-
-body.weather-body .weather-card {
-  height: 142px !important;
 }
 
 body.weather-body .hero-temperature-line,
@@ -1442,11 +1031,6 @@ body.weather-body .temperature {
   row-gap: 4px !important;
 }
 
-body.weather-body .hero-location {
-  grid-column: 1 !important;
-  grid-row: 1 !important;
-}
-
 body.weather-body .hero-date {
   grid-column: 1 !important;
   grid-row: 1 !important;
@@ -1455,82 +1039,19 @@ body.weather-body .hero-date {
   font-family:
     -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
     "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif !important;
-  font-size: 13px !important;
-  font-weight: 500 !important;
-  line-height: 1.35 !important;
-}
-
-body.weather-body .hero-rain-probability {
-  grid-column: 1 !important;
-  grid-row: 2 !important;
-  justify-self: center !important;
-  align-self: center !important;
-  align-items: center !important;
-  gap: 5px !important;
-  margin: 8px 0 0 !important;
-  padding: 0 !important;
-}
-
-body.weather-body .hero-rain-probability > span {
-  order: 2 !important;
-  font-size: 13px !important;
-}
-
-body.weather-body .hero-rain-probability strong,
-body.weather-body #heroRainProbabilityValue {
-  order: 1 !important;
-  font-size: clamp(48px, 6vw, 76px) !important;
-  font-weight: 300 !important;
-  line-height: 0.95 !important;
 }
 
 @media (max-width: 700px) {
-  body.weather-body .weather-card {
-    height: 154px !important;
-  }
-
-  body.weather-body .hero-rain-probability {
-    grid-row: 2 !important;
-    justify-self: center !important;
-    align-items: center !important;
-  }
-
   body.weather-body .hero-rain-probability strong,
   body.weather-body #heroRainProbabilityValue {
     font-size: 52px !important;
   }
 }
 
-/* Final Leaflet fix: expand only inside the central content column. */
-body.weather-body .weather-map-card {
-  position: relative !important;
-  inset: auto !important;
-  width: 100% !important;
-  height: 170px !important;
-  min-height: 0 !important;
-  overflow: hidden !important;
-  transform: none !important;
-  transition: height 220ms ease, box-shadow 220ms ease !important;
-}
-
-/* Final sticky placement for the standalone map card. */
-/* Keep the main column scrollable without showing its extra scrollbar. */
-body.weather-body .weather-page {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-body.weather-body .weather-page::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-}
-
 body.weather-body .weather-page > .weather-map-card,
 body.weather-body .weather-page > .weather-map-card.is-expanded {
   position: sticky !important;
   top: 18px !important;
-  left: auto !important;
-  right: auto !important;
   inset-inline: auto !important;
   width: 100% !important;
   align-self: start !important;
@@ -1538,12 +1059,7 @@ body.weather-body .weather-page > .weather-map-card.is-expanded {
 }
 
 body.weather-body .weather-map-card.is-expanded {
-  position: relative !important;
-  inset: auto !important;
-  width: 100% !important;
   height: clamp(65vh, 70vh, 75vh) !important;
-  z-index: 20 !important;
-  overflow: hidden !important;
   box-shadow: 0 18px 42px rgba(9, 57, 91, 0.3) !important;
 }
 
@@ -1555,10 +1071,6 @@ body.weather-body .weather-map-card.is-expanded .weather-leaflet-map {
 }
 
 @media (max-width: 700px) {
-  body.weather-body .weather-map-card {
-    height: 150px !important;
-  }
-
   body.weather-body .weather-map-card.is-expanded {
     height: 65vh !important;
   }

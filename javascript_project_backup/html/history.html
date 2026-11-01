@@ -30,8 +30,7 @@
     <main class="history-page">
       <header class="history-header">
         <button class="back-button" type="button" aria-label="이전 페이지">←</button>
-          <p id="stadiumName">야구장</p>
-        </div>
+        <p id="stadiumName">야구장</p>
       </header>
 
       <section class="history-intro">
@@ -140,48 +139,7 @@
           </span>
         </div>
         <h2>전국 주요 날씨</h2>
-        <div class="weather-panel-list">
-          <button type="button" data-stadium="인천 SSG랜더스필드">
-            <span class="stadium-weather-icon" aria-hidden="true">☁️</span>
-            <span class="stadium-weather-name">인천 SSG랜더스필드<small>흐림</small></span>
-            <b>21°</b><i aria-hidden="true">›</i>
-          </button>
-          <button type="button" data-stadium="잠실야구장">
-            <span class="stadium-weather-icon" aria-hidden="true">🌧️</span>
-            <span class="stadium-weather-name">잠실야구장<small>비</small></span>
-            <b>21°</b><i aria-hidden="true">›</i>
-          </button>
-          <button type="button" data-stadium="수원KT위즈파크">
-            <span class="stadium-weather-icon" aria-hidden="true">🌤️</span>
-            <span class="stadium-weather-name">수원 KT 위즈파크<small>구름 조금</small></span>
-            <b>21°</b><i aria-hidden="true">›</i>
-          </button>
-          <button type="button" data-stadium="대전 한화생명 볼파크">
-            <span class="stadium-weather-icon" aria-hidden="true">🌧️</span>
-            <span class="stadium-weather-name">대전 한화생명 볼파크<small>비</small></span>
-            <b>21°</b><i aria-hidden="true">›</i>
-          </button>
-          <button type="button" data-stadium="대구 삼성 라이온즈 파크">
-            <span class="stadium-weather-icon" aria-hidden="true">🌤️</span>
-            <span class="stadium-weather-name">대구 삼성 라이온즈 파크<small>구름 조금</small></span>
-            <b>21°</b><i aria-hidden="true">›</i>
-          </button>
-          <button type="button" data-stadium="광주기아챔피언스필드">
-            <span class="stadium-weather-icon" aria-hidden="true">☀️</span>
-            <span class="stadium-weather-name">광주-기아 챔피언스 필드<small>맑음</small></span>
-            <b>21°</b><i aria-hidden="true">›</i>
-          </button>
-          <button type="button" data-stadium="창원NC파크">
-            <span class="stadium-weather-icon" aria-hidden="true">☁️</span>
-            <span class="stadium-weather-name">창원 NC파크<small>흐림</small></span>
-            <b>21°</b><i aria-hidden="true">›</i>
-          </button>
-          <button type="button" data-stadium="사직야구장">
-            <span class="stadium-weather-icon" aria-hidden="true">🌤️</span>
-            <span class="stadium-weather-name">부산 사직야구장<small>구름 조금</small></span>
-            <b>21°</b><i aria-hidden="true">›</i>
-          </button>
-        </div>
+        <div class="weather-panel-list"></div>
         <p class="weather-panel-empty" hidden>검색 결과가 없습니다.</p>
       </aside>
     </main>
@@ -189,62 +147,27 @@
     <script src="weather-list-shuffle.js"></script>
     <script src="weather-service.js"></script>
     <script>
-      const stadiumName = localStorage.getItem("selectedStadium");
-      if (stadiumName) {
-        document.getElementById("stadiumName").textContent = stadiumName;
-      }
+      const storedStadium = localStorage.getItem("selectedStadium");
+      const stadiumName = storedStadium || "잠실야구장";
+      const getElement = (id) => document.getElementById(id);
+      if (storedStadium) getElement("stadiumName").textContent = storedStadium;
 
-      const cityNames = {
-        "인천 SSG랜더스필드": "인천",
-        잠실야구장: "서울",
-        수원KT위즈파크: "수원",
-        "대전 한화생명 볼파크": "대전",
-        "대구 삼성 라이온즈 파크": "대구",
-        광주기아챔피언스필드: "광주",
-        창원NC파크: "창원",
-        사직야구장: "부산",
-      };
-      document.getElementById("panelCity").textContent =
-        cityNames[stadiumName] || "서울";
-      window.weatherService.loadPanelWeather();
-
-      const stadiumSearch = document.getElementById("stadiumSearch");
-      const stadiumButtons = [
-        ...document.querySelectorAll(".weather-panel-list button"),
-      ];
-      stadiumSearch.addEventListener("input", () => {
-        const query = stadiumSearch.value.trim().toLocaleLowerCase("ko");
-        let visibleCount = 0;
-
-        stadiumButtons.forEach((button) => {
-          const isMatch = button.textContent
-            .toLocaleLowerCase("ko")
-            .includes(query);
-          button.hidden = !isMatch;
-          if (isMatch) visibleCount += 1;
-        });
-        document.querySelector(".weather-panel-empty").hidden =
-          visibleCount > 0;
-      });
-
-      stadiumButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-          localStorage.setItem("selectedStadium", button.dataset.stadium);
-          window.location.reload();
-        });
+      window.weatherService.initStadiumPanel((selected) => {
+        localStorage.setItem("selectedStadium", selected);
+        window.location.reload();
       });
 
       document.querySelector(".back-button").addEventListener("click", () => {
         window.history.back();
       });
 
-      const fiveDayList = document.getElementById("fiveDayForecastList");
-      const fiveDayFormatter = new Intl.DateTimeFormat("ko-KR", {
-        timeZone: "Asia/Seoul",
-        month: "long",
-        day: "numeric",
-        weekday: "short",
-      });
+      const today = new Date();
+      const toDateKey = (date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+      };
       const getSeoulDateKey = (timestamp) =>
         new Intl.DateTimeFormat("en-CA", {
           timeZone: "Asia/Seoul",
@@ -252,28 +175,23 @@
           month: "2-digit",
           day: "2-digit",
         }).format(new Date(timestamp * 1000));
-      const getDateKey = (date) => {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, "0");
-        const day = String(date.getDate()).padStart(2, "0");
-        return `${year}-${month}-${day}`;
-      };
-      const renderFiveDayError = () => {
-        fiveDayList.replaceChildren(Object.assign(document.createElement("p"), {
-          className: "five-day-forecast-message",
-          textContent: "강수확률을 확인할 수 없습니다.",
-        }));
-      };
-      const loadFiveDayForecast = async () => {
+
+      const fiveDayList = getElement("fiveDayForecastList");
+      const fiveDayFormatter = new Intl.DateTimeFormat("ko-KR", {
+        timeZone: "Asia/Seoul",
+        month: "long",
+        day: "numeric",
+        weekday: "short",
+      });
+      async function loadFiveDayForecast() {
         try {
-          const data = await window.weatherService.loadForecast(stadiumName || "잠실야구장");
-          const today = new Date();
+          const data = await window.weatherService.loadForecast(stadiumName);
           const dates = Array.from({ length: 5 }, (_, index) => {
             const date = new Date(today);
             date.setDate(today.getDate() + index);
             return date;
           });
-          const daily = new Map(dates.map((date) => [getDateKey(date), []]));
+          const daily = new Map(dates.map((date) => [toDateKey(date), []]));
           (data.list || []).forEach((item) => {
             const key = getSeoulDateKey(item.dt);
             if (daily.has(key) && Number.isFinite(item.pop)) daily.get(key).push(item.pop);
@@ -285,10 +203,10 @@
             dateElement.className = "date-text";
             dateElement.textContent = fiveDayFormatter.format(date);
             const value = document.createElement("strong");
-            const probabilities = daily.get(getDateKey(date));
+            const probabilities = daily.get(toDateKey(date));
             // API가 제공하는 실제 강수확률(POP)을 해당 날짜의 우천취소 위험 기준으로 사용합니다.
             // 하루 대표값은 3시간 예보 중 가장 높은 강수확률입니다.
-            value.textContent = probabilities?.length
+            value.textContent = probabilities.length
               ? `${Math.round(Math.max(...probabilities) * 100)}%`
               : "확인 불가";
             const label = document.createElement("small");
@@ -298,57 +216,56 @@
           }));
         } catch (error) {
           console.error("향후 5일 강수확률 조회 실패:", error);
-          renderFiveDayError();
+          const message = document.createElement("p");
+          message.className = "five-day-forecast-message";
+          message.textContent = "강수확률을 확인할 수 없습니다.";
+          fiveDayList.replaceChildren(message);
         }
-      };
+      }
       loadFiveDayForecast();
 
-      const dateButtonsContainer = document.getElementById("dateButtons");
       const dateFormatter = new Intl.DateTimeFormat("ko-KR", { timeZone: "Asia/Seoul", year: "numeric", month: "long", day: "numeric" });
       const monthDayFormatter = new Intl.DateTimeFormat("ko-KR", { timeZone: "Asia/Seoul", month: "numeric", day: "numeric" });
-      const today = new Date();
+      const weatherCodes = { 0: ["☀️", "맑음"], 1: ["🌤️", "대체로 맑음"], 2: ["⛅", "부분적으로 흐림"], 3: ["☁️", "흐림"], 45: ["🌫️", "안개"], 51: ["🌦️", "이슬비"], 61: ["🌧️", "비"], 71: ["❄️", "눈"], 80: ["🌧️", "소나기"], 95: ["⛈️", "뇌우"] };
       const selectedDates = Array.from({ length: 5 }, (_, index) => {
         const date = new Date(today);
         date.setFullYear(date.getFullYear() - 1);
         date.setDate(date.getDate() - index);
         return date;
       });
-      const toDateParam = (date) => {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, "0");
-        const day = String(date.getDate()).padStart(2, "0");
-        return `${year}-${month}-${day}`;
-      };
-      const showHistoryError = (message) => {
-        document.getElementById("historyDescription").textContent = message;
-        ["historyTemperature", "historyHumidity", "historyRainfall"].forEach((id) => { document.getElementById(id).textContent = "--"; });
-        document.getElementById("historyIcon").textContent = "⚠️";
-      };
       async function loadHistory(date) {
-        document.getElementById("historyDate").textContent = dateFormatter.format(date);
-        document.getElementById("historyDescription").textContent = "과거 관측 데이터를 불러오는 중입니다.";
+        getElement("historyDate").textContent = dateFormatter.format(date);
+        getElement("historyDescription").textContent = "과거 관측 데이터를 불러오는 중입니다.";
         try {
-          const response = await fetch(`/api/history?stadium=${encodeURIComponent(stadiumName || "잠실야구장")}&date=${toDateParam(date)}`);
+          const response = await fetch(`/api/history?stadium=${encodeURIComponent(stadiumName)}&date=${toDateKey(date)}`);
           const data = await response.json();
           if (!response.ok) throw new Error(data.error || "과거 날씨 데이터를 불러오지 못했습니다.");
           const daily = data.daily;
-          const code = daily.weather_code[0];
-          const descriptions = { 0: ["☀️", "맑음"], 1: ["🌤️", "대체로 맑음"], 2: ["⛅", "부분적으로 흐림"], 3: ["☁️", "흐림"], 45: ["🌫️", "안개"], 51: ["🌦️", "이슬비"], 61: ["🌧️", "비"], 71: ["❄️", "눈"], 80: ["🌧️", "소나기"], 95: ["⛈️", "뇌우"] };
-          const [icon, description] = descriptions[code] || ["🌡️", "관측 코드 확인 필요"];
-          document.getElementById("historyIcon").textContent = icon;
-          document.getElementById("historyDescription").textContent = description;
-          document.getElementById("historyTemperature").textContent = `${Math.round(daily.temperature_2m_mean[0])}℃`;
-          document.getElementById("historyHumidity").textContent = `${Math.round(daily.relative_humidity_2m_mean[0])}%`;
-          document.getElementById("historyRainfall").textContent = `${Number(daily.precipitation_sum[0]).toFixed(1)}mm`;
-        } catch (error) { showHistoryError(error.message); }
+          const [icon, description] = weatherCodes[daily.weather_code[0]] || ["🌡️", "관측 코드 확인 필요"];
+          getElement("historyIcon").textContent = icon;
+          getElement("historyDescription").textContent = description;
+          getElement("historyTemperature").textContent = `${Math.round(daily.temperature_2m_mean[0])}℃`;
+          getElement("historyHumidity").textContent = `${Math.round(daily.relative_humidity_2m_mean[0])}%`;
+          getElement("historyRainfall").textContent = `${Number(daily.precipitation_sum[0]).toFixed(1)}mm`;
+        } catch (error) {
+          getElement("historyDescription").textContent = error.message;
+          ["historyTemperature", "historyHumidity", "historyRainfall"].forEach((id) => { getElement(id).textContent = "--"; });
+          getElement("historyIcon").textContent = "⚠️";
+        }
       }
-      selectedDates.forEach((date, index) => {
+      const dateButtons = selectedDates.map((date, index) => {
         const button = document.createElement("button");
         button.className = `date-button${index === 0 ? " active" : ""}`;
-        button.type = "button"; button.textContent = monthDayFormatter.format(date); button.dataset.date = toDateParam(date);
-        button.addEventListener("click", () => { document.querySelectorAll(".date-button").forEach((item) => item.classList.remove("active")); button.classList.add("active"); loadHistory(date); });
-        dateButtonsContainer.append(button);
+        button.type = "button";
+        button.textContent = monthDayFormatter.format(date);
+        button.addEventListener("click", () => {
+          dateButtons.forEach((item) => item.classList.remove("active"));
+          button.classList.add("active");
+          loadHistory(date);
+        });
+        return button;
       });
+      getElement("dateButtons").append(...dateButtons);
       loadHistory(selectedDates[0]);
     </script>
   </body>

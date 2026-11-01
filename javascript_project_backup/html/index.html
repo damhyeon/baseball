@@ -26,17 +26,14 @@
     <main class="main-page">
       <section class="map-section">
         <div class="korea-map">
-          <!-- SVG 파일을 이미지로 불러오기 -->
           <img
             src="assets/korea-map.svg?v=20260911"
             class="korea-svg-img"
             alt="대한민국 지도"
           />
 
-          <!-- 야구장 마커 -->
           <button
             class="stadium-marker marker-incheon"
-            style="top: 20.6%; left: 19.1%"
             data-stadium="인천 SSG랜더스필드"
           >
             <span class="marker" aria-hidden="true"></span
@@ -47,7 +44,6 @@
           </button>
           <button
             class="stadium-marker marker-jamsil"
-            style="top: 21.4%; left: 27.7%"
             data-stadium="잠실야구장"
           >
             <span class="marker" aria-hidden="true"></span
@@ -58,7 +54,6 @@
           </button>
           <button
             class="stadium-marker marker-suwon"
-            style="top: 26.1%; left: 24.8%"
             data-stadium="수원KT위즈파크"
           >
             <span class="marker" aria-hidden="true"></span
@@ -69,7 +64,6 @@
           </button>
           <button
             class="stadium-marker marker-daejeon"
-            style="top: 42.8%; left: 37.2%"
             data-stadium="대전 한화생명 볼파크"
           >
             <span class="marker" aria-hidden="true"></span
@@ -80,7 +74,6 @@
           </button>
           <button
             class="stadium-marker marker-daegu"
-            style="top: 56.3%; left: 54.4%"
             data-stadium="대구 삼성 라이온즈 파크"
           >
             <span class="marker" aria-hidden="true"></span
@@ -91,7 +84,6 @@
           </button>
           <button
             class="stadium-marker marker-gwangju"
-            style="top: 63.4%; left: 26.7%"
             data-stadium="광주기아챔피언스필드"
           >
             <span class="marker" aria-hidden="true"></span
@@ -102,7 +94,6 @@
           </button>
           <button
             class="stadium-marker marker-changwon"
-            style="top: 63.4%; left: 57.3%"
             data-stadium="창원NC파크"
           >
             <span class="marker" aria-hidden="true"></span
@@ -112,7 +103,6 @@
           </button>
           <button
             class="stadium-marker marker-busan"
-            style="top: 63.4%; left: 66.8%"
             data-stadium="사직야구장"
           >
             <span class="marker" aria-hidden="true"></span
@@ -146,48 +136,7 @@
           </span>
         </div>
         <h2>전국 주요 날씨</h2>
-        <div class="weather-panel-list">
-          <button class="quick-weather" type="button" data-stadium="인천 SSG랜더스필드">
-            <span class="stadium-weather-icon" aria-hidden="true">☁️</span>
-            <span class="stadium-weather-name">인천 SSG랜더스필드<small>흐림</small></span>
-            <b>21°</b><i aria-hidden="true">›</i>
-          </button>
-          <button class="quick-weather" type="button" data-stadium="잠실야구장">
-            <span class="stadium-weather-icon" aria-hidden="true">🌧️</span>
-            <span class="stadium-weather-name">잠실야구장<small>비</small></span>
-            <b>21°</b><i aria-hidden="true">›</i>
-          </button>
-          <button class="quick-weather" type="button" data-stadium="수원KT위즈파크">
-            <span class="stadium-weather-icon" aria-hidden="true">🌤️</span>
-            <span class="stadium-weather-name">수원 KT 위즈파크<small>구름 조금</small></span>
-            <b>21°</b><i aria-hidden="true">›</i>
-          </button>
-          <button class="quick-weather" type="button" data-stadium="대전 한화생명 볼파크">
-            <span class="stadium-weather-icon" aria-hidden="true">🌧️</span>
-            <span class="stadium-weather-name">대전 한화생명 볼파크<small>비</small></span>
-            <b>21°</b><i aria-hidden="true">›</i>
-          </button>
-          <button class="quick-weather" type="button" data-stadium="대구 삼성 라이온즈 파크">
-            <span class="stadium-weather-icon" aria-hidden="true">🌤️</span>
-            <span class="stadium-weather-name">대구 삼성 라이온즈 파크<small>구름 조금</small></span>
-            <b>21°</b><i aria-hidden="true">›</i>
-          </button>
-          <button class="quick-weather" type="button" data-stadium="광주기아챔피언스필드">
-            <span class="stadium-weather-icon" aria-hidden="true">☀️</span>
-            <span class="stadium-weather-name">광주-기아 챔피언스 필드<small>맑음</small></span>
-            <b>21°</b><i aria-hidden="true">›</i>
-          </button>
-          <button class="quick-weather" type="button" data-stadium="창원NC파크">
-            <span class="stadium-weather-icon" aria-hidden="true">☁️</span>
-            <span class="stadium-weather-name">창원 NC파크<small>흐림</small></span>
-            <b>21°</b><i aria-hidden="true">›</i>
-          </button>
-          <button class="quick-weather" type="button" data-stadium="사직야구장">
-            <span class="stadium-weather-icon" aria-hidden="true">🌤️</span>
-            <span class="stadium-weather-name">부산 사직야구장<small>구름 조금</small></span>
-            <b>21°</b><i aria-hidden="true">›</i>
-          </button>
-        </div>
+        <div class="weather-panel-list"></div>
         <p class="weather-panel-empty" hidden>검색 결과가 없습니다.</p>
       </aside>
 
@@ -201,10 +150,7 @@
         잠실야구장: { x: 235, y: 125 },
         수원KT위즈파크: { x: 175, y: 175 },
         "대전 한화생명 볼파크": { x: 220, y: 260 },
-        "대구 삼성 라이온즈 파크": {
-          x: 295,
-          y: 345,
-        },
+        "대구 삼성 라이온즈 파크": { x: 295, y: 345 },
         광주기아챔피언스필드: { x: 150, y: 380 },
         창원NC파크: { x: 205, y: 395 },
         사직야구장: { x: 355, y: 400 },
@@ -212,37 +158,11 @@
       const mapCanvas = document.querySelector(".korea-map");
       const mapImage = document.querySelector(".korea-svg-img");
       const stadiumMarkers = document.querySelectorAll(".stadium-marker");
-      const cityNames = {
-        "인천 SSG랜더스필드": "인천",
-        잠실야구장: "서울",
-        수원KT위즈파크: "수원",
-        "대전 한화생명 볼파크": "대전",
-        "대구 삼성 라이온즈 파크": "대구",
-        광주기아챔피언스필드: "광주",
-        창원NC파크: "창원",
-        사직야구장: "부산",
-      };
-      const selectedStadium = localStorage.getItem("selectedStadium");
-      document.getElementById("panelCity").textContent =
-        cityNames[selectedStadium] || "서울";
-      window.weatherService.loadPanelWeather();
 
-      const stadiumSearch = document.getElementById("stadiumSearch");
-      const weatherButtons = [
-        ...document.querySelectorAll(".weather-panel-list button"),
-      ];
-      stadiumSearch.addEventListener("input", () => {
-        const query = stadiumSearch.value.trim().toLocaleLowerCase("ko");
-        let visibleCount = 0;
-
-        weatherButtons.forEach((button) => {
-          const isMatch = button.textContent.toLocaleLowerCase("ko").includes(query);
-          button.hidden = !isMatch;
-          if (isMatch) visibleCount += 1;
-        });
-        document.querySelector(".weather-panel-empty").hidden =
-          visibleCount > 0;
-      });
+      function selectStadium(stadiumName) {
+        localStorage.setItem("selectedStadium", stadiumName);
+        window.location.href = "weather.html";
+      }
 
       function positionMarkers() {
         const width = mapCanvas.clientWidth;
@@ -252,26 +172,14 @@
         const offsetY = (height - 631 * scale) / 2;
         stadiumMarkers.forEach((marker) => {
           const point = stadiumCoordinates[marker.dataset.stadium];
-          if (!point || !marker.classList.contains("stadium-marker")) return;
-          marker.style.setProperty(
-            "left",
-            `${offsetX + point.x * scale}px`,
-            "important",
-          );
-          marker.style.setProperty(
-            "top",
-            `${offsetY + point.y * scale}px`,
-            "important",
-          );
+          marker.style.setProperty("left", `${offsetX + point.x * scale}px`, "important");
+          marker.style.setProperty("top", `${offsetY + point.y * scale}px`, "important");
         });
       }
-      function selectStadium(event) {
-        const stadiumName = event.currentTarget.dataset.stadium;
-        localStorage.setItem("selectedStadium", stadiumName);
-        window.location.href = "weather.html";
-      }
-      [...stadiumMarkers, ...weatherButtons].forEach((button) =>
-        button.addEventListener("click", selectStadium),
+
+      window.weatherService.initStadiumPanel(selectStadium, "quick-weather");
+      stadiumMarkers.forEach((marker) =>
+        marker.addEventListener("click", () => selectStadium(marker.dataset.stadium)),
       );
       window.addEventListener("resize", positionMarkers);
       if (mapImage.complete) positionMarkers();

@@ -26,10 +26,10 @@ const contentTypes = {
   ".css": "text/css; charset=utf-8",
   ".html": "text/html; charset=utf-8",
   ".js": "text/javascript; charset=utf-8",
-  ".json": "application/json; charset=utf-8",
   ".svg": "image/svg+xml",
 };
 
+// 이 목록에 있는 파일만 제공합니다. (.env, 서버 코드 등은 노출되지 않습니다.)
 const publicFiles = new Map([
   ["/", "html/index.html"],
   ["/index.html", "html/index.html"],
@@ -40,29 +40,14 @@ const publicFiles = new Map([
   ["/history.css", "css/history.css"],
   ["/weather-list-shuffle.js", "js/weather-list-shuffle.js"],
   ["/weather-service.js", "js/weather-service.js"],
+  ["/assets/korea-map.svg", "assets/korea-map.svg"],
 ]);
 
 function loadLocalEnv() {
-  let contents;
   try {
-    contents = fs.readFileSync(path.join(root, ".env"), "utf8");
+    process.loadEnvFile(path.join(root, ".env"));
   } catch (error) {
-    if (error.code === "ENOENT") return;
-    throw error;
-  }
-
-  for (const line of contents.split(/\r?\n/)) {
-    const match = line.match(/^\s*(?:export\s+)?([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*?)\s*$/);
-    if (!match || match[1] in process.env) continue;
-
-    let value = match[2];
-    if (
-      (value.startsWith('"') && value.endsWith('"')) ||
-      (value.startsWith("'") && value.endsWith("'"))
-    ) {
-      value = value.slice(1, -1);
-    }
-    process.env[match[1]] = value;
+    if (error.code !== "ENOENT") throw error;
   }
 }
 
@@ -70,9 +55,12 @@ function sendJson(response, statusCode, data) {
   response.writeHead(statusCode, {
     "Cache-Control": "no-store",
     "Content-Type": "application/json; charset=utf-8",
-    "X-Content-Type-Options": "nosniff",
   });
   response.end(JSON.stringify(data));
+}
+
+function findStadium(stadiumName) {
+  return Object.hasOwn(stadiums, stadiumName) ? stadiums[stadiumName] : null;
 }
 
 function isRateLimited(ipAddress) {
@@ -82,7 +70,7 @@ function isRateLimited(ipAddress) {
   }
 
   const entry = requestCounts.get(ipAddress);
-  if (!entry || now - entry.startedAt >= requestWindowMs) {
+  if (!entry) {
     requestCounts.set(ipAddress, { startedAt: now, count: 1 });
     return false;
   }
@@ -94,9 +82,7 @@ function isRateLimited(ipAddress) {
 
 async function handleWeatherRequest(url, request, response) {
   const stadiumName = url.searchParams.get("stadium");
-  const place = Object.hasOwn(stadiums, stadiumName)
-    ? stadiums[stadiumName]
-    : null;
+  const place = findStadium(stadiumName);
   if (!place) {
     sendJson(response, 400, { error: "지원하지 않는 야구장입니다." });
     return;
@@ -123,9 +109,7 @@ async function handleWeatherRequest(url, request, response) {
     return;
   }
 
-  const upstreamUrl = new URL(
-    "https://api.openweathermap.org/data/2.5/forecast",
-  );
+  const upstreamUrl = new URL("https://api.openweathermap.org/data/2.5/forecast");
   upstreamUrl.search = new URLSearchParams({
     lat: String(place.lat),
     lon: String(place.lon),
@@ -152,18 +136,14 @@ async function handleWeatherRequest(url, request, response) {
     weatherCache.set(stadiumName, { cachedAt: Date.now(), data });
     sendJson(response, 200, data);
   } catch (error) {
-    console.error(
-      "OpenWeather request failed:",
-      error instanceof Error ? error.message : "unknown error",
-    );
+    console.error("OpenWeather request failed:", error.message);
     sendJson(response, 502, { error: "날씨 정보를 불러오지 못했습니다." });
   }
 }
 
-async function handleHistoryRequest(url, request, response) {
-  const stadiumName = url.searchParams.get("stadium");
+async function handleHistoryRequest(url, response) {
+  const place = findStadium(url.searchParams.get("stadium"));
   const date = url.searchParams.get("date");
-  const place = Object.hasOwn(stadiums, stadiumName) ? stadiums[stadiumName] : null;
   if (!place || !/^\d{4}-\d{2}-\d{2}$/.test(date || "")) {
     sendJson(response, 400, { error: "야구장 또는 날짜가 올바르지 않습니다." });
     return;
@@ -188,7 +168,7 @@ async function handleHistoryRequest(url, request, response) {
     }
     sendJson(response, 200, data);
   } catch (error) {
-    console.error("Historical weather request failed:", error instanceof Error ? error.message : "unknown error");
+    console.error("Historical weather request failed:", error.message);
     sendJson(response, 502, { error: "과거 날씨 정보를 불러오지 못했습니다." });
   }
 }
@@ -203,69 +183,38 @@ async function handleRequest(request, response) {
   }
 
   const url = new URL(request.url, "http://localhost");
-  if (url.pathname === "/api/weather") {
+  if (url.pathname === "/api/weather" || url.pathname === "/api/history") {
     if (request.method === "HEAD") {
       response.writeHead(405, { Allow: "GET" });
       response.end();
-      return;
+    } else if (url.pathname === "/api/weather") {
+      await handleWeatherRequest(url, request, response);
+    } else {
+      await handleHistoryRequest(url, response);
     }
-    await handleWeatherRequest(url, request, response);
-    return;
-  }
-  if (url.pathname === "/api/history") {
-    if (request.method === "HEAD") {
-      response.writeHead(405, { Allow: "GET" });
-      response.end();
-      return;
-    }
-    await handleHistoryRequest(url, request, response);
     return;
   }
 
-  let pathname;
-  try {
-    pathname = decodeURIComponent(url.pathname);
-  } catch {
-    response.writeHead(400);
-    response.end("Bad request");
+  const relativePath = publicFiles.get(url.pathname);
+  if (!relativePath) {
+    response.writeHead(404);
+    response.end("Not found");
     return;
   }
 
-  const relativePath =
-    publicFiles.get(pathname) || pathname.replace(/^\/+/, "");
-  const filePath = path.resolve(root, relativePath);
-  if (filePath === root || !filePath.startsWith(`${root}${path.sep}`)) {
-    response.writeHead(403);
-    response.end("Forbidden");
+  const filePath = path.join(root, relativePath);
+  response.writeHead(200, { "Content-Type": contentTypes[path.extname(filePath)] });
+  if (request.method === "HEAD") {
+    response.end();
     return;
   }
-
-  fs.stat(filePath, (error, stats) => {
-    if (error || !stats.isFile()) {
-      response.writeHead(404);
-      response.end("Not found");
-      return;
-    }
-
-    response.writeHead(200, {
-      "Content-Type":
-        contentTypes[path.extname(filePath)] || "application/octet-stream",
-    });
-    if (request.method === "HEAD") {
-      response.end();
-      return;
-    }
-    fs.createReadStream(filePath).pipe(response);
-  });
+  fs.createReadStream(filePath).pipe(response);
 }
 
 loadLocalEnv();
 http.createServer((request, response) => {
   handleRequest(request, response).catch((error) => {
-    console.error(
-      "Request failed:",
-      error instanceof Error ? error.message : "unknown error",
-    );
+    console.error("Request failed:", error instanceof Error ? error.message : "unknown error");
     if (!response.headersSent) {
       sendJson(response, 500, { error: "서버 내부 오류가 발생했습니다." });
     } else {
