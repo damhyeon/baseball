@@ -73,10 +73,10 @@ const contentTypes = {
 // 이 목록에 없는 파일은 무조건 404 가 됩니다.
 // 그래서 .env 파일이나 server.js 같은 파일은 주소를 입력해도 볼 수 없습니다.
 const publicFiles = {
-  "/": "html/index.html",
-  "/index.html": "html/index.html",
-  "/weather.html": "html/weather.html",
-  "/history.html": "html/history.html",
+  "/": "index.html",
+  "/index.html": "index.html",
+  "/weather.html": "weather.html",
+  "/history.html": "history.html",
 
   "/style.css": "css/style.css",
   "/weather.css": "css/weather.css",

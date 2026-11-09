@@ -124,7 +124,9 @@ curl "http://127.0.0.1:3000/api/weather?stadium=잠실야구장"
 baseball/
 ├── .env.example        환경 변수 템플릿 (복사해서 .env 로 사용)
 ├── package.json        의존성 없음, start 스크립트만 있음
-├── html/               index.html / weather.html / history.html
+├── index.html          구장 선택
+├── weather.html        날씨
+├── history.html        날씨 기록
 ├── css/                style.css / weather.css / history.css / weather-scene.css
 ├── js/
 │   ├── server.js           정적 파일 서버 + OpenWeather 프록시
