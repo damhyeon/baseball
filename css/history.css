@@ -12,7 +12,7 @@
     grid-column: 2 !important;
     display: grid !important;
     grid-template-columns: minmax(0, 1fr) 390px !important;
-    grid-template-rows: auto auto auto minmax(200px, auto) auto auto !important;
+    grid-template-rows: auto auto !important;
     align-content: start !important;
     gap: 14px !important;
     width: auto !important;
@@ -25,10 +25,7 @@
   }
 
   body.history-body .history-header,
-  body.history-body .history-intro,
-  body.history-body .date-select-section,
-  body.history-body .history-weather,
-  body.history-body .before-weather {
+  body.history-body .history-intro {
     grid-column: 1 !important;
     min-width: 0 !important;
     margin: 0 !important;
@@ -40,8 +37,8 @@
   }
 
   body.history-body .history-header p {
-    margin-top: 6px !important;
-    font-size: 13px !important;
+    margin-top: 2px !important;
+    font-size: 30px !important;
   }
 
   body.history-body .history-intro {
@@ -55,75 +52,10 @@
     font-size: 13px !important;
   }
 
-  body.history-body .date-select-section {
-    align-items: center !important;
-    gap: 16px !important;
-  }
-
-  body.history-body .date-select-section h3 {
-    display: block !important;
-    flex: 0 0 auto !important;
-    font-size: 15px !important;
-  }
-
-  body.history-body .date-buttons {
-    flex-wrap: wrap !important;
-    gap: 8px !important;
-  }
-
-  body.history-body .date-button {
-    min-width: 78px !important;
-    min-height: 40px !important;
-    padding: 8px 12px !important;
-    border-radius: 10px !important;
-  }
-
-  body.history-body .history-weather {
-    padding: 20px !important;
-  }
-
-  body.history-body .weather-summary .weather-icon {
-    font-size: 46px !important;
-  }
-
-  body.history-body .weather-summary .temperature strong {
-    font-size: 42px !important;
-  }
-
-  body.history-body .weather-info {
-    gap: 8px !important;
-    flex: 1 1 auto !important;
-    min-width: 0 !important;
-    padding-left: 16px !important;
-    transform: translateY(-22px) !important;
-  }
-
-  body.history-body .weather-info > div {
-    min-width: 0 !important;
-    padding: 10px !important;
-  }
-
-  body.history-body .weather-info strong {
-    margin-top: 5px !important;
-  }
-
-  body.history-body .before-weather {
-    grid-row: 6 !important;
-    padding: 18px 20px !important;
-  }
-
-  body.history-body .history-weather,
-  body.history-body .before-weather {
-    border: 1px solid rgba(255, 255, 255, 0.22) !important;
-    border-radius: 16px !important;
-    background: var(--sky-tone-1) !important;
-    box-shadow: 0 8px 22px var(--sky-tone-37) !important;
-  }
-
   body.history-body > .history-page > .weather-stadium-panel {
     position: static !important;
     grid-column: 2 !important;
-    grid-row: 1 / 7 !important;
+    grid-row: 1 / 3 !important;
     align-self: start !important;
     display: flex !important;
     flex-direction: column !important;
@@ -316,15 +248,7 @@
     font-size: 12px !important;
     text-align: center !important;
   }
-  body.history-body .history-weather .section-title {
-    margin-bottom: 8px !important;
-  }
 
-  body.history-body .weather-summary {
-    flex-wrap: nowrap !important;
-    min-height: 100px !important;
-    gap: 14px !important;
-  }
 }
 
 @media (min-width: 701px) and (max-width: 1100px) {
@@ -353,9 +277,6 @@
 
   body.history-body .history-header,
   body.history-body .history-intro,
-  body.history-body .date-select-section,
-  body.history-body .history-weather,
-  body.history-body .before-weather,
   body.history-body > .history-page > .weather-stadium-panel {
     grid-column: 1 !important;
     grid-row: auto !important;
@@ -367,10 +288,7 @@
     max-height: calc(100dvh - 24px) !important;
   }
 
-  body.history-body .history-intro,
-  body.history-body .date-select-section,
-  body.history-body .history-weather,
-  body.history-body .before-weather {
+  body.history-body .history-intro {
     padding: 18px !important;
   }
 }
@@ -587,9 +505,6 @@
 
   body.history-body .history-header,
   body.history-body .history-intro,
-  body.history-body .date-select-section,
-  body.history-body .history-weather,
-  body.history-body .before-weather,
   body.history-body > .history-page > .weather-stadium-panel {
     grid-column: 1 !important;
     grid-row: auto !important;
@@ -606,42 +521,8 @@
     display: inline-flex !important;
   }
 
-  body.history-body .history-intro,
-  body.history-body .date-select-section,
-  body.history-body .history-weather,
-  body.history-body .before-weather {
+  body.history-body .history-intro {
     padding: 16px !important;
-  }
-
-  body.history-body .date-select-section h3 {
-    display: block !important;
-  }
-
-  body.history-body .date-buttons {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    gap: 8px !important;
-  }
-
-  body.history-body .date-button {
-    min-width: 0 !important;
-    padding: 9px 12px !important;
-  }
-
-  body.history-body .weather-summary {
-    flex-wrap: wrap !important;
-    gap: 12px !important;
-  }
-
-  body.history-body .weather-info {
-    width: 100% !important;
-    margin: 8px 0 0 !important;
-    gap: 6px !important;
-  }
-
-  body.history-body .weather-info > div {
-    min-width: 0 !important;
-    padding: 8px !important;
   }
 
   body.history-body > .history-page > .weather-stadium-panel {
@@ -655,23 +536,10 @@
   }
 }
 
-body.history-body .history-weather {
-  border: 1px solid rgba(255, 255, 255, 0.48) !important;
-  box-shadow: 0 0 24px rgba(255, 255, 255, 0.24) !important;
-  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.2));
-  display: block !important;
-  grid-row: 4 !important;
-}
-
-body.history-body .date-text,
-body.history-body #historyDate {
+body.history-body .date-text {
   font-size: 13px !important;
   color: rgba(218, 235, 247, 0.78) !important;
   line-height: 1.35 !important;
-}
-
-body.history-body .history-weather .weather-info {
-  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
 }
 
 /* history 상단을 향후 5일 우천취소 위험 요약으로 사용 */
@@ -679,9 +547,10 @@ body.history-body .history-intro {
   display: none !important;
 }
 
-/* 과거 날씨 기록 기능은 하단 영역에서 계속 표시 */
+/* 향후 5일 우천취소 위험 요약 */
 body.history-body .five-day-forecast {
-  grid-row: 3 !important;
+  grid-row: 2 !important;
+  align-self: start !important;
   grid-column: 1 !important;
   display: block !important;
   min-width: 0 !important;
@@ -690,19 +559,6 @@ body.history-body .five-day-forecast {
   border-radius: 18px !important;
   background: var(--sky-tone-38) !important;
   box-shadow: 0 8px 22px var(--sky-tone-37) !important;
-}
-
-body.history-body .date-select-section {
-  display: flex !important;
-  grid-row: 2 !important;
-}
-
-@media (max-width: 700px) {
-  body.history-body .date-select-section,
-  body.history-body .history-weather {
-    display: block !important;
-    grid-row: auto !important;
-  }
 }
 
 body.history-body .five-day-forecast .section-title {
@@ -779,22 +635,6 @@ body.history-body .five-day-forecast-message {
   body.history-body .five-day-forecast-item {
     padding: 8px 10px !important;
   }
-}
-
-body.history-body .history-weather .section-title h3 {
-  font-weight: 300 !important;
-  letter-spacing: -0.03em !important;
-  font-size: clamp(18px, 1.8vw, 22px) !important;
-}
-
-body.history-body .weather-info span,
-body.history-body .history-tooltip {
-  font-size: 12px !important;
-}
-
-body.history-body .weather-info strong {
-  font-size: 18px !important;
-  font-weight: 400 !important;
 }
 
 /* 모든 화면 크기에서 동일한 글꼴과 굵기 유지 */

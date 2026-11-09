@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>날씨 기록 - 우천 취소 지킴이</title>
+
+    <link rel="stylesheet" href="style.css?v=20261023-10" />
+    <link rel="stylesheet" href="history.css?v=20261023-5" />
+    <link rel="stylesheet" href="weather-scene.css" />
+    <script src="weather-scene-boot.js"></script>
+  </head>
+
+  <body class="history-body">
+    <aside class="app-sidebar">
+      <a class="brand" href="index.html"
+        ><i class="brand-mark"></i><span>우천 취소 지킴이</span></a
+      >
+      <nav>
+        <a class="nav-home" href="index.html"
+          ><i class="nav-icon stadium-icon"></i><span>구장 선택</span></a
+        ><a class="nav-weather" href="weather.html"
+          ><i class="nav-icon weather-icon-small"></i><span>날씨</span></a
+        ><a class="nav-history" href="history.html"
+          ><i class="nav-icon history-icon"></i><span>날씨 기록</span></a
+        >
+      </nav>
+      <p class="sidebar-note">야구장 날씨를<br />한눈에 확인하세요.</p>
+    </aside>
+
+    <main class="history-page">
+      <header class="history-header">
+        <button class="back-button" type="button" aria-label="이전 페이지">←</button>
+        <p id="stadiumName">야구장</p>
+      </header>
+
+      <section class="five-day-forecast" aria-labelledby="fiveDayTitle">
+        <div class="section-title">
+          <h3 id="fiveDayTitle">향후 5일 우천취소 확률</h3>
+        </div>
+        <div class="five-day-forecast-list" id="fiveDayForecastList" aria-live="polite"></div>
+      </section>
+
+      <section class="history-intro">
+        <p>선택한 구장의 향후 5일 우천취소 위험을 확인하세요.</p>
+      </section>
+
+      <aside class="weather-stadium-panel" aria-label="전국 구장 날씨">
+        <div class="weather-panel-search">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="10.8" cy="10.8" r="6.8" />
+            <path d="m16 16 4.5 4.5" />
+          </svg>
+          <input
+            id="stadiumSearch"
+            type="search"
+            placeholder="도시를 검색해보세요"
+            aria-label="도시 또는 야구장 검색"
+          />
+          <span class="weather-panel-current-city">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" />
+              <circle cx="12" cy="10" r="2.5" />
+            </svg>
+            <strong id="panelCity">서울</strong>
+            <span aria-hidden="true">⌄</span>
+          </span>
+        </div>
+        <h2>전국 주요 날씨</h2>
+        <div class="weather-panel-list"></div>
+        <p class="weather-panel-empty" hidden>검색 결과가 없습니다.</p>
+      </aside>
+    </main>
+
+    <script src="weather-list-shuffle.js"></script>
+    <script src="weather-scene.js"></script>
+    <script src="weather-service.js"></script>
+    <script>
+      const storedStadium = localStorage.getItem("selectedStadium");
+      const stadiumName = storedStadium || "잠실야구장";
+      const getElement = (id) => document.getElementById(id);
+      if (storedStadium) getElement("stadiumName").textContent = storedStadium;
+
+      window.weatherService.initStadiumPanel((selected) => {
+        localStorage.setItem("selectedStadium", selected);
+        window.location.reload();
+      });
+
+      document.querySelector(".back-button").addEventListener("click", () => {
+        window.history.back();
+      });
+
+      const today = new Date();
+      // 오늘 포함 향후 5일: 우천취소 확률과 날짜 선택 버튼이 함께 사용합니다.
+      const upcomingDates = Array.from({ length: 5 }, (_, index) => {
+        const date = new Date(today);
+        date.setDate(today.getDate() + index);
+        return date;
+      });
+      const toDateKey = (date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+      };
+      const getSeoulDateKey = (timestamp) =>
+        new Intl.DateTimeFormat("en-CA", {
+          timeZone: "Asia/Seoul",
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        }).format(new Date(timestamp * 1000));
+
+      const fiveDayList = getElement("fiveDayForecastList");
+      const fiveDayFormatter = new Intl.DateTimeFormat("ko-KR", {
+        timeZone: "Asia/Seoul",
+        month: "long",
+        day: "numeric",
+        weekday: "short",
+      });
+      // 우천취소 위험도 계산식(js/calculator.js)을 가져와 강수확률 대신 사용합니다.
+      const riskReady = import("/js/calculator.js").then((module) => module.calculateCancelRisk);
+
+      async function loadFiveDayForecast() {
+        try {
+          const calculateCancelRisk = await riskReady;
+          const data = await window.weatherService.loadForecast(stadiumName);
+          const daily = new Map(upcomingDates.map((date) => [toDateKey(date), []]));
+          // 3시간 예보 한 칸을 우천취소 위험도(0~100)로 바꿉니다.
+          const riskOf = (item) =>
+            Number.isFinite(item?.pop)
+              ? calculateCancelRisk(
+                  Number(item.rain?.["3h"]) || 0,
+                  item.pop * 100,
+                  item.weather?.[0]?.id,
+                )
+              : null;
+
+          (data.list || []).forEach((item) => {
+            const key = getSeoulDateKey(item.dt);
+            const risk = riskOf(item);
+            if (daily.has(key) && risk !== null) daily.get(key).push(risk);
+          });
+          // 저녁·밤에는 오늘 남은 예보 칸이 없으므로, 오늘 값에는 현재 예보(날씨 화면과 같은 값)를 항상 포함합니다.
+          const currentRisk = riskOf(data.list?.[0]);
+          if (currentRisk !== null) daily.get(toDateKey(today)).push(currentRisk);
+          fiveDayList.replaceChildren(...upcomingDates.map((date) => {
+            const item = document.createElement("div");
+            item.className = "five-day-forecast-item";
+            const dateElement = document.createElement("span");
+            dateElement.className = "date-text";
+            dateElement.textContent = fiveDayFormatter.format(date);
+            const value = document.createElement("strong");
+            const risks = daily.get(toDateKey(date));
+            // 강수량·강수확률·날씨코드를 합친 우천취소 위험도를 사용합니다.
+            // 하루 대표값은 3시간 예보 중 가장 높은 위험도입니다.
+            value.textContent = risks.length ? `${Math.max(...risks)}%` : "확인 불가";
+            value.classList.toggle("is-unavailable", !risks.length);
+            const label = document.createElement("small");
+            label.textContent = "우천취소 확률";
+            item.append(dateElement, value, label);
+            return item;
+          }));
+        } catch (error) {
+          console.error("향후 5일 강수확률 조회 실패:", error);
+          const message = document.createElement("p");
+          message.className = "five-day-forecast-message";
+          message.textContent = "강수확률을 확인할 수 없습니다.";
+          fiveDayList.replaceChildren(message);
+        }
+      }
+      loadFiveDayForecast();
+    </script>
+  </body>
+</html>

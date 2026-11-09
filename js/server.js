@@ -44,6 +44,8 @@ const publicFiles = new Map([
   ["/weather-scene.css", "css/weather-scene.css"],
   ["/weather-scene.js", "js/weather-scene.js"],
   ["/weather-scene-boot.js", "js/weather-scene-boot.js"],
+  // 우천취소 위험도 계산 모듈 (날씨·날씨 기록 페이지가 함께 사용합니다)
+  ["/js/calculator.js", "js/calculator.js"],
   ["/assets/korea-map.svg", "assets/korea-map.svg"],
   ["/images/clouds.svg", "images/clouds.svg"],
   ...["sunny", "sunset", "night", "cloudy", "rain"].map((name) => [
@@ -150,38 +152,6 @@ async function handleWeatherRequest(url, request, response) {
   }
 }
 
-async function handleHistoryRequest(url, response) {
-  const place = findStadium(url.searchParams.get("stadium"));
-  const date = url.searchParams.get("date");
-  if (!place || !/^\d{4}-\d{2}-\d{2}$/.test(date || "")) {
-    sendJson(response, 400, { error: "야구장 또는 날짜가 올바르지 않습니다." });
-    return;
-  }
-
-  const upstreamUrl = new URL("https://archive-api.open-meteo.com/v1/archive");
-  upstreamUrl.search = new URLSearchParams({
-    latitude: String(place.lat),
-    longitude: String(place.lon),
-    start_date: date,
-    end_date: date,
-    daily: "temperature_2m_mean,relative_humidity_2m_mean,precipitation_sum,weather_code",
-    timezone: "Asia/Seoul",
-  }).toString();
-
-  try {
-    const upstreamResponse = await fetch(upstreamUrl);
-    const data = await upstreamResponse.json();
-    if (!upstreamResponse.ok || !data.daily?.time?.length) {
-      sendJson(response, 502, { error: "해당 날짜의 과거 관측 데이터를 제공받지 못했습니다." });
-      return;
-    }
-    sendJson(response, 200, data);
-  } catch (error) {
-    console.error("Historical weather request failed:", error.message);
-    sendJson(response, 502, { error: "과거 날씨 정보를 불러오지 못했습니다." });
-  }
-}
-
 async function handleRequest(request, response) {
   response.setHeader("X-Content-Type-Options", "nosniff");
 
@@ -192,14 +162,12 @@ async function handleRequest(request, response) {
   }
 
   const url = new URL(request.url, "http://localhost");
-  if (url.pathname === "/api/weather" || url.pathname === "/api/history") {
+  if (url.pathname === "/api/weather") {
     if (request.method === "HEAD") {
       response.writeHead(405, { Allow: "GET" });
       response.end();
-    } else if (url.pathname === "/api/weather") {
-      await handleWeatherRequest(url, request, response);
     } else {
-      await handleHistoryRequest(url, response);
+      await handleWeatherRequest(url, request, response);
     }
     return;
   }

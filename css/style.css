@@ -50,38 +50,13 @@
   body.history-body .history-header .back-button {
     display: none !important;
   }
-  body.history-body .date-select-section {
-    justify-self: end;
-  }
-  body.history-body .date-select-section h3 {
-    display: none;
-  }
-  body.history-body .history-weather {
-    min-height: 0;
-  }
-  body.history-body .before-weather {
-    display: none !important;
-  }
-  body.history-body .history-weather,
+
   body.history-body .history-intro {
     border: 1px solid rgba(255, 255, 255, 0.22) !important;
     border-radius: 18px !important;
     background: var(--sky-tone-1) !important;
   }
-  body.history-body .weather-summary {
-    min-height: 180px;
-    display: flex;
-  }
-  body.history-body .weather-info {
-    margin-left: auto;
-  }
-  body.history-body .weather-info > div {
-    padding: 16px;
-    border-radius: 14px;
-  }
-  body.history-body .weather-info strong {
-    margin-top: 8px;
-  }
+
   body.weather-body .weather-card {
     flex-direction: column;
     grid-row: 2 !important;
@@ -171,21 +146,7 @@
   body.history-body .history-intro {
     margin-bottom: 20px !important;
   }
-  body.history-body .date-select-section {
-    margin-bottom: 20px !important;
-  }
-  body.history-body .date-buttons {
-    display: flex !important;
-    gap: 10px !important;
-  }
-  body.history-body .date-button {
-    min-height: 42px !important;
-    min-width: 88px !important;
-    padding: 11px 17px !important;
-  }
-  body.history-body .weather-timeline {
-    background: rgba(255, 255, 255, 0.07) !important;
-  }
+
   body.index-body .map-section {
     border-radius: 0 !important;
     visibility: visible !important;
@@ -518,17 +479,6 @@ a {
   border-radius: 4px !important;
 }
 
-.date-buttons {
-  overflow-x: auto;
-
-  padding-bottom: 5px;
-  scrollbar-width: none;
-}
-
-.date-button {
-  flex: 0 0 auto;
-}
-
 /* 날씨 요약 */
 
 .weather-main {
@@ -581,18 +531,6 @@ a {
 
 /* ---------- 과거 날씨 ---------- */
 
-.history-weather {
-  align-items: center;
-
-  gap: 15px;
-}
-
-.history-weather strong {
-  display: block;
-
-  margin-bottom: 5px;
-}
-
 /* =========================================================
    모바일 - 700px 이하
 ========================================================= */
@@ -606,16 +544,10 @@ a {
     gap: 12px;
   }
 
-  .history-weather {
-    gap: 10px;
-  }
-
   .main-page .map-section {
     align-items: flex-start;
   }
-  .timeline-item:nth-child(-n + 2) {
-    border-bottom: 1px solid var(--line);
-  }
+
   body.index-body .weather-panel-list button {
     font-size: 13.3333px !important;
   }
@@ -626,25 +558,10 @@ a {
   }
 }
 body.history-body .history-header,
-body.history-body .history-intro,
-body.history-body .date-select-section,
-body.history-body .history-weather,
-body.history-body .before-weather {
+body.history-body .history-intro {
   width: 100% !important;
 }
-body.history-body .weather-timeline {
-  grid-template-columns: repeat(4, 1fr) !important;
-  display: grid;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.18) !important;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.08);
-}
-@media (max-width: 700px) {
-  body.history-body .weather-timeline {
-    grid-template-columns: repeat(2, 1fr) !important;
-  }
-}
+
 @media (min-width: 901px) {
   /* Stable three-column weather shell.
    Keep the sidebar and stadium list independent from the center dashboard. */
@@ -719,24 +636,6 @@ body.history-body .weather-timeline {
   gap: 12px;
 }
 
-.history-page .weather-summary {
-  display: grid;
-}
-
-.history-page .weather-info {
-  display: grid;
-}
-
-.history-page .weather-info span,
-.history-page .weather-info strong {
-  display: block;
-}
-
-.timeline-item {
-  display: grid;
-  gap: 5px;
-}
-
 /* History dashboard matching the weather page */
 body.history-body,
 body.history-body button {
@@ -755,9 +654,6 @@ body.history-body .history-intro {
   border-color: rgba(255, 255, 255, 0.42) !important;
   box-shadow: 0 0 22px rgba(255, 255, 255, 0.3) !important;
   filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.24));
-}
-body.history-body .date-select-section {
-  max-width: none !important;
 }
 
 @media (max-width: 400px) {
@@ -919,41 +815,12 @@ body.index-body .stadium-marker {
   max-height: 64px !important;
   padding: 10px 13px !important;
 }
-body.history-body .history-weather,
-body.history-body .before-weather {
-  color: #fff !important;
-  max-width: none !important;
-  margin: 0 0 22px !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  box-shadow: none !important;
-}
+
 body.history-body .section-title h3,
-body.history-body .section-title span,
-body.history-body .before-weather p {
+body.history-body .section-title span {
   color: #fff !important;
 }
-body.history-body .weather-summary {
-  align-items: center;
-  grid-template-columns: 42px 150px 1fr !important;
-  gap: 16px;
-}
-body.history-body .weather-info {
-  border-top-color: rgba(255, 255, 255, 0.2) !important;
-  gap: 18px;
-  padding-left: 24px;
-  border-left: 1px solid rgba(255, 255, 255, 0.22) !important;
-}
-body.history-body .timeline-item {
-  background: rgba(255, 255, 255, 0.1) !important;
-  border-color: rgba(255, 255, 255, 0.2) !important;
-  min-height: 108px;
-  padding: 16px !important;
-  border-right: 1px solid rgba(255, 255, 255, 0.16) !important;
-  color: rgba(255, 255, 255, 0.72) !important;
-  font-size: 11px !important;
-}
+
 .app-sidebar {
   z-index: 20;
   display: flex;
@@ -973,12 +840,7 @@ body.history-body .timeline-item {
   font-size: 11px;
   line-height: 1.7;
 }
-@media (min-width: 701px) {
-  body.history-body .timeline-item {
-    min-height: 132px !important;
-    padding: 18px !important;
-  }
-}
+
 body.history-body .app-sidebar nav a:hover,
 body.history-body .app-sidebar nav a:focus-visible {
   background: rgba(255, 255, 255, 0.14) !important;
@@ -1064,18 +926,7 @@ body.history-body .app-sidebar nav a:focus-visible {
     left: 3px;
     top: 3px;
   }
-  body.history-body .weather-summary {
-    grid-template-columns: 36px 1fr !important;
-  }
-  body.history-body .weather-info {
-    grid-column: 1 / -1;
-    padding: 14px 0 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-    border-left: 0 !important;
-  }
-  body.history-body .timeline-item:nth-child(2) {
-    border-right: 0 !important;
-  }
+
 }
 body.index-body .stadium-name {
   display: block !important;
@@ -1273,9 +1124,11 @@ body.history-body .history-page {
   background: transparent !important;
 }
 body.history-body .history-header p {
-  margin-top: 4px;
-  color: rgba(255, 255, 255, 0.68) !important;
-  font-size: 13px !important;
+  margin-top: 2px;
+  color: #fff !important;
+  font-size: 24px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
 }
 body.history-body .back-button {
   width: 38px;
@@ -1290,87 +1143,10 @@ body.history-body .history-intro p {
   color: rgba(255, 255, 255, 0.68) !important;
   font-size: 12px !important;
 }
-body.history-body .date-select-section h3 {
-  margin-bottom: 10px;
-  color: rgba(255, 255, 255, 0.72) !important;
-  font-size: 12px !important;
-  font-weight: 500 !important;
-}
-body.history-body .date-button {
-  border: 1px solid rgba(255, 255, 255, 0.3) !important;
-  border-radius: 8px !important;
-  background: rgba(255, 255, 255, 0.1) !important;
-  color: rgba(255, 255, 255, 0.82) !important;
-  font-size: 12px !important;
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease;
-}
-body.history-body .date-button.active,
-body.history-body .date-button:hover {
-  border-color: rgba(255, 255, 255, 0.72) !important;
-  background: rgba(255, 255, 255, 0.28) !important;
-  color: #fff !important;
-}
-body.history-body .history-weather {
-  border-radius: 14px !important;
-  background: var(--sky-tone-23) !important;
-  position: relative !important;
-}
-body.history-body .history-weather .section-title,
-body.history-body .before-weather .section-title {
-  margin-bottom: 18px;
-}
-body.history-body .history-weather .section-title h3,
-body.history-body .before-weather .section-title h3 {
-  font-size: 15px !important;
-  font-weight: 600 !important;
-}
-body.history-body .history-weather .weather-icon {
-  font-size: 30px;
-}
-body.history-body .weather-summary .temperature strong {
-  color: #fff !important;
-  font-size: 44px !important;
-}
-body.history-body .weather-summary .temperature span {
-  color: rgba(255, 255, 255, 0.72) !important;
-  font-size: 12px !important;
-}
-body.history-body .weather-info > div {
-  border: 0 !important;
-}
-body.history-body .weather-info span {
-  margin-bottom: 7px;
-  color: rgba(255, 255, 255, 0.62) !important;
-}
-body.history-body .weather-info strong {
-  color: #fff !important;
-}
-body.history-body .before-weather p {
-  color: rgba(255, 255, 255, 0.64) !important;
-  font-size: 11px !important;
-}
-body.history-body .timeline-item:last-child {
-  border-right: 0 !important;
-}
-body.history-body .timeline-item .day,
-body.history-body .timeline-item strong {
-  color: #fff !important;
-}
-body.history-body .timeline-item .icon {
-  margin: 4px 0;
-  font-size: 22px !important;
-}
-body.history-body .timeline-item.today {
-  background: rgba(255, 255, 255, 0.12) !important;
-}
+
 @media (min-width: 701px) {
   body.history-body .history-header,
-  body.history-body .history-intro,
-  body.history-body .date-select-section,
-  body.history-body .history-weather,
-  body.history-body .before-weather {
+  body.history-body .history-intro {
     margin-left: auto !important;
     margin-right: auto !important;
   }
@@ -1378,25 +1154,10 @@ body.history-body .timeline-item.today {
     font-size: 16px !important;
   }
   body.history-body .history-header p {
-    font-size: 14px !important;
+    font-size: 26px !important;
   }
-  body.history-body .history-intro p,
-  body.history-body .date-select-section h3 {
+  body.history-body .history-intro p {
     font-size: 13px !important;
-  }
-  body.history-body .history-weather .section-title h3,
-  body.history-body .before-weather .section-title h3 {
-    font-size: 18px !important;
-  }
-  body.history-body .weather-summary .temperature strong {
-    font-size: 54px !important;
-  }
-  body.history-body .weather-summary .temperature span,
-  body.history-body .weather-info strong {
-    font-size: 18px !important;
-  }
-  body.history-body .timeline-item .icon {
-    font-size: 24px !important;
   }
 
   /* Improve desktop readability. */
@@ -1410,14 +1171,10 @@ body.history-body .timeline-item.today {
     font-size: 14px !important;
   }
 
-  body.history-body .history-intro p,
-  body.history-body .timeline-item {
+  body.history-body .history-intro p {
     font-size: 16px !important;
   }
 
-  body.history-body .date-button {
-    font-size: 16px !important;
-  }
   body.index-body .map-section {
     display: block !important;
     position: static !important;
@@ -1908,36 +1665,6 @@ body.history-body > .app-sidebar nav a span {
   text-overflow: ellipsis !important;
   overflow: visible !important;
   white-space: nowrap !important;
-}
-
-body.history-body .history-weather .history-tooltip {
-  position: absolute;
-  z-index: 10;
-  top: 18px;
-  right: 24px;
-  padding: 8px 11px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 8px;
-  /* 날씨 색에 따라 밝아지지 않도록 항상 어두운 배경 */
-  background: rgba(16, 22, 30, 0.92);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-  color: #fff;
-  font-weight: 600 !important;
-  line-height: 1.35;
-  pointer-events: none;
-  transform: translateY(-4px);
-  transition:
-    opacity 160ms ease,
-    transform 160ms ease;
-  opacity: 0;
-  visibility: hidden;
-}
-
-body.history-body .history-weather:hover .history-tooltip,
-body.history-body .history-weather:focus-within .history-tooltip {
-  opacity: 1;
-  transform: translateY(0);
-  visibility: visible;
 }
 
 @media (max-width: 900px) and (min-width: 701px) {

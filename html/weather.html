@@ -148,26 +148,6 @@
           </div>
         </article>
 
-        <article class="weather-extra-card uv-index-card">
-          <svg
-            class="weather-extra-icon"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <circle cx="12" cy="12" r="4" />
-            <path
-              d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"
-            />
-          </svg>
-          <div class="weather-extra-copy">
-            <span>자외선 지수</span>
-            <strong id="uvIndexValue">--</strong>
-            <small id="uvIndexMessage" aria-live="polite"
-              >자외선 정보를 불러오는 중입니다.</small
-            >
-          </div>
-        </article>
-
       </section>
 
       <section class="weather-map-card" aria-label="날씨 지도">
@@ -218,15 +198,23 @@
     <script>
       const { icons, stadiums, getCityName, loadForecast, initStadiumPanel } =
         window.weatherService;
+
+      // 우천취소 위험도 계산식(js/calculator.js)을 가져와 강수확률 대신 사용합니다.
+      let calculateCancelRisk = null;
+      const riskReady = import("/js/calculator.js").then((module) => {
+        calculateCancelRisk = module.calculateCancelRisk;
+      });
+
+      // 3시간 예보 한 칸을 우천취소 위험도(0~100)로 바꿉니다.
+      function cancelRiskOf(item) {
+        if (!calculateCancelRisk || !Number.isFinite(item?.pop)) return null;
+        return calculateCancelRisk(
+          Number(item.rain?.["3h"]) || 0,
+          item.pop * 100,
+          item.weather?.[0]?.id,
+        );
+      }
       const stadiumName = localStorage.getItem("selectedStadium") || "잠실야구장";
-      const place = stadiums[stadiumName] || stadiums["잠실야구장"];
-      const uvDescriptions = [
-        { max: 2, label: "낮음" },
-        { max: 5, label: "보통" },
-        { max: 7, label: "높음" },
-        { max: 10, label: "매우 높음" },
-        { max: Infinity, label: "위험" },
-      ];
       const getElement = (id) => document.getElementById(id);
 
       // 날씨 지도: 8개 구장이 한눈에 보이도록 고정된 지도 (드래그·확대 없음)
@@ -275,9 +263,8 @@
 
       function renderMapTooltip(region, data, marker) {
         const current = data?.list?.[0];
-        const probability = Number.isFinite(current?.pop)
-          ? `${Math.round(current.pop * 100)}%`
-          : "정보 없음";
+        const risk = cancelRiskOf(current);
+        const probability = risk === null ? "정보 없음" : `${risk}%`;
         const rainfall = Number.isFinite(current?.rain?.["3h"])
           ? `${current.rain["3h"]}mm`
           : "정보 없음";
@@ -477,48 +464,15 @@
         getElement("windCard").textContent =
           `${Math.round((current.wind?.speed || 0) * 10) / 10} m/s`;
 
-        const rainProbability = Number.isFinite(current.pop)
-          ? Math.round(current.pop * 100)
-          : null;
-        renderRainProbability(rainProbability);
-        renderHeroRainProbability(rainProbability);
+        const cancelRisk = cancelRiskOf(current);
+        renderRainProbability(cancelRisk);
+        renderHeroRainProbability(cancelRisk);
         renderHourlyForecast(data.list);
-      }
-
-      async function loadUvIndex() {
-        const url = new URL("https://api.open-meteo.com/v1/forecast");
-        url.search = new URLSearchParams({
-          latitude: String(place.lat),
-          longitude: String(place.lon),
-          current: "uv_index",
-          timezone: "Asia/Seoul",
-          forecast_days: "1",
-        }).toString();
-
-        try {
-          const response = await fetch(url);
-          if (!response.ok) throw new Error(`HTTP ${response.status}`);
-          const data = await response.json();
-          const uvIndex = data.current?.uv_index;
-          if (typeof uvIndex !== "number" || !Number.isFinite(uvIndex)) {
-            throw new Error("자외선 지수 데이터가 없습니다.");
-          }
-
-          getElement("uvIndexValue").textContent = String(Math.round(uvIndex));
-          getElement("uvIndexMessage").textContent = uvDescriptions.find(
-            ({ max }) => uvIndex <= max,
-          ).label;
-          document.querySelector(".uv-index-card").dataset.level =
-            uvIndex <= 2 ? "low" : uvIndex <= 5 ? "medium" : "high";
-        } catch (error) {
-          console.error("자외선 지수를 불러오지 못했습니다.", error);
-          getElement("uvIndexMessage").textContent =
-            "자외선 정보를 불러오지 못했습니다.";
-        }
       }
 
       async function loadWeather() {
         try {
+          await riskReady;
           renderWeather(await loadForecast(stadiumName));
         } catch (error) {
           console.error("날씨 정보를 불러오지 못했습니다.", error);
@@ -532,7 +486,6 @@
       }
 
       loadWeather();
-      loadUvIndex();
     </script>
   </body>
 </html>

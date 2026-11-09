@@ -428,7 +428,7 @@ body.weather-body .weather-detail small {
 
 body.weather-body .weather-extra-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: 14px;
   min-width: 0;
 }
@@ -537,10 +537,6 @@ body.weather-body
   .rain-probability-meter
   span {
   background: #ff9696;
-}
-
-body.weather-body .uv-index-card[data-level="high"] {
-  border-color: rgba(255, 211, 126, 0.52);
 }
 
 body.weather-body .weather-map-heading {
