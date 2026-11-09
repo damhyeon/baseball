@@ -27,6 +27,5 @@ export function calculateCancelRisk(rain3h, pop, code) {
     return Math.min(Math.max(Math.round(totalScore), 0), 100);
     
     
-    //이전에 있었던 우천 취소 경기의 방대한 데이터(그 당시 강수량, 등등)을 DB에 넣어서 수식을 새로 만들기
     
 }

@@ -6,10 +6,10 @@
 
     <title>날씨 기록 - 우천 취소 지킴이</title>
 
-    <link rel="stylesheet" href="style.css?v=20261023-10" />
-    <link rel="stylesheet" href="history.css?v=20261110-1" />
-    <link rel="stylesheet" href="weather-scene.css" />
-    <script src="weather-scene-boot.js"></script>
+    <link rel="stylesheet" href="css/style.css?v=20261023-10" />
+    <link rel="stylesheet" href="css/history.css?v=20261110-1" />
+    <link rel="stylesheet" href="css/weather-scene.css" />
+    <script src="js/weather-scene-boot.js"></script>
   </head>
 
   <body class="history-body">
@@ -74,9 +74,10 @@
       </aside>
     </main>
 
-    <script src="weather-list-shuffle.js"></script>
-    <script src="weather-scene.js"></script>
-    <script src="weather-service.js"></script>
+    <script src="js/weather-list-shuffle.js"></script>
+    <script src="js/weather-scene.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/weather-service.js"></script>
     <script>
       const storedStadium = localStorage.getItem("selectedStadium");
       const stadiumName = storedStadium || "잠실야구장";

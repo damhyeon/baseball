@@ -62,34 +62,34 @@ html.has-sky-scene body.weather-body::before {
    html 배경에도 깔아두어 스크립트 실행 전 첫 화면부터 같은 배경이 보이게 합니다.
    --sky-base는 사진의 평균 색으로, 사진이 그려지기 전 순간에 보이는 바탕색입니다. */
 html[data-sky="sunny"] {
-  --sky-photo: url("images/sunny.jpg");
+  --sky-photo: url("../images/sunny.jpg");
   --sky-base: #5984bb;
   --sky-scrim: linear-gradient(rgba(8, 42, 82, 0.12), rgba(8, 42, 82, 0.26));
   --sky-photo-position: center top;
 }
 
 html[data-sky="sunset"] {
-  --sky-photo: url("images/sunset.jpg");
+  --sky-photo: url("../images/sunset.jpg");
   --sky-base: #7f7c91;
   --sky-scrim: linear-gradient(rgba(36, 28, 60, 0.12), rgba(36, 28, 60, 0.3));
   --sky-photo-position: center top;
 }
 
 html[data-sky="night"] {
-  --sky-photo: url("images/night.jpg");
+  --sky-photo: url("../images/night.jpg");
   --sky-base: #242843;
   --sky-scrim: linear-gradient(rgba(6, 10, 30, 0.08), rgba(6, 10, 30, 0.25));
   --sky-photo-position: center top;
 }
 
 html[data-sky="cloudy"] {
-  --sky-photo: url("images/cloudy.jpg");
+  --sky-photo: url("../images/cloudy.jpg");
   --sky-base: #727272;
   --sky-scrim: linear-gradient(rgba(22, 32, 48, 0.28), rgba(22, 32, 48, 0.38));
 }
 
 html[data-sky="rain"] {
-  --sky-photo: url("images/rain.jpg");
+  --sky-photo: url("../images/rain.jpg");
   --sky-base: #949395;
   --sky-scrim: linear-gradient(rgba(14, 22, 34, 0.36), rgba(14, 22, 34, 0.48));
 }
@@ -192,7 +192,7 @@ html.has-sky-scene[data-sky] body.weather-body .weather-map-silhouette {
   inset: -4% auto auto 0;
   width: calc(100% + var(--tile));
   height: 62%;
-  background: url("images/clouds.svg") repeat-x 0 0 / var(--tile) 100%;
+  background: url("../images/clouds.svg") repeat-x 0 0 / var(--tile) 100%;
   opacity: var(--opacity, 0);
   filter: brightness(var(--brightness, 1));
   /* 구름은 아주 느리게 움직이므로 초당 10번(--steps)만 위치를 갱신합니다. */
