@@ -7,7 +7,7 @@
     <title>날씨 기록 - 우천 취소 지킴이</title>
 
     <link rel="stylesheet" href="style.css?v=20261023-10" />
-    <link rel="stylesheet" href="history.css?v=20261023-5" />
+    <link rel="stylesheet" href="history.css?v=20261110-1" />
     <link rel="stylesheet" href="weather-scene.css" />
     <script src="weather-scene-boot.js"></script>
   </head>
@@ -33,6 +33,7 @@
       <header class="history-header">
         <button class="back-button" type="button" aria-label="이전 페이지">←</button>
         <p id="stadiumName">야구장</p>
+        <div class="refund-links" id="refundLinks"></div>
       </header>
 
       <section class="five-day-forecast" aria-labelledby="fiveDayTitle">
@@ -90,6 +91,63 @@
       document.querySelector(".back-button").addEventListener("click", () => {
         window.history.back();
       });
+
+      // ----------------------------------------------------------
+      // 환불하기 버튼
+      // ----------------------------------------------------------
+      // 구장마다 티켓을 파는 곳(예매처)이 다릅니다.
+      // 환불도 티켓을 산 곳에서 하기 때문에, 구장에 맞는 예매처로 보내줍니다.
+      // 주소는 KBO 공식 "티켓 안내" 페이지에 적힌 예매처 바로가기입니다.
+      //
+      // 잠실야구장은 LG 와 두산이 함께 쓰는 구장이라 예매처가 두 곳입니다.
+      // 그래서 잠실만 버튼이 두 개 나옵니다.
+      const refundSites = {
+        "인천 SSG랜더스필드": [{ team: "SSG", url: "https://ticket.ssg.com/" }],
+        잠실야구장: [
+          { team: "LG", url: "https://www.ticketlink.co.kr/sports/baseball" },
+          { team: "두산", url: "https://nol.yanolja.com/ticket/genre/sports" },
+        ],
+        수원KT위즈파크: [{ team: "KT", url: "https://www.ticketlink.co.kr/sports/baseball" }],
+        "대전 한화생명 볼파크": [
+          { team: "한화", url: "https://www.ticketlink.co.kr/sports/baseball" },
+        ],
+        "대구 삼성 라이온즈 파크": [
+          { team: "삼성", url: "https://www.ticketlink.co.kr/sports/baseball" },
+        ],
+        광주기아챔피언스필드: [{ team: "KIA", url: "https://www.ticketlink.co.kr/sports/baseball" }],
+        창원NC파크: [{ team: "NC", url: "https://ticket.ncdinos.com/login" }],
+        사직야구장: [{ team: "롯데", url: "https://ticket.giantsclub.com/" }],
+      };
+
+      function renderRefundLinks(stadium) {
+        const box = getElement("refundLinks");
+        const sites = refundSites[stadium];
+
+        // 목록에 없는 구장이면 버튼을 만들지 않습니다.
+        if (!sites) {
+          box.replaceChildren();
+          return;
+        }
+
+        const buttons = sites.map((site) => {
+          const link = document.createElement("a");
+          link.className = "refund-button";
+          link.href = site.url;
+
+          // 새 탭에서 엽니다. rel 은 새 탭이 이 페이지를 건드리지 못하게 막는 안전장치입니다.
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+
+          // 예매처가 한 곳이면 "환불하기", 두 곳이면 구단 이름을 붙여 구분합니다.
+          link.textContent = sites.length === 1 ? "환불하기" : `${site.team} 환불`;
+          link.title = `${site.team} 예매처에서 환불하기`;
+          return link;
+        });
+
+        box.replaceChildren(...buttons);
+      }
+
+      renderRefundLinks(stadiumName);
 
       const today = new Date();
       // 오늘 포함 향후 5일: 우천취소 확률과 날짜 선택 버튼이 함께 사용합니다.
