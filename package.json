@@ -1,8 +1,0 @@
-{
-  "name": "rain-cancel-guard",
-  "version": "1.0.0",
-  "private": true,
-  "scripts": {
-    "start": "node js/server.js"
-  }
-}
