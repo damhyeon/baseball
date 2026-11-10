@@ -6,10 +6,10 @@
 
     <title>날씨 기록 - 우천 취소 지킴이</title>
 
-    <link rel="stylesheet" href="css/style.css?v=20261023-10" />
-    <link rel="stylesheet" href="css/history.css?v=20261110-1" />
-    <link rel="stylesheet" href="css/weather-scene.css" />
-    <script src="js/weather-scene-boot.js"></script>
+    <link rel="stylesheet" href="../css/style.css?v=20261023-10" />
+    <link rel="stylesheet" href="../css/history.css?v=20261110-1" />
+    <link rel="stylesheet" href="../css/weather-scene.css" />
+    <script src="../js/weather-scene-boot.js"></script>
   </head>
 
   <body class="history-body">
@@ -105,10 +105,10 @@
       </aside>
     </main>
 
-    <script src="js/weather-list-shuffle.js"></script>
-    <script src="js/weather-scene.js"></script>
-    <script src="js/config.js"></script>
-    <script src="js/weather-service.js"></script>
+    <script src="../js/weather-list-shuffle.js"></script>
+    <script src="../js/weather-scene.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/weather-service.js"></script>
     <script>
       const storedStadium = localStorage.getItem("selectedStadium");
       const stadiumName = storedStadium || "잠실야구장";
@@ -222,7 +222,7 @@
       });
       const getSeoulHour = (timestamp) => Number(hourFormatter.format(new Date(timestamp * 1000)).replace(/\D/g, ""));
       // 우천취소 위험도 계산식(js/calculator.js)을 가져와 강수확률 대신 사용합니다.
-      const riskReady = import("/js/calculator.js").then((module) => module.calculateCancelRisk);
+      const riskReady = import("../js/calculator.js").then((module) => module.calculateCancelRisk);
 
       // 위험도 단계: 0~29 낮음, 30~59 주의, 60 이상 높음
       const riskLevel = (risk) =>

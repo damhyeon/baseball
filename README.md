@@ -55,11 +55,19 @@ window.APP_CONFIG = {
 
 파일을 더블클릭해서 여는 방식(`file://`)은 **동작하지 않습니다.** 우천취소 계산식을 ES 모듈(`import`)로 불러오는데, 브라우저가 `file://`에서는 모듈 로딩을 막기 때문입니다.
 
-VS Code의 **Live Server** 확장을 설치하고, `index.html`에서 우클릭 → **Open with Live Server** 하면 됩니다. 파일을 저장할 때마다 브라우저가 자동으로 새로고침됩니다.
+프로젝트 폴더에서 아래 명령을 실행하고 브라우저에서 http://localhost:3000 을 엽니다. 종료는 `Ctrl + C`입니다.
+
+```
+npm start
+```
+
+`npm start`는 `js/dev-server.js`(의존성 없는 작은 정적 파일 서버)를 띄울 뿐이라 `npm install`이 필요 없습니다. 포트를 바꾸려면 `PORT=4000 npm start`처럼 실행합니다.
+
+또는 VS Code의 **Live Server** 확장을 설치하고, `index.html`에서 우클릭 → **Open with Live Server** 해도 됩니다. 파일을 저장할 때마다 브라우저가 자동으로 새로고침됩니다.
 
 배포하는 Cloudflare Pages가 하는 일도 똑같이 "파일을 주소로 꺼내주는 것"뿐이라, 여기서 정상이면 배포해도 똑같이 동작합니다.
 
-> 설치하거나 실행할 것이 없습니다. `npm install`도, 빌드도 없습니다.
+> 설치할 것이 없습니다. `npm install`도, 빌드도 없습니다.
 
 ---
 

@@ -6,10 +6,10 @@
 
     <title>우천 취소 지킴이 - 날씨</title>
 
-    <link rel="stylesheet" href="css/style.css?v=20261023-1" />
-    <link rel="stylesheet" href="css/weather.css?v=20261023-1" />
-    <link rel="stylesheet" href="css/weather-scene.css" />
-    <script src="js/weather-scene-boot.js"></script>
+    <link rel="stylesheet" href="../css/style.css?v=20261023-1" />
+    <link rel="stylesheet" href="../css/weather.css?v=20261023-1" />
+    <link rel="stylesheet" href="../css/weather-scene.css" />
+    <script src="../js/weather-scene-boot.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   </head>
 
@@ -191,10 +191,10 @@
       <p class="weather-panel-empty" hidden>검색 결과가 없습니다.</p>
     </aside>
 
-    <script src="js/weather-list-shuffle.js"></script>
-    <script src="js/weather-scene.js"></script>
-    <script src="js/config.js"></script>
-    <script src="js/weather-service.js"></script>
+    <script src="../js/weather-list-shuffle.js"></script>
+    <script src="../js/weather-scene.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/weather-service.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
       const { icons, stadiums, getCityName, loadForecast, initStadiumPanel } =
@@ -252,7 +252,7 @@
       });
       // 구장 선택 화면과 같은 한국 지도 실루엣을 지도 배경으로 씁니다.
       // 범위는 SVG 속 시·도 경계와 실제 위경도를 맞춰 구한 값입니다.
-      L.imageOverlay("assets/korea-map.svg?v=20260911", [[33.207, 125.339], [38.641, 130.946]], {
+      L.imageOverlay("../assets/korea-map.svg?v=20260911", [[33.207, 125.339], [38.641, 130.946]], {
         className: "weather-map-silhouette",
       }).addTo(leafletMap);
       const fitStadiums = () => {

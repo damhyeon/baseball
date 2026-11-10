@@ -156,7 +156,7 @@
   function showPhoto(name, instant) {
     if (name === shownPhoto) return;
     shownPhoto = name;
-    const url = `images/${name}.jpg`;
+    const url = `../images/${name}.jpg`;
     const swap = () => {
       if (shownPhoto !== name) return;
       const next = photos[1 - frontPhoto];

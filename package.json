@@ -1,0 +1,7 @@
+{
+  "name": "rain-cancel-guard",
+  "private": true,
+  "scripts": {
+    "start": "node js/dev-server.js"
+  }
+}
