@@ -12,7 +12,8 @@
     grid-column: 2 !important;
     display: grid !important;
     grid-template-columns: minmax(0, 1fr) 390px !important;
-    grid-template-rows: auto auto !important;
+    /* 마지막 1fr 행이 오른쪽 패널 높이를 흡수해 왼쪽 카드 사이에 빈 공간이 생기지 않게 합니다. */
+    grid-template-rows: auto auto auto auto minmax(0, 1fr) !important;
     align-content: start !important;
     gap: 14px !important;
     width: auto !important;
@@ -55,7 +56,7 @@
   body.history-body > .history-page > .weather-stadium-panel {
     position: static !important;
     grid-column: 2 !important;
-    grid-row: 1 / 3 !important;
+    grid-row: 1 / 6 !important;
     align-self: start !important;
     display: flex !important;
     flex-direction: column !important;
@@ -576,14 +577,23 @@ body.history-body .five-day-forecast-list {
 }
 
 body.history-body .five-day-forecast-item {
+  position: relative !important;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  border-left: 0 !important;
+  background: transparent !important;
+  color: #f2f8fc !important;
+  cursor: pointer !important;
+  transition: background 0.15s ease !important;
   display: flex !important;
   min-width: 0 !important;
   min-height: 112px !important;
-  padding: 8px 14px !important;
+  padding: 12px 14px !important;
+  border-radius: 12px !important;
   flex-direction: column !important;
   align-items: center !important;
   justify-content: center !important;
-  gap: 8px !important;
+  gap: 6px !important;
   border-right: 1px solid rgba(255, 255, 255, 0.2) !important;
   text-align: center !important;
 }
@@ -634,6 +644,321 @@ body.history-body .five-day-forecast-message {
 
   body.history-body .five-day-forecast-item {
     padding: 8px 10px !important;
+  }
+}
+
+/* ===== 위험도 색상 ===== */
+body.history-body {
+  --risk-low: #7fe0a8;
+  --risk-mid: #ffd166;
+  --risk-high: #ff8a80;
+  --card-bg: rgba(20, 52, 76, 0.32);
+  --card-line: rgba(255, 255, 255, 0.22);
+}
+
+body.history-body .level-low { --risk-color: var(--risk-low); }
+body.history-body .level-mid { --risk-color: var(--risk-mid); }
+body.history-body .level-high { --risk-color: var(--risk-high); }
+
+body.history-body .section-title {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-wrap: wrap !important;
+  gap: 8px 14px !important;
+}
+
+body.history-body .risk-legend {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  color: rgba(218, 235, 247, 0.78) !important;
+  font-size: 12px !important;
+}
+
+body.history-body .risk-legend i {
+  display: inline-block !important;
+  width: 9px !important;
+  height: 9px !important;
+  margin-left: 6px !important;
+  border-radius: 50% !important;
+}
+
+body.history-body .risk-legend .risk-low { background: var(--risk-low) !important; }
+body.history-body .risk-legend .risk-mid { background: var(--risk-mid) !important; }
+body.history-body .risk-legend .risk-high { background: var(--risk-high) !important; }
+
+/* ===== 5일 카드 (선택 가능) ===== */
+body.history-body .five-day-forecast-item:hover:not(:disabled),
+body.history-body .five-day-forecast-item:focus-visible {
+  background: rgba(255, 255, 255, 0.08) !important;
+  outline: none !important;
+}
+
+body.history-body .five-day-forecast-item[aria-pressed="true"] {
+  background: rgba(255, 255, 255, 0.14) !important;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35) !important;
+}
+
+body.history-body .five-day-forecast-item:disabled {
+  cursor: default !important;
+}
+
+body.history-body .five-day-forecast-item strong {
+  color: var(--risk-color, #f2f8fc) !important;
+}
+
+body.history-body .five-day-forecast-item .day-tag {
+  min-height: 16px !important;
+  padding: 0 8px !important;
+  border-radius: 99px !important;
+  background: rgba(255, 255, 255, 0.16) !important;
+  color: rgba(242, 248, 252, 0.95) !important;
+  line-height: 16px !important;
+  font-size: 11px !important;
+  font-style: normal !important;
+}
+
+body.history-body .five-day-forecast-item .day-tag:empty {
+  background: transparent !important;
+}
+
+body.history-body .five-day-forecast-item .day-icon {
+  font-size: 28px !important;
+  line-height: 1.1 !important;
+}
+
+body.history-body .risk-bar {
+  display: block !important;
+  width: 80% !important;
+  height: 5px !important;
+  border-radius: 99px !important;
+  background: rgba(255, 255, 255, 0.16) !important;
+  overflow: hidden !important;
+}
+
+body.history-body .risk-bar i {
+  display: block !important;
+  height: 100% !important;
+  border-radius: inherit !important;
+  background: var(--risk-color) !important;
+}
+
+body.history-body .day-temp {
+  color: rgba(242, 248, 252, 0.9) !important;
+  font-size: 13px !important;
+}
+
+/* ===== 5일 요약 ===== */
+body.history-body .forecast-summary {
+  grid-column: 1 !important;
+  grid-row: 3 !important;
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  min-width: 0 !important;
+}
+
+body.history-body .summary-card {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  min-width: 0 !important;
+  padding: 16px 18px !important;
+  border: 1px solid var(--card-line) !important;
+  border-left: 4px solid var(--risk-color, rgba(255, 255, 255, 0.4)) !important;
+  border-radius: 16px !important;
+  background: var(--sky-tone-38) !important;
+  color: #f2f8fc !important;
+}
+
+body.history-body .summary-card small,
+body.history-body .summary-card span {
+  color: rgba(218, 235, 247, 0.8) !important;
+  font-size: 12px !important;
+}
+
+body.history-body .summary-card strong {
+  font-size: 22px !important;
+  line-height: 1.2 !important;
+}
+
+/* ===== 선택한 날의 시간대별 예보 ===== */
+body.history-body .day-detail {
+  grid-column: 1 !important;
+  grid-row: 4 !important;
+  align-self: start !important;
+  min-width: 0 !important;
+  padding: 22px 24px !important;
+  border: 1px solid rgba(255, 255, 255, 0.28) !important;
+  border-radius: 18px !important;
+  background: var(--sky-tone-38) !important;
+  box-shadow: 0 8px 22px var(--sky-tone-37) !important;
+  color: #f2f8fc !important;
+}
+
+body.history-body .day-detail-head h3 {
+  font-size: 20px !important;
+}
+
+body.history-body .risk-badge {
+  padding: 4px 12px !important;
+  border: 1px solid var(--risk-color) !important;
+  border-radius: 99px !important;
+  color: var(--risk-color) !important;
+  font-size: 13px !important;
+}
+
+body.history-body .risk-badge[hidden] {
+  display: none !important;
+}
+
+body.history-body .day-detail-hint {
+  margin: 6px 0 14px !important;
+  color: rgba(218, 235, 247, 0.72) !important;
+  font-size: 12px !important;
+}
+
+body.history-body .day-stats {
+  display: grid !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+  margin-bottom: 16px !important;
+}
+
+body.history-body .day-stat {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  min-width: 0 !important;
+  padding: 10px 12px !important;
+  border-radius: 12px !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+
+body.history-body .day-stat small {
+  color: rgba(218, 235, 247, 0.75) !important;
+  font-size: 11px !important;
+}
+
+body.history-body .day-stat strong {
+  font-size: 17px !important;
+  white-space: nowrap !important;
+}
+
+body.history-body .timeline {
+  display: grid !important;
+  grid-auto-flow: column !important;
+  grid-auto-columns: minmax(78px, 1fr) !important;
+  gap: 6px !important;
+  min-width: 0 !important;
+  padding-bottom: 4px !important;
+  overflow-x: auto !important;
+}
+
+body.history-body .timeline-slot {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 5px !important;
+  padding: 10px 6px 12px !important;
+  border: 1px solid transparent !important;
+  border-radius: 12px !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  text-align: center !important;
+}
+
+body.history-body .timeline-slot.is-game-time {
+  border-color: rgba(255, 255, 255, 0.32) !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+}
+
+body.history-body .slot-time {
+  color: rgba(218, 235, 247, 0.85) !important;
+  font-size: 12px !important;
+}
+
+body.history-body .slot-icon {
+  font-size: 22px !important;
+  line-height: 1.2 !important;
+}
+
+body.history-body .slot-temp {
+  font-size: 15px !important;
+}
+
+body.history-body .slot-meter {
+  display: flex !important;
+  align-items: flex-end !important;
+  width: 10px !important;
+  height: 54px !important;
+  border-radius: 99px !important;
+  background: rgba(255, 255, 255, 0.14) !important;
+  overflow: hidden !important;
+}
+
+body.history-body .slot-meter i {
+  display: block !important;
+  width: 100% !important;
+  border-radius: inherit !important;
+  background: var(--risk-color) !important;
+}
+
+body.history-body .slot-risk {
+  color: var(--risk-color) !important;
+  font-size: 15px !important;
+}
+
+body.history-body .slot-rain {
+  color: rgba(218, 235, 247, 0.72) !important;
+  font-size: 10px !important;
+  white-space: nowrap !important;
+}
+
+body.history-body .slot-game {
+  position: absolute !important;
+  top: -8px !important;
+  padding: 1px 7px !important;
+  border-radius: 99px !important;
+  background: rgba(242, 248, 252, 0.9) !important;
+  color: #1d3b52 !important;
+  font-size: 10px !important;
+  font-style: normal !important;
+}
+
+body.history-body .day-detail .timeline {
+  padding-top: 8px !important;
+}
+
+/* 작은 화면: 위에서부터 순서대로 쌓기 */
+@media (max-width: 1100px) {
+  body.history-body .forecast-summary,
+  body.history-body .day-detail {
+    grid-row: auto !important;
+  }
+
+  body.history-body .day-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 700px) {
+  body.history-body .forecast-summary {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 8px !important;
+  }
+
+  body.history-body .summary-card {
+    padding: 12px 14px !important;
+  }
+
+  body.history-body .day-detail {
+    padding: 18px 12px !important;
+  }
+
+  body.history-body .day-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
 }
 

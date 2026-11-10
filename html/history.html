@@ -7,7 +7,7 @@
     <title>날씨 기록 - 우천 취소 지킴이</title>
 
     <link rel="stylesheet" href="style.css?v=20261023-10" />
-    <link rel="stylesheet" href="history.css?v=20261023-5" />
+    <link rel="stylesheet" href="history.css?v=20261110-1" />
     <link rel="stylesheet" href="weather-scene.css" />
     <script src="weather-scene-boot.js"></script>
   </head>
@@ -38,8 +38,39 @@
       <section class="five-day-forecast" aria-labelledby="fiveDayTitle">
         <div class="section-title">
           <h3 id="fiveDayTitle">향후 5일 우천취소 확률</h3>
+          <span class="risk-legend" aria-hidden="true"
+            ><i class="risk-low"></i>낮음 <i class="risk-mid"></i>주의 <i class="risk-high"></i>높음</span
+          >
         </div>
         <div class="five-day-forecast-list" id="fiveDayForecastList" aria-live="polite"></div>
+      </section>
+
+      <section class="forecast-summary" aria-label="향후 5일 요약">
+        <article class="summary-card">
+          <small>경기하기 좋은 날</small>
+          <strong id="safestDay">--</strong>
+          <span id="safestDayNote">예보를 불러오는 중</span>
+        </article>
+        <article class="summary-card">
+          <small>취소 위험이 가장 큰 날</small>
+          <strong id="riskiestDay">--</strong>
+          <span id="riskiestDayNote">예보를 불러오는 중</span>
+        </article>
+        <article class="summary-card">
+          <small>5일 누적 예상 강수량</small>
+          <strong id="totalRain">--</strong>
+          <span id="totalRainNote">예보를 불러오는 중</span>
+        </article>
+      </section>
+
+      <section class="day-detail" aria-labelledby="dayDetailTitle">
+        <div class="section-title day-detail-head">
+          <h3 id="dayDetailTitle">시간대별 예보</h3>
+          <span class="risk-badge" id="dayDetailBadge" hidden></span>
+        </div>
+        <p class="day-detail-hint">위에서 날짜를 누르면 그날의 3시간 단위 예보를 볼 수 있어요.</p>
+        <div class="day-stats" id="dayStats"></div>
+        <div class="timeline" id="dayTimeline" aria-live="polite"></div>
       </section>
 
       <section class="history-intro">
@@ -119,55 +150,207 @@
         day: "numeric",
         weekday: "short",
       });
+      const shortDayFormatter = new Intl.DateTimeFormat("ko-KR", {
+        timeZone: "Asia/Seoul",
+        month: "numeric",
+        day: "numeric",
+        weekday: "short",
+      });
+      const hourFormatter = new Intl.DateTimeFormat("ko-KR", {
+        timeZone: "Asia/Seoul",
+        hour: "2-digit",
+        hourCycle: "h23",
+      });
+      const getSeoulHour = (timestamp) => Number(hourFormatter.format(new Date(timestamp * 1000)).replace(/\D/g, ""));
       // 우천취소 위험도 계산식(js/calculator.js)을 가져와 강수확률 대신 사용합니다.
       const riskReady = import("/js/calculator.js").then((module) => module.calculateCancelRisk);
+
+      // 위험도 단계: 0~29 낮음, 30~59 주의, 60 이상 높음
+      const riskLevel = (risk) =>
+        risk >= 60
+          ? { key: "high", label: "취소 위험 높음" }
+          : risk >= 30
+            ? { key: "mid", label: "주의" }
+            : { key: "low", label: "경기 가능성 높음" };
+      // KBO 저녁 경기(18:30 시작)와 겹치는 예보 칸
+      const isGameTime = (hour) => hour >= 18 && hour <= 21;
+      const rainOf = (item) => Number(item.rain?.["3h"]) || 0;
+      const make = (tag, className, text) => {
+        const element = document.createElement(tag);
+        if (className) element.className = className;
+        if (text !== undefined) element.textContent = text;
+        return element;
+      };
+
+      let days = [];
+      let selectedKey = null;
+
+      function summarizeDay(date, slots, calculateCancelRisk) {
+        const withRisk = slots.map((item) => ({
+          item,
+          hour: getSeoulHour(item.dt),
+          risk: calculateCancelRisk(rainOf(item), (item.pop || 0) * 100, item.weather?.[0]?.id),
+        }));
+        const risks = withRisk.map((slot) => slot.risk);
+        const temps = slots.map((item) => item.main?.temp).filter(Number.isFinite);
+        // 하루 대표 날씨: 위험도가 가장 높은 시간대의 날씨
+        const worst = withRisk.reduce((a, b) => (b.risk > a.risk ? b : a), withRisk[0]);
+        return {
+          key: toDateKey(date),
+          date,
+          slots: withRisk,
+          risk: risks.length ? Math.max(...risks) : null,
+          rain: slots.reduce((sum, item) => sum + rainOf(item), 0),
+          maxTemp: temps.length ? Math.round(Math.max(...temps)) : null,
+          minTemp: temps.length ? Math.round(Math.min(...temps)) : null,
+          maxWind: Math.max(0, ...slots.map((item) => item.wind?.speed || 0)),
+          humidity: slots.length
+            ? Math.round(slots.reduce((sum, item) => sum + (item.main?.humidity || 0), 0) / slots.length)
+            : null,
+          weather: worst?.item.weather?.[0],
+        };
+      }
+
+      function renderFiveDay() {
+        fiveDayList.replaceChildren(
+          ...days.map((day) => {
+            const item = make("button", "five-day-forecast-item");
+            item.type = "button";
+            item.dataset.key = day.key;
+            item.setAttribute("aria-pressed", String(day.key === selectedKey));
+            item.disabled = day.risk === null;
+            const index = days.indexOf(day);
+            const dateText = make("span", "date-text", fiveDayFormatter.format(day.date));
+            const tag = make("em", "day-tag", index === 0 ? "오늘" : index === 1 ? "내일" : "");
+            const icon = make("span", "day-icon", day.weather ? window.weatherService.icons[day.weather.main] || "☁️" : "–");
+            icon.setAttribute("aria-hidden", "true");
+            const value = make("strong", "", day.risk === null ? "확인 불가" : `${day.risk}%`);
+            value.classList.toggle("is-unavailable", day.risk === null);
+            const label = make("small", "", "우천취소 확률");
+            item.append(tag, dateText, icon, value, label);
+            if (day.risk !== null) {
+              const level = riskLevel(day.risk);
+              item.classList.add(`level-${level.key}`);
+              const bar = make("span", "risk-bar");
+              const fill = make("i");
+              fill.style.width = `${Math.max(day.risk, 3)}%`;
+              bar.append(fill);
+              const temp = make("span", "day-temp", `${day.maxTemp}° / ${day.minTemp}°`);
+              item.append(bar, temp);
+            }
+            item.addEventListener("click", () => selectDay(day.key));
+            return item;
+          }),
+        );
+      }
+
+      function renderSummary() {
+        const available = days.filter((day) => day.risk !== null);
+        if (!available.length) return;
+        const safest = available.reduce((a, b) => (b.risk < a.risk ? b : a));
+        const riskiest = available.reduce((a, b) => (b.risk > a.risk ? b : a));
+        getElement("safestDay").textContent = shortDayFormatter.format(safest.date);
+        getElement("safestDayNote").textContent = `최대 위험도 ${safest.risk}% · ${safest.weather?.description || ""}`;
+        getElement("riskiestDay").textContent =
+          riskiest.risk === 0 ? "없음" : shortDayFormatter.format(riskiest.date);
+        getElement("riskiestDayNote").textContent =
+          riskiest.risk === 0 ? "5일 내내 비 소식이 없어요" : `최대 위험도 ${riskiest.risk}% · ${riskLevel(riskiest.risk).label}`;
+        const total = available.reduce((sum, day) => sum + day.rain, 0);
+        const rainyDays = available.filter((day) => day.rain >= 0.1).length;
+        getElement("totalRain").textContent = `${total.toFixed(1)}mm`;
+        getElement("totalRainNote").textContent = rainyDays ? `비 예보 ${rainyDays}일` : "비 예보 없음";
+        document.querySelectorAll(".summary-card").forEach((card, index) => {
+          const day = [safest, riskiest][index];
+          card.className = "summary-card" + (day ? ` level-${riskLevel(day.risk).key}` : "");
+        });
+      }
+
+      function renderDetail(day) {
+        getElement("dayDetailTitle").textContent = `${fiveDayFormatter.format(day.date)} 시간대별 예보`;
+        const badge = getElement("dayDetailBadge");
+        const level = riskLevel(day.risk);
+        badge.hidden = false;
+        badge.className = `risk-badge level-${level.key}`;
+        badge.textContent = level.label;
+
+        const gameSlots = day.slots.filter((slot) => isGameTime(slot.hour));
+        const gameRisk = gameSlots.length ? `${Math.max(...gameSlots.map((slot) => slot.risk))}%` : "예보 없음";
+        const stats = [
+          ["경기 시간대 위험도", gameRisk],
+          ["최고 / 최저", `${day.maxTemp}° / ${day.minTemp}°`],
+          ["예상 강수량", `${day.rain.toFixed(1)}mm`],
+          ["최대 풍속", `${day.maxWind.toFixed(1)}m/s`],
+          ["평균 습도", `${day.humidity}%`],
+        ];
+        getElement("dayStats").replaceChildren(
+          ...stats.map(([name, value]) => {
+            const stat = make("div", "day-stat");
+            stat.append(make("small", "", name), make("strong", "", value));
+            return stat;
+          }),
+        );
+
+        getElement("dayTimeline").replaceChildren(
+          ...day.slots.map(({ item, hour, risk }) => {
+            const slot = make("div", `timeline-slot level-${riskLevel(risk).key}`);
+            slot.classList.toggle("is-game-time", isGameTime(hour));
+            const time = make("span", "slot-time", `${String(hour).padStart(2, "0")}시`);
+            const icon = make("span", "slot-icon", window.weatherService.icons[item.weather?.[0]?.main] || "☁️");
+            icon.title = item.weather?.[0]?.description || "";
+            const temp = make("span", "slot-temp", `${Math.round(item.main?.temp)}°`);
+            const meter = make("span", "slot-meter");
+            const fill = make("i");
+            fill.style.height = `${Math.max(risk, 4)}%`;
+            meter.append(fill);
+            meter.setAttribute("aria-hidden", "true");
+            const riskText = make("strong", "slot-risk", `${risk}%`);
+            const rain = make("small", "slot-rain", `☂ ${Math.round((item.pop || 0) * 100)}% · ${rainOf(item).toFixed(1)}mm`);
+            slot.append(time, icon, temp, meter, riskText, rain);
+            if (isGameTime(hour)) slot.append(make("em", "slot-game", "경기"));
+            return slot;
+          }),
+        );
+      }
+
+      function selectDay(key) {
+        const day = days.find((entry) => entry.key === key);
+        if (!day || day.risk === null) return;
+        selectedKey = key;
+        fiveDayList.querySelectorAll(".five-day-forecast-item").forEach((button) => {
+          button.setAttribute("aria-pressed", String(button.dataset.key === key));
+        });
+        renderDetail(day);
+      }
 
       async function loadFiveDayForecast() {
         try {
           const calculateCancelRisk = await riskReady;
           const data = await window.weatherService.loadForecast(stadiumName);
           const daily = new Map(upcomingDates.map((date) => [toDateKey(date), []]));
-          // 3시간 예보 한 칸을 우천취소 위험도(0~100)로 바꿉니다.
-          const riskOf = (item) =>
-            Number.isFinite(item?.pop)
-              ? calculateCancelRisk(
-                  Number(item.rain?.["3h"]) || 0,
-                  item.pop * 100,
-                  item.weather?.[0]?.id,
-                )
-              : null;
-
           (data.list || []).forEach((item) => {
             const key = getSeoulDateKey(item.dt);
-            const risk = riskOf(item);
-            if (daily.has(key) && risk !== null) daily.get(key).push(risk);
+            if (daily.has(key) && Number.isFinite(item?.pop)) daily.get(key).push(item);
           });
           // 저녁·밤에는 오늘 남은 예보 칸이 없으므로, 오늘 값에는 현재 예보(날씨 화면과 같은 값)를 항상 포함합니다.
-          const currentRisk = riskOf(data.list?.[0]);
-          if (currentRisk !== null) daily.get(toDateKey(today)).push(currentRisk);
-          fiveDayList.replaceChildren(...upcomingDates.map((date) => {
-            const item = document.createElement("div");
-            item.className = "five-day-forecast-item";
-            const dateElement = document.createElement("span");
-            dateElement.className = "date-text";
-            dateElement.textContent = fiveDayFormatter.format(date);
-            const value = document.createElement("strong");
-            const risks = daily.get(toDateKey(date));
-            // 강수량·강수확률·날씨코드를 합친 우천취소 위험도를 사용합니다.
-            // 하루 대표값은 3시간 예보 중 가장 높은 위험도입니다.
-            value.textContent = risks.length ? `${Math.max(...risks)}%` : "확인 불가";
-            value.classList.toggle("is-unavailable", !risks.length);
-            const label = document.createElement("small");
-            label.textContent = "우천취소 확률";
-            item.append(dateElement, value, label);
-            return item;
-          }));
+          const current = data.list?.[0];
+          const todaySlots = daily.get(toDateKey(today));
+          if (Number.isFinite(current?.pop) && !todaySlots.includes(current)) todaySlots.unshift(current);
+
+          days = upcomingDates.map((date) => summarizeDay(date, daily.get(toDateKey(date)), calculateCancelRisk));
+          selectedKey = days.find((day) => day.risk !== null)?.key ?? null;
+          renderFiveDay();
+          renderSummary();
+          if (selectedKey) selectDay(selectedKey);
         } catch (error) {
-          console.error("향후 5일 강수확률 조회 실패:", error);
-          const message = document.createElement("p");
-          message.className = "five-day-forecast-message";
-          message.textContent = "강수확률을 확인할 수 없습니다.";
+          console.error("향후 5일 예보 조회 실패:", error);
+          const message = make("p", "five-day-forecast-message", "예보를 확인할 수 없습니다.");
           fiveDayList.replaceChildren(message);
+          ["safestDayNote", "riskiestDayNote", "totalRainNote"].forEach((id) => {
+            getElement(id).textContent = "확인 불가";
+          });
+          getElement("dayTimeline").replaceChildren(
+            make("p", "five-day-forecast-message", "예보를 불러오지 못했습니다."),
+          );
         }
       }
       loadFiveDayForecast();
